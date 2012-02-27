@@ -2,6 +2,7 @@
 require "moon"
 
 require "lovekit.all"
+lovekit.reload_images = true
 
 import graphics, keyboard from love
 
@@ -22,6 +23,7 @@ love.load = ->
       when "escape" then os.exit!
 
   love.update = (dt) ->
+    lovekit.reloader\update!
     speed = 100
 
     if keyboard.isDown "left"

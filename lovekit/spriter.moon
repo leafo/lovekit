@@ -2,25 +2,9 @@
 import graphics from love
 import push, pop, scale, translate from graphics
 
-_newImage = graphics.newImage
-graphics.newImage = (...) ->
-  print "loading image:", ...
-  with _newImage ...
-    \setFilter "nearest", "nearest"
+require "lovekit.image"
 
 export *
-
-image_cache = {}
-imgfy = (img) ->
-  if "string" == type img
-    cached = image_cache[img]
-    img = if not cached
-      new = graphics.newImage img
-      image_cache[img] = new
-      new
-    else
-      cached
-  img
 
 -- holds a collection of Animators assigned to a state
 class StateAnim
@@ -72,7 +56,7 @@ class Spriter
   new: (@img, @cell_w, @cell_h, @width=0) =>
     @img = imgfy @img
 
-    @iw, @ih = @img\getWidth!, @img\getHeight!
+    @iw, @ih = @img\width!, @img\height!
 
     @ox = 0
     @oy = 0
@@ -97,7 +81,7 @@ class Spriter
 
     sx = w / @cell_w
     sy = h / @cell_h
-    graphics.drawq @img, q, x, y, 0, sx, sy
+    @img\drawq q, x, y, 0, sx, sy
 
     nil
 
@@ -110,12 +94,11 @@ class Spriter
       translate @cell_w, 0
       scale -1, 1
 
-      graphics.drawq @img, q, 0, 0
+      @img\drawq q, 0, 0
 
       pop!
     else
-      graphics.drawq @img, q, x, y
-
+      @img\drawq q, x, y
     nil
 
 
