@@ -1,10 +1,7 @@
 
 require "moon"
 
-require "geometry"
-require "tilemap"
-require "spriter"
-require "viewport"
+require "lovekit.all"
 
 import graphics, keyboard from love
 

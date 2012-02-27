@@ -1,0 +1,5 @@
+
+
+test:
+	moonc .
+	love .

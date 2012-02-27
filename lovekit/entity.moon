@@ -1,5 +1,5 @@
 
-require "geometry"
+require "lovekit.geometry"
 
 export *
 
