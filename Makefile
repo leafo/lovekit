@@ -1,5 +1,6 @@
 
+all:
+	moonc main.moon lovekit
 
-test:
-	moonc .
+test: all
 	love .

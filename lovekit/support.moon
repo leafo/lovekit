@@ -1,6 +1,8 @@
 
 export *
 
+lovekit = lovekit or {}
+
 -- TODO move these elsewhere
 mixin_object = (object, methods) =>
   for name in *methods
