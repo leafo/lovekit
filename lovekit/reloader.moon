@@ -49,6 +49,9 @@ class Reloader
 
     @actions[fname] = { action, unpack @actions[fname] or {} }
 
+  is_watching: (fname) =>
+    @actions[fname]
+
   update: =>
     events = @handle\read!
     if events
@@ -105,7 +108,7 @@ watch_class = (cls) ->
 
   print "Watching", a_name, info.source
   -- don't watch the same file multiple times
-  if not reloader.actions[info.source]
+  if not reloader\is_watching info.source
     reloader\watch info.source, ->
       print "Reloading:", pkg_name
       package.loaded[pkg_name] = nil

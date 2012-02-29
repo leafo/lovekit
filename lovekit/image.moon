@@ -4,29 +4,13 @@ import graphics from love
 export ^
 export imgfy
 
-class ImageReloader
-  new: =>
-    require "inotify"
-    @handle = inotify.init true
-    @descriptors = {}
-
-  add: (image) =>
-    print "watching:", image.fname
-    wd = @handle\addwatch image.fname, inotify.IN_CLOSE_WRITE
-    @descriptors[wd] = image
-
-  update: =>
-    events = @handle\read!
-    if events
-      for e in *events
-        @descriptors[e.wd]\reload!
+reloader = require "lovekit.reloader"
 
 class Image
   new: (@fname) =>
     @reload!
-    if lovekit and lovekit.reload_images
-      lovekit.reloader = ImageReloader! if not lovekit.reloader
-      lovekit.reloader\add self
+    if reloader and not reloader\is_watching @fname
+      reloader\watch @fname, self\reload
     nil
   
   width: => @tex\getWidth!
