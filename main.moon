@@ -13,6 +13,7 @@ love.load = ->
   map = TileMap.from_image "scrap/map.png", sprite, {
     ["0,0,0"]: { tid: 0 }
     ["255,255,255"]: { tid: 1 }
+    ["0,0,255"]: animated_tile { 2, 3 }
   }
 
   b = Box 0,0, 30, 30
@@ -35,6 +36,8 @@ love.load = ->
       thing\move 0, speed*dt
     elseif keyboard.isDown "up"
       thing\move 0, -speed*dt
+
+    map\update dt
 
 
   love.mousepressed = (x, y) ->

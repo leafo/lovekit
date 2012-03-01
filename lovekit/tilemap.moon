@@ -8,9 +8,21 @@ import setColor, rectangle from love.graphics
 
 export *
 
+animated_tile = (frames=error"expecting table") ->
+  animate: frames, delay: frames.delay or 0.5
+
 class Tile extends Box
   new: (@tid, ...) => super ...
   draw: (sprite, map) => sprite\draw_cell @tid, @x, @y
+
+-- frames a array of tids
+class AnimatedTile extends Box
+  new: (@frames, @delay, ...) =>
+    super ...
+  draw: (sprite, map) =>
+    fid = math.floor(map.time / @delay % #@frames) + 1
+    sprite\draw_cell @frames[fid], @x, @y
+
 
 -- a grid of tiles with a preset map size (should be infinite soon)
 class TileMap
@@ -37,6 +49,9 @@ class TileMap
         elseif a == 255
           color_to_tile[hash_color r,g,b,a]
 
+        if not tile and a > 0
+          error "Got unexpected map tile color: " .. hash_color r,g,b,a
+
         tiles[len] = tile if tile
         len += 1
 
@@ -59,10 +74,15 @@ class TileMap
         else
           t.tid
 
-        if tid
-          @layers[t.layer or 0][i] = Tile tid,
-            x * @cell_size, y * @cell_size,
-            @cell_size, @cell_size
+        position = {
+          x * @cell_size, y * @cell_size
+          @cell_size, @cell_size
+        }
+
+        @layers[t.layer or 0][i] = if tid
+          Tile tid, unpack position
+        elseif t.animate
+          AnimatedTile t.animate, t.delay, unpack position
 
   update_collision: =>
     new_layer = -> UniformGrid @cell_size * 3
@@ -85,6 +105,7 @@ class TileMap
   new: (@width, @height, tiles=nil) =>
     @count = @width * @height
     @min_layer, @max_layer = nil
+    @time = 0 -- time used for animating tiles
 
     -- pixel size of the map
     @real_width = @width * @cell_size
@@ -128,20 +149,23 @@ class TileMap
     setColor 255,0,0,128
     for tile in *@collision_layers[layer]\get_candidates box
       Box.draw tile
-      tile\draw @sprite
+      tile\draw @sprite, self
 
     setColor 255,255,255
     rectangle "line", box\unpack!
 
 
+  update: (dt) =>
+    @time += dt
+
   draw: (viewport) =>
     if not viewport
       for i=@min_layer,@max_layer
         for x,y, tile in @each_xyt @layers[i]
-          tile\draw @sprite if tile
+          tile\draw @sprite, self if tile
     else
       for i=@min_layer,@max_layer
         for tile in *@collision_layers[i]\get_candidates viewport
-          tile\draw @sprite
+          tile\draw @sprite, self
 
 

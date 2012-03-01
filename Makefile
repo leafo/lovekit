@@ -4,3 +4,6 @@ all:
 
 test: all
 	love .
+
+watch:
+	moonc -w main.moon lovekit
