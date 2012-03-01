@@ -9,7 +9,9 @@ import setColor, rectangle from love.graphics
 export *
 
 animated_tile = (frames=error"expecting table") ->
-  animate: frames, delay: frames.delay or 0.5
+  frames.animated = true
+  frames.delay = frames.delay or 0.5
+  frames
 
 class Tile extends Box
   new: (@tid, ...) => super ...
@@ -79,10 +81,10 @@ class TileMap
           @cell_size, @cell_size
         }
 
-        @layers[t.layer or 0][i] = if tid
+        @layers[t.layer or 1][i] = if tid
           Tile tid, unpack position
-        elseif t.animate
-          AnimatedTile t.animate, t.delay, unpack position
+        elseif t.animated
+          AnimatedTile t, t.delay, unpack position
 
   update_collision: =>
     new_layer = -> UniformGrid @cell_size * 3
@@ -92,11 +94,8 @@ class TileMap
       tiles = @layers[l]
       grid = new_layer!
 
-      count = 0
       for x,y,t in @each_xyt tiles
         grid\add t if t
-
-      print "added", count, "items"
 
       @collision_layers[l] = grid
 
@@ -111,6 +110,7 @@ class TileMap
     @real_width = @width * @cell_size
     @real_height = @height * @cell_size
 
+    -- automatically creates layer when we access it
     @layers = setmetatable {}, {
       __index: (layers, layer) ->
         l = {}
@@ -153,7 +153,6 @@ class TileMap
 
     setColor 255,255,255
     rectangle "line", box\unpack!
-
 
   update: (dt) =>
     @time += dt

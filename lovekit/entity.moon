@@ -1,10 +1,79 @@
 
 require "lovekit.geometry"
 
+floor = (n) ->
+  if n < 0
+    -math.floor -n
+  else
+    math.floor n
+
 export *
 
--- something with a @box that moves around in the world
 class Entity
+  w: 20
+  h: 20
+
+  loc: => Vec2d @box.x, @box.y
+
+  new: (@world, x, y) =>
+    @facing = "right"
+    @box = Box x, y, @w, @h
+    @velocity = Vec2d 0, 0
+
+  draw: =>
+    @box\draw!
+
+  update: (dt) =>
+    @fit_move unpack @velocity * dt
+    print @box.x, @box.y
+
+  fit_move: (dx, dy) =>
+    collided_x = false
+    collided_y = false
+
+    -- x
+    if dx > 0
+      start = @box.x
+      @box.x += dx
+      while @world\collides self
+        collided_x = true
+        @box.x -= 1
+        if @box.x <= start
+          @box.x = start
+          break
+    elseif dx < 0
+      start = @box.x
+      @box.x += dx
+      while @world\collides self
+        collided_x = true
+        @box.x += 1
+        if @box.x >= start
+          @box.x = start
+          break
+ 
+    if dy > 0
+      start = @box.y
+      @box.y += dy
+      while @world\collides self
+        collided_y = true
+        @box.y -= 1
+        if @box.y <= start
+          @box.y = start
+          break
+    elseif dy < 0
+      start = @box.y
+      @box.y += dy
+      while @world\collides self
+        collided_y = true
+        @box.y += 1
+        if @box.y >= start
+          @box.y = start
+          break
+
+    collided_x, collided_y
+
+-- something with a @box that moves around in the world
+class PlatformEntity extends Entity
   w: 20
   h: 20
 
@@ -28,32 +97,4 @@ class Entity
         @on_ground = false
 
     true
-
-  loc: => Vec2d @box.x, @box.y
-
-  fit_move: (dx, dy) =>
-    collided_x = false
-    collided_y = false
-
-    @facing = "right" if dx > 0
-    @facing = "left" if dx < 0
-
-    dx = math.floor dx
-    dy = math.floor dy
-    if dx != 0
-      ddx = dx < 0 and -1 or 1
-      @box.x += dx
-      while @world\collides self
-        collided_x = true
-        @box.x -= ddx
-
-    if dy != 0
-      ddy = dy < 0 and -1 or 1
-      @box.y += dy
-      while @world\collides self
-        collided_y = true
-        @box.y -= ddy
-
-    collided_x, collided_y
-
 

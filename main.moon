@@ -13,11 +13,15 @@ love.load = ->
   map = TileMap.from_image "scrap/map.png", sprite, {
     ["0,0,0"]: { tid: 0 }
     ["255,255,255"]: { tid: 1 }
-    ["0,0,255"]: animated_tile { 2, 3 }
+    ["0,0,255"]: animated_tile { 2, 3, layer: 0 }
   }
 
   b = Box 0,0, 30, 30
-  thing = Box 0,0, 10,10
+
+  world =
+    collides: => false
+
+  me = Entity world, 0,0
 
   love.keypressed = (name, code) ->
     switch name
@@ -27,31 +31,35 @@ love.load = ->
     reloader\update!
     speed = 100
 
-    if keyboard.isDown "left"
-      thing\move -speed*dt, 0
+    me.velocity[1] = if keyboard.isDown "left"
+      -speed
     elseif keyboard.isDown "right"
-      thing\move speed*dt, 0
+      speed
+    else
+      0
 
-    if keyboard.isDown "down"
-      thing\move 0, speed*dt
+    me.velocity[2] = if keyboard.isDown "down"
+      speed
     elseif keyboard.isDown "up"
-      thing\move 0, -speed*dt
+      -speed
+    else
+      0
 
+    me\update dt
     map\update dt
-
 
   love.mousepressed = (x, y) ->
     x,y = viewport\unproject x, y
     b\set_pos x,y
 
   love.draw = ->
-    viewport\center_on box:thing
+    viewport\center_on me
     viewport\apply!
 
     map\draw!
     graphics.rectangle "line", b\unpack!
 
-    -- map\highlight_region b
+    map\highlight_region me.box
 
-    thing\draw!
+    me\draw!
 
