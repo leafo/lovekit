@@ -29,21 +29,9 @@ love.load = ->
 
   love.update = (dt) ->
     reloader\update!
-    speed = 100
+    speed = 120
 
-    me.velocity[1] = if keyboard.isDown "left"
-      -speed
-    elseif keyboard.isDown "right"
-      speed
-    else
-      0
-
-    me.velocity[2] = if keyboard.isDown "down"
-      speed
-    elseif keyboard.isDown "up"
-      -speed
-    else
-      0
+    me.velocity\update unpack movement_vector speed
 
     me\update dt
     map\update dt
@@ -62,4 +50,7 @@ love.load = ->
     map\highlight_region me.box
 
     me\draw!
+
+    graphics.print love.timer.getFPS!, 10, 10
+
 

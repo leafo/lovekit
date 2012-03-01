@@ -35,6 +35,9 @@ class Vec2d
   left: => return self[1] < 0
   right: => return self[1] > 0
 
+  update: (x, y) =>
+    self[1], self[2] = x, y
+
   normalized: =>
     len = @len!
     if len == 0

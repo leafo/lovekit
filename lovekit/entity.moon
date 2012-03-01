@@ -25,7 +25,6 @@ class Entity
 
   update: (dt) =>
     @fit_move unpack @velocity * dt
-    print @box.x, @box.y
 
   fit_move: (dx, dy) =>
     collided_x = false
