@@ -84,7 +84,9 @@ class_table = {} -- classes are are being watched
 watch_class = (cls) ->
   return if not reloader
   info = debug.getinfo getmetatable(cls).__call
-  pkg_name = path_to_package info.source
+
+  source_name = "./" .. info.source\match"^%@(.*)$" or info.source
+  pkg_name = path_to_package source_name
   a_name = absolute_name cls, pkg_name
 
   if class_table[a_name]
@@ -106,10 +108,10 @@ watch_class = (cls) ->
     class_table[a_name] = cls
     return
 
-  print "Watching", a_name, info.source
+  print "Watching", a_name, source_name
   -- don't watch the same file multiple times
-  if not reloader\is_watching info.source
-    reloader\watch info.source, ->
+  if not reloader\is_watching source_name
+    reloader\watch source_name, ->
       print "Reloading:", pkg_name
       package.loaded[pkg_name] = nil
       require pkg_name
