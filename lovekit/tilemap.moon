@@ -3,7 +3,6 @@ require "lovekit.support"
 require "lovekit.geometry"
 require "lovekit.spriter"
 
-import getMicroTime from love.timer
 import setColor, rectangle from love.graphics
 
 export *

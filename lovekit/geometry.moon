@@ -6,6 +6,21 @@ import rad, atan2, cos, sin from math
 
 export *
 
+_floor, _ceil = math.floor, math.ceil
+
+floor = (n) ->
+  if n < 0
+    -_floor -n
+  else
+    _floor n
+
+
+ceil = (n) ->
+  if n < 0
+    -_ceil -n
+  else
+    _ceil n
+
 class Vec2d
   base = self.__base
   self.__base.__index = (name) =>
@@ -85,10 +100,10 @@ class Box
     x1, y1, x2, y2 = @unpack2!
     ox1, oy1, ox2, oy2 = o\unpack2!
 
-    return false if x2 < ox1
-    return false if x1 > ox2
-    return false if y2 < oy1
-    return false if y1 > oy2
+    return false if x2 <= ox1
+    return false if x1 >= ox2
+    return false if y2 <= oy1
+    return false if y1 >= oy2
     true
 
   -- is self left of box

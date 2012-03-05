@@ -1,12 +1,6 @@
 
 require "lovekit.geometry"
 
-floor = (n) ->
-  if n < 0
-    -math.floor -n
-  else
-    math.floor n
-
 export *
 
 class Entity
@@ -34,40 +28,37 @@ class Entity
     if dx > 0
       start = @box.x
       @box.x += dx
-      while @world\collides self
-        collided_x = true
-        @box.x -= 1
-        if @box.x <= start
-          @box.x = start
-          break
+      if @world\collides self
+        @box.x = floor @box.x
+        while @world\collides self
+          collided_x = true
+          @box.x -= 1
     elseif dx < 0
       start = @box.x
       @box.x += dx
-      while @world\collides self
-        collided_x = true
-        @box.x += 1
-        if @box.x >= start
-          @box.x = start
-          break
+      if @world\collides self
+        @box.x = ceil @box.x
+        while @world\collides self
+          collided_x = true
+          @box.x += 1
  
+    -- y
     if dy > 0
       start = @box.y
       @box.y += dy
-      while @world\collides self
-        collided_y = true
-        @box.y -= 1
-        if @box.y <= start
-          @box.y = start
-          break
+      if @world\collides self
+        @box.y = floor @box.y
+        while @world\collides self
+          collided_y = true
+          @box.y -= 1
     elseif dy < 0
       start = @box.y
       @box.y += dy
-      while @world\collides self
-        collided_y = true
-        @box.y += 1
-        if @box.y >= start
-          @box.y = start
-          break
+      if @world\collides self
+        @box.y = ceil @box.y
+        while @world\collides self
+          collided_y = true
+          @box.y += 1
 
     collided_x, collided_y
 
