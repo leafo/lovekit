@@ -13,8 +13,9 @@ GAME_ZIP=$GAME_NAME.love
 
 # LOVEKIT_SRC=https://leafo@github.com/leafo/lovekit.git
 LOVEKIT_SRC=/srv/git/lovekit.git
+
 LOVE_BIN=/home/leafo/Downloads/love-0.7.2-win-x86.zip
-MOONSCRIPT=
+MOON_SRC_DIR=/home/leafo/code/lua/moonscript
 
 if [ -z "`git status 2> /dev/null`" ]; then
 	echo ">> Must run in a git repository"
@@ -45,6 +46,15 @@ echo ""
 copyall "`git ls-files`" $REL
 (cd $LOVEKIT && copyall "`git ls-files | grep ^lovekit`" $REL)
 
+if [ -n "$MOON_SRC_DIR" ]; then
+	echo ""
+	echo ">> Copying moon"
+	(
+		cd $MOON_SRC_DIR
+		bin/splat.moon moon > "$REL/moon.lua"
+	)
+fi
+
 echo ""
 echo ">> Building"
 (
@@ -63,6 +73,7 @@ echo ">> Packing $GAME_ZIP"
 )
 
 mv "$REL/$GAME_ZIP" .
+
 
 # create win32 exe
 if [ -n "$LOVE_BIN" ]; then
