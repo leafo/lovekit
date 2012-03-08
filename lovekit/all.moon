@@ -8,3 +8,5 @@ require "lovekit.viewport"
 require "lovekit.entity"
 require "lovekit.input"
 
+require "lovekit.ui.window"
+

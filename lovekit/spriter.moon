@@ -53,7 +53,7 @@ class Animator
 
 -- used for blitting
 class Spriter
-  new: (@img, @cell_w, @cell_h, @width=0) =>
+  new: (@img, @cell_w, @cell_h=cell_w, @width=0) =>
     @img = imgfy @img
 
     @iw, @ih = @img\width!, @img\height!

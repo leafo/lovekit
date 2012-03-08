@@ -16,6 +16,10 @@ love.load = ->
     ["0,0,255"]: animated_tile { 2, 3, layer: 0 }
   }
 
+
+  ui_sprite = Spriter "scrap/ui.png", 4, 4, 4
+  window = ui.Window ui_sprite
+
   b = Box 0,0, 30, 30
 
   world =
@@ -24,14 +28,14 @@ love.load = ->
       for t in *map\get_candidates box
         return true if box\touches_box t
 
-  speed = 50
+  speed = 150
   me = Entity world, 0,0
 
   speed_i = 0
   love.keypressed = (name, code) ->
     switch name
       when " "
-        speed_i = speed_i + 1 % 4
+        speed_i = (speed_i + 1) % 4
         print "speed index", speed_i
         speed = 50 + speed_i * 50
       when "escape" then os.exit!
@@ -80,6 +84,10 @@ love.load = ->
     me\draw!
 
     graphics.print love.timer.getFPS!, 10, 10
+
+
+    window\draw 10, 10, 100, 100
+    window\draw b\unpack!
 
     -- show_grid viewport
 
