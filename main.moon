@@ -83,10 +83,13 @@ love.load = ->
     -- map\highlight_region me.box
     me\draw!
 
-    graphics.print love.timer.getFPS!, 10, 10
+    viewport\pop!
 
 
     window\draw 10, 10, 100, 100
+
+    graphics.print love.timer.getFPS!, 10, 10
+
     window\draw b\unpack!
 
     -- show_grid viewport
