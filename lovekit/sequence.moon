@@ -42,7 +42,7 @@ default_scope = {
     -- push left over time
     leftover = t - 1.0
     if leftover > 0
-      print "more response:", coroutine.yield "more", leftover
+      coroutine.yield "more", leftover
 }
 
 -- safely resumes a coroutine
@@ -68,7 +68,6 @@ class Sequence
     @create!
 
   create: =>
-    print " >> creating"
     @co = coroutine.create @fn
     @started = false
 
@@ -85,7 +84,6 @@ class Sequence
       return false if coroutine.status(@co) == "dead"
 
       signal, val = resume @co, dt
-      print "signal:", signal if signal
 
       switch signal
         when "again"

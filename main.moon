@@ -61,23 +61,6 @@ love.load = ->
     b\set_pos x,y
     print "CLICK", x, y
 
-
-  show_grid = (v) ->
-    graphics.setLineWidth 1/v.screen.scale
-    graphics.setColor 255,255,255, 128
-
-    w, h = v.w + 1, v.h + 1
-    sx = math.floor v.x
-    sy = math.floor v.y
-
-    for y = sy, sy + h
-      graphics.line sx, y, sx + w, y
-
-    for x = sx, sx + w
-      graphics.line x, sy, x, sy + h
-
-    graphics.setColor 255,255,255
-
   love.draw = ->
     viewport\center_on me
     viewport\apply!
@@ -91,7 +74,6 @@ love.load = ->
     me\draw!
 
     viewport\pop!
-
 
     -- window\draw 10, 10, 100, 100
     -- graphics.print love.timer.getFPS!, 10, 10
