@@ -40,6 +40,11 @@ love.load = ->
         speed = 50 + speed_i * 50
       when "escape" then os.exit!
 
+  seq = Sequence ->
+    tween b, 1, x: 80, y: 50
+    tween b, 1, x: 0, y: 0
+    again!
+
   love.update = (dt) ->
     reloader\update!
 
@@ -47,6 +52,8 @@ love.load = ->
 
     me\update dt
     map\update dt
+
+    seq\update dt
 
   love.mousepressed = (x, y) ->
     x,y = viewport\unproject x, y
@@ -86,11 +93,9 @@ love.load = ->
     viewport\pop!
 
 
-    window\draw 10, 10, 100, 100
-
-    graphics.print love.timer.getFPS!, 10, 10
-
-    window\draw b\unpack!
+    -- window\draw 10, 10, 100, 100
+    -- graphics.print love.timer.getFPS!, 10, 10
+    -- window\draw b\unpack!
 
     -- show_grid viewport
 

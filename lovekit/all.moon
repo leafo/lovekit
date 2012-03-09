@@ -7,6 +7,7 @@ require "lovekit.spriter"
 require "lovekit.viewport"
 require "lovekit.entity"
 require "lovekit.input"
+require "lovekit.sequence"
 
 require "lovekit.ui.window"
 
