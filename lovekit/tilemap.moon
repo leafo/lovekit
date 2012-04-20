@@ -64,7 +64,6 @@ class TileMap
         tile_sprite
 
       \add_tiles tiles
-      \update_collision!
 
   -- adds Tile objects into @layers from tile description tables
   add_tiles: (tiles) =>
@@ -84,21 +83,6 @@ class TileMap
           Tile tid, unpack position
         elseif t.animated
           AnimatedTile t, t.delay, unpack position
-
-  update_collision: =>
-    new_layer = -> UniformGrid @cell_size * 3
-
-    @collision_layers = {}
-    for l=@min_layer,@max_layer
-      tiles = @layers[l]
-      grid = new_layer!
-
-      for x,y,t in @each_xyt tiles
-        grid\add t if t
-
-      @collision_layers[l] = grid
-
-    mixin_object self, @collision_layers[@solid_layer], {"get_candidates"}
 
   new: (@width, @height, tiles=nil) =>
     @count = @width * @height
@@ -144,26 +128,46 @@ class TileMap
         y = math.floor(i / @width)
         coroutine.yield x, y, t, i + 1
 
-  highlight_region: (box, layer=@solid_layer) =>
-    setColor 255,0,0,128
-    for tile in *@collision_layers[layer]\get_candidates box
-      Box.draw tile
-      tile\draw @sprite, self
-
-    setColor 255,255,255
-    rectangle "line", box\unpack!
-
   update: (dt) =>
     @time += dt
 
   draw: (viewport) =>
-    if not viewport
-      for i=@min_layer,@max_layer
-        for x,y, tile in @each_xyt @layers[i]
-          tile\draw @sprite, self if tile
-    else
-      for i=@min_layer,@max_layer
-        for tile in *@collision_layers[i]\get_candidates viewport
-          tile\draw @sprite, self
+    box = viewport and viewport.box or Box 0,0, @real_width, @real_height
+    for tid in @tiles_for_box box
+      for i=@min_layer, @max_layer
+        tile = @layers[i][tid]
+        tile\draw @sprite, self if tile
+
+  collides: (thing) =>
+    solid = @layers[@solid_layer]
+    for tid in @tiles_for_box thing.box
+      return true if solid[tid]
+    false
+
+    -- get all tile id touching box
+  tiles_for_box: (box) =>
+    xy_to_i = (x,y) ->
+      col = math.floor x / @cell_size
+      row = math.floor y / @cell_size
+      col + @height * row + 1 -- 1 indexed
+
+    coroutine.wrap ->
+      x1, y1, x2, y2 = box\unpack2!
+      x, y = x1, y1
+
+      max_x = x2
+      rem_x = max_x % @cell_size
+      max_x += @cell_size - rem_x if rem_x != 0
+
+      max_y = y2
+      rem_y = max_y % @cell_size
+      max_y += @cell_size - rem_y if rem_y != 0
+
+      while y <= max_y
+        x = x1
+        while x <= max_x
+          coroutine.yield xy_to_i x, y
+          x += @cell_size
+        y += @cell_size
 
 

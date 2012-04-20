@@ -23,10 +23,7 @@ love.load = ->
   b = Box 0,0, 30, 30
 
   world =
-    collides: (thing) =>
-      box = thing.box
-      for t in *map\get_candidates box
-        return true if box\touches_box t
+    collides: (...) => map\collides ...
 
   speed = 150
   me = Entity world, 0,0
@@ -70,13 +67,12 @@ love.load = ->
     graphics.rectangle "fill", b\unpack!
     graphics.setColor 255,255,255
 
-    -- map\highlight_region me.box
     me\draw!
 
     viewport\pop!
 
     -- window\draw 10, 10, 100, 100
-    -- graphics.print love.timer.getFPS!, 10, 10
+    graphics.print love.timer.getFPS!, 10, 10
     -- window\draw b\unpack!
 
     -- show_grid viewport
