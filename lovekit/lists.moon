@@ -1,3 +1,6 @@
+
+import insert, remove from table
+
 export *
 
 -- a basic hashed linked list
@@ -88,4 +91,36 @@ class DrawList
       item\draw! if item.alive
 
 
+-- a simple array that reuses the tables created for objects when they are dead
+-- better than "DeadList" above
+class ReuseList
+  new: =>
+    @dead_list = {}
+
+  update: (dt) =>
+    for i, b in ipairs self
+      if b.alive
+        b.alive = b\update dt
+        if not b.alive
+          b\onremove! if b.onremove
+          insert @dead_list, i
+
+  draw: =>
+    for b in *self
+      b\draw! if b.alive
+
+  add_item: (cls, ...) =>
+    top = remove @dead_list
+    if top
+      cls.__init top, ...
+      top
+    else
+      @_append cls ...
+
+    out.alive = true
+    out
+
+  _append: (b) =>
+    with b
+      self[#self + 1] = b
 
