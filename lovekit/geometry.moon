@@ -47,6 +47,8 @@ class Vec2d
     return 0 if n == 0
     math.sqrt n
 
+  is_zero: => self[1] == 0 and self[2] == 0
+
   left: => return self[1] < 0
   right: => return self[1] > 0
 
@@ -60,9 +62,19 @@ class Vec2d
     else
       Vec2d self[1] / len, self[2] / len
 
+  truncate: (max_len) =>
+    l = @len!
+    if l > max_len
+      self[1] = self[1] / l * max_len
+      self[2] = self[2] / l * max_len
+
   __mul: (other) =>
     if type(other) == "number"
       Vec2d self[1] * other, self[2] * other
+
+  __div: (other) =>
+    if type(other) == "number"
+      Vec2d self[1] / other, self[2] / other
 
   __add: (other) =>
     Vec2d self[1] + other[1], self[2] + other[2]
