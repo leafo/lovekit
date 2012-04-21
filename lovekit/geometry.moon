@@ -122,6 +122,18 @@ class Box
     return false if y1 >= oy2
     true
 
+  contains_box: (o) =>
+    x1, y1, x2, y2 = @unpack2!
+    ox1, oy1, ox2, oy2 = o\unpack2!
+
+    return false if ox1 <= x1
+    return false if ox2 >= x2
+
+    return false if oy1 <= y1
+    return false if oy2 >= y2
+
+    true
+
   -- is self left of box
   left_of: (box) =>
     self.x < box.x
