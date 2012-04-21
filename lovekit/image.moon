@@ -16,6 +16,11 @@ class Image
   width: => @tex\getWidth!
   height: => @tex\getHeight!
 
+  set_wrap: (...) => @tex\setWrap ...
+
+  draw: (...) =>
+    graphics.draw @tex, ...
+
   drawq: (...) =>
     graphics.drawq @tex, ...
 
