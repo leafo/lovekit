@@ -24,6 +24,13 @@ default_scope = {
   again: ->
     coroutine.yield "again"
     nil
+
+  wait: (time) ->
+    while time > 0
+      time -= coroutine.yield!
+    if time < 0
+      coroutine.yield "more", -time
+
   tween: (obj, time, props, step=smoothstep) ->
     t = 0
     initial = {}
