@@ -82,6 +82,10 @@ class Box
   unpack: => @x, @y, @w, @h
   unpack2: => @x, @y, @x + @w, @y + @h
 
+  pad: (amount) =>
+    amount2 = amount * 2
+    Box @x + amount, @y + amount, @w - amount2, @h - amount2
+
   pos: => @x, @y
   set_pos: (@x, @y) =>
 
@@ -113,6 +117,10 @@ class Box
   draw: (color=nil) =>
     setColor color if color
     rectangle "fill", @unpack!
+
+  outline: (color=nil) =>
+    setColor color if color
+    rectangle "line", @unpack!
 
   __tostring: =>
     ("box<(%d, %d), (%d, %d)>")\format @unpack!

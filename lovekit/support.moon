@@ -26,7 +26,7 @@ hash_color = (r,g,b,a) ->
 -- takes viewport
 -- draws grid on scaled pixel boundaries
 show_grid = (v) ->
-  return if v.screen.scale = 1
+  return if v.screen.scale == 1
   graphics.setLineWidth 1/v.screen.scale
   graphics.setColor 255,255,255, 128
 
