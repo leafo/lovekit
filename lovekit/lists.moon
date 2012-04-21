@@ -97,10 +97,10 @@ class ReuseList
   new: =>
     @dead_list = {}
 
-  update: (dt) =>
+  update: (dt, ...) =>
     for i, b in ipairs self
       if b.alive
-        b.alive = b\update dt
+        b.alive = b\update dt, ...
         if not b.alive
           b\onremove! if b.onremove
           insert @dead_list, i
@@ -109,11 +109,12 @@ class ReuseList
     for b in *self
       b\draw! if b.alive
 
-  add_item: (cls, ...) =>
+  add: (cls, ...) =>
     top = remove @dead_list
-    if top
-      cls.__init top, ...
-      top
+    out = if top
+      o = self[top]
+      cls.__init o, ...
+      o
     else
       @_append cls ...
 
