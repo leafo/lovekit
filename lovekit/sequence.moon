@@ -61,7 +61,9 @@ resume = (co, ...) ->
   err, v
 
 class Sequence
-  new: (@fn, scope=default_scope) =>
+  self.default_scope = default_scope
+
+  new: (@fn, scope=Sequence.default_scope) =>
     if scope
       old_env = getfenv @fn
       setfenv @fn, setmetatable {}, {
