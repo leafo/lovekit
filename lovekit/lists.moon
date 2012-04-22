@@ -113,6 +113,7 @@ class ReuseList
     top = remove @dead_list
     out = if top
       o = self[top]
+      setmetatable o, cls.__base if o.__class != cls
       cls.__init o, ...
       o
     else
