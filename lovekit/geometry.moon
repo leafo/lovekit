@@ -138,6 +138,9 @@ class Box
   left_of: (box) =>
     self.x < box.x
 
+  above_of: (box) =>
+    self.y <= box.y + box.h
+
   draw: (color=nil) =>
     setColor color if color
     rectangle "fill", @unpack!
