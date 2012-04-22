@@ -20,7 +20,7 @@ class Entity
     @fit_move unpack @velocity * dt
     -- @box\move unpack @velocity * dt
 
-  on_stuck: => print "on_suck: " .. @@__name
+  on_stuck: => print "on_stuck: " .. @@__name
 
   fit_move: (dx, dy) =>
     collided_x = false
