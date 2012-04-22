@@ -10,7 +10,6 @@ class Entity
   loc: => Vec2d @box.x, @box.y
 
   new: (@world, x, y) =>
-    @facing = "right"
     @box = Box x, y, @w, @h
     @velocity = Vec2d 0, 0
 
@@ -19,10 +18,17 @@ class Entity
 
   update: (dt) =>
     @fit_move unpack @velocity * dt
+    -- @box\move unpack @velocity * dt
+
+  on_stuck: => print "on_suck: " .. @@__name
 
   fit_move: (dx, dy) =>
     collided_x = false
     collided_y = false
+
+    -- if you are collided before you move then the world changed, PANIC
+    if dx != 0 or dy != 0 and @world\collides self
+      return @on_stuck!
 
     -- x
     if dx > 0
