@@ -27,7 +27,7 @@ class Entity
     collided_y = false
 
     -- if you are collided before you move then the world changed, PANIC
-    if dx != 0 or dy != 0 and @world\collides self
+    if (dx != 0 or dy != 0) and @world\collides self
       return @on_stuck!
 
     -- x
