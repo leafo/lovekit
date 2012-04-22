@@ -1,5 +1,5 @@
 
-module "ui", package.seeall
+module "lui", package.seeall
 
 export ^
 
