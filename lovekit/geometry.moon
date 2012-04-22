@@ -156,6 +156,12 @@ class Box
     setColor color if color
     rectangle "line", @unpack!
 
+  -- center to center vector
+  vector_to: (other) =>
+    x1, y1 = @center!
+    x2, y2 = other\center!
+    Vec2d x2 - x1, y2 - y1
+
   __tostring: =>
     ("box<(%d, %d), (%d, %d)>")\format @unpack!
 
