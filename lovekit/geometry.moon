@@ -1,7 +1,7 @@
 
 -- collision stuff
 
-import rectangle, setColor from love.graphics if love
+import rectangle, setColor from love.graphics
 import rad, atan2, cos, sin from math
 
 export *
