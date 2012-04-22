@@ -51,6 +51,11 @@ class Animator
   draw: (x, y) =>
     @sprite\draw_cell @sequence[@i], x, y, @flip
 
+  -- draw frame based on time form 0 to 1
+  drawt: (t, x, y) =>
+    k = math.max 1, math.ceil t * #@sequence
+    @sprite\draw_cell @sequence[k], x, y, @flip
+
 -- used for blitting
 class Spriter
   new: (@img, @cell_w, @cell_h=cell_w, @width=0) =>
