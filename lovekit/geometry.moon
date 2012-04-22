@@ -1,7 +1,7 @@
 
 -- collision stuff
 
-import rectangle, setColor from love.graphics
+import rectangle, setColor from love.graphics if love
 import rad, atan2, cos, sin from math
 
 export *
@@ -68,13 +68,20 @@ class Vec2d
       self[1] = self[1] / l * max_len
       self[2] = self[2] / l * max_len
 
-  __mul: (other) =>
-    if type(other) == "number"
-      Vec2d self[1] * other, self[2] * other
+  __mul: (left, right) ->
+    if type(left) == "number"
+      if type(right) == "number"
+        error "put dot product here!"
+      else
+        Vec2d left * right[1], left * right[2]
+    else
+      Vec2d left[1] * right, left[2] * right
 
-  __div: (other) =>
-    if type(other) == "number"
-      Vec2d self[1] / other, self[2] / other
+  __div: (left, right) ->
+    if type(left) == "number"
+      error "vector division undefined"
+
+    Vec2d left[1] / right, left[2] / right
 
   __add: (other) =>
     Vec2d self[1] + other[1], self[2] + other[2]
