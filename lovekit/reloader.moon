@@ -2,6 +2,8 @@
 export ^
 export watch_class
 
+return false if disable_reloader
+
 import p from require "moon"
 
 config_char = (n) -> package.config\sub n,n
