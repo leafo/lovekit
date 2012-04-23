@@ -14,7 +14,7 @@ GAME_ZIP=$GAME_NAME.love
 # LOVEKIT_SRC=https://leafo@github.com/leafo/lovekit.git
 LOVEKIT_SRC=/srv/git/lovekit.git
 
-LOVE_BIN=/home/leafo/Downloads/love-0.7.2-win-x86.zip
+LOVE_BIN=/home/leafo/Downloads/love-0.8.0-win-x86.zip
 MOON_SRC_DIR=/home/leafo/code/lua/moonscript
 
 if [ -z "`git status 2> /dev/null`" ]; then
