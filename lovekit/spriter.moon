@@ -33,7 +33,7 @@ class Animator
   -- @sequence array of cell ids to animate
   -- @rate time between each frame in seconds
   -- @flip flip all frames horizontally if true
-  new: (@sprite, @sequence, @rate=0, @flip=false) =>
+  new: (@sprite, @sequence, @rate=0, @flip_x=false, @flip_y=false) =>
     @reset!
 
   reset: =>
@@ -49,12 +49,12 @@ class Animator
         @i = 1 if @i > #@sequence
 
   draw: (x, y) =>
-    @sprite\draw_cell @sequence[@i], x, y, @flip
+    @sprite\draw_cell @sequence[@i], x, y, @flip_x, @flip_y
 
   -- draw frame based on time form 0 to 1
   drawt: (t, x, y) =>
     k = math.max 1, math.ceil t * #@sequence
-    @sprite\draw_cell @sequence[k], x, y, @flip
+    @sprite\draw_cell @sequence[k], x, y, @flip_x, @flip_y
 
 -- used for blitting
 class Spriter
@@ -81,7 +81,6 @@ class Spriter
         else
           @ox + (i % @width) * @cell_w, @oy + math.floor(i / @width) * @cell_h
 
-        print "make quad", sx, sy, @cell_w, @cell_h, @iw, @ih
         graphics.newQuad sx, sy, @cell_w, @cell_h, @iw, @ih
 
     @quads[i]
@@ -95,18 +94,13 @@ class Spriter
 
     nil
 
-  draw_cell: (i, x, y, flip=false) =>
+  draw_cell: (i, x, y, flip_x=false, flip_y=false) =>
     q = @quad_for i
 
-    if flip
-      push!
-      translate x, y
-      translate @cell_w, 0
-      scale -1, 1
-
-      @img\drawq q, 0, 0
-
-      pop!
+    if flip or flip_y
+      q\flip flip_x, flip_y
+      @img\drawq q, x, y
+      q\flip flip_x, flip_y
     else
       @img\drawq q, x, y
     nil
