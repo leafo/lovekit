@@ -10,6 +10,7 @@ require "lovekit.input"
 require "lovekit.sequence"
 require "lovekit.lists"
 require "lovekit.state"
+require "lovekit.color"
 
 require "lovekit.ui.window"
 

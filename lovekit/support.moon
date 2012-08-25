@@ -30,7 +30,6 @@ bench = (name, fn) ->
 hash_color = (r,g,b,a) ->
   table.concat {r,g,b}, ","
 
-
 -- takes viewport
 -- draws grid on scaled pixel boundaries
 show_grid = (v) ->
