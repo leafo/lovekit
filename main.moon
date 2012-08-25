@@ -3,11 +3,17 @@ require "moon"
 
 require "lovekit.all"
 reloader = require "lovekit.reloader"
+require "lovekit.screen_snap"
 
 import graphics, keyboard from love
 
+snapper = nil
+
 love.load = ->
   viewport = Viewport scale: 4
+
+  for k,v in pairs love.graphics
+    print "*", k
 
   sprite = Spriter "scrap/tileset.png", 16, 16
   map = TileMap.from_image "scrap/map.png", sprite, {
@@ -18,7 +24,7 @@ love.load = ->
 
 
   ui_sprite = Spriter "scrap/ui.png", 4, 4, 4
-  window = ui.Window ui_sprite
+  window = lui.Window ui_sprite
 
   b = Box 0,0, 30, 30
 
@@ -36,6 +42,8 @@ love.load = ->
         print "speed index", speed_i
         speed = 50 + speed_i * 50
       when "escape" then os.exit!
+      when "s"
+        snapper = if snapper then nil else ScreenSnap!
 
   seq = Sequence ->
     tween b, 1, x: 80, y: 50
@@ -62,10 +70,16 @@ love.load = ->
     viewport\center_on me
     viewport\apply!
 
-    map\draw!
+
+    v = viewport\pad 20
+    map\draw box: v
+    v\outline!
+
     graphics.setColor 255,255,255, 64
     graphics.rectangle "fill", b\unpack!
     graphics.setColor 255,255,255
+
+    map\show_touching me
 
     me\draw!
 
@@ -74,6 +88,8 @@ love.load = ->
     -- window\draw 10, 10, 100, 100
     graphics.print love.timer.getFPS!, 10, 10
     -- window\draw b\unpack!
+
+    snapper\tick! if snapper
 
     -- show_grid viewport
 

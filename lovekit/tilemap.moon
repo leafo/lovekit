@@ -116,6 +116,9 @@ class TileMap
   pos_for_xy: (x, y) =>
     x * @cell_size, y * @cell_size, @cell_size, @cell_size
 
+  pos_for_i: (i) =>
+    @pos_for_xy @to_xy i
+
   -- final x,y coord
   each_xyt: (tiles=@tiles)=>
     coroutine.wrap ->
@@ -137,10 +140,29 @@ class TileMap
         tile\draw @sprite, self if tile
 
   collides: (thing) =>
+    -- test all the tiles
+    solid = @layers[@solid_layer]
+    for x, y, t, i in @each_xyt solid
+      return true if solid[i] and solid[i]\touches_box thing.box
+
+    false
+    -- for tid in @tiles_for_box thing.box
+    --   return true if solid[tid]
+    -- false
+
+  -- tiles for box is bugged, see main.moon example
+  show_touching: (thing) =>
     solid = @layers[@solid_layer]
     for tid in @tiles_for_box thing.box
-      return true if solid[tid]
-    false
+      tile = solid[tid]
+      if tile
+        Box.draw tile, {255, 128, 128, 128}
+      else -- show candidates
+        x, y = @to_xy tid
+        b = Box x * @cell_size, y * @cell_size, @cell_size, @cell_size
+        b = b\pad 10
+        b\draw {255, 128, 128, 128}
+
 
     -- get all tile id touching box
   tiles_for_box: (box) =>
