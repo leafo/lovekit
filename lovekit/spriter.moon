@@ -97,7 +97,7 @@ class Spriter
   draw_cell: (i, x, y, flip_x=false, flip_y=false) =>
     q = @quad_for i
 
-    if flip or flip_y
+    if flip_x or flip_y
       q\flip flip_x, flip_y
       @img\drawq q, x, y
       q\flip flip_x, flip_y
