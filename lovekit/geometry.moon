@@ -68,6 +68,18 @@ class Vec2d
       self[1] = self[1] / l * max_len
       self[2] = self[2] / l * max_len
 
+  direction_name:(names={"up", "right", "down", "left"}) =>
+    if math.abs(self[1]) > math.abs(self[2])
+      if self[1] < 0
+        names[4]
+      else
+        names[2]
+    else
+      if self[2] < 0
+        names[1]
+      else
+        names[3]
+
   __mul: (left, right) ->
     if type(left) == "number"
       if type(right) == "number"
