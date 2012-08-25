@@ -1,4 +1,6 @@
 
+punct = "[%^$()%.%[%]*+%-?]"
+
 export *
 
 lovekit = lovekit or {}
@@ -7,6 +9,12 @@ smoothstep = (a, b, t) ->
   t = t*t*t*(t*(t*6 - 15) + 10)
   a + (b - a)*t
 
+escape_patt = (str) ->
+  (str\gsub punct, (p) -> "%"..p)
+
+split = (str, delim using nil) ->
+  str ..= delim
+  [part for part in str\gmatch "(.-)" .. escape_patt(delim)]
 
 -- TODO move these elsewhere
 mixin_object = (object, methods) =>
