@@ -74,15 +74,10 @@ class TileMap
         else
           t.tid
 
-        position = {
-          x * @cell_size, y * @cell_size
-          @cell_size, @cell_size
-        }
-
         @layers[t.layer or 1][i] = if tid
-          Tile tid, unpack position
+          Tile tid, @pos_for_xy x, y
         elseif t.animated
-          AnimatedTile t, t.delay, unpack position
+          AnimatedTile t, t.delay, @pos_for_xy x, y
 
   new: (@width, @height, tiles=nil) =>
     @count = @width * @height
@@ -117,6 +112,9 @@ class TileMap
     return false if x < 0 or x >= @width
     return false if y < 0 or y >= @height
     y * @width + x + 1
+
+  pos_for_xy: (x, y) =>
+    x * @cell_size, y * @cell_size, @cell_size, @cell_size
 
   -- final x,y coord
   each_xyt: (tiles=@tiles)=>
