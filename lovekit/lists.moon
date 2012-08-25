@@ -3,6 +3,11 @@ import insert, remove from table
 
 export *
 
+Set = (items) ->
+  self = {}
+  self[key] = true for key in *items
+  self
+
 -- a basic hashed linked list
 class List
   new: => @clear!

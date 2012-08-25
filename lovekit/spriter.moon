@@ -72,12 +72,17 @@ class Spriter
 
   quad_for: (i) =>
     if not @quads[i]
-      sx, sy = if @width == 0
-        @ox + i * @cell_w, @oy
+      @quads[i] = if type(i) == "string" -- "x,y,w,h"
+        x, y, w, h = i\match "(%d+),(%d+),(%d+),(%d+)"
+        graphics.newQuad x, y, w, h, @iw, @ih
       else
-        @ox + (i % @width) * @cell_w, @oy + math.floor(i / @width) * @cell_h
+        sx, sy = if @width == 0
+          @ox + i * @cell_w, @oy
+        else
+          @ox + (i % @width) * @cell_w, @oy + math.floor(i / @width) * @cell_h
 
-      @quads[i] = graphics.newQuad sx, sy, @cell_w, @cell_h, @iw, @ih
+        print "make quad", sx, sy, @cell_w, @cell_h, @iw, @ih
+        graphics.newQuad sx, sy, @cell_w, @cell_h, @iw, @ih
 
     @quads[i]
 

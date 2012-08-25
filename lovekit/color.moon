@@ -61,9 +61,6 @@ rgb_to_hsl = (r,g,b) ->
     else
       (max - min) / (2 - max - min)
 
-    print r,g,b
-    print max
-
     h = switch max
       when r
         (g - b) / (max - min)
@@ -75,6 +72,4 @@ rgb_to_hsl = (r,g,b) ->
   h += 6 if h < 0
   h * 60, s * 100, l * 100
 
-
-print rgb_to_hsl(hsl_to_rgb(100, 50,50))
 
