@@ -35,6 +35,10 @@ class Vec2d
     theta = rad deg
     Vec2d cos(theta), sin(theta)
 
+  self.random = (mag=1) ->
+    vec = Vec2d.from_angle math.random() * 360
+    vec * mag
+
   angle: =>
     math.deg atan2 self[2], self[1]
 
