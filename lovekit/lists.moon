@@ -61,6 +61,8 @@ class List
 -- a lua array that fills dead slots added items
 -- uses .alive property of items in list to keep track of state
 class DrawList
+  show_boxes: false
+
   new: =>
     @dead_list = {}
 
@@ -97,7 +99,9 @@ class DrawList
 
   draw: =>
     for item in *self
-      item\draw! if item.alive
+      if item.alive
+        item\draw!
+        item.box\outline! if @show_boxes and item.box
 
 
 -- a simple array that reuses the tables created for objects when they are dead
