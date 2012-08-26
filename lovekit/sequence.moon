@@ -61,9 +61,12 @@ resume = (co, ...) ->
   err, v
 
 class Sequence
-  self.default_scope = default_scope
+  @default_scope = default_scope
 
-  new: (@fn, scope=Sequence.default_scope) =>
+  @extend = (tbl) =>
+    @default_scope = setmetatable tbl, __index: @default_scope
+
+  new: (@fn, scope=@@default_scope) =>
     if scope
       old_env = getfenv @fn
       setfenv @fn, setmetatable {}, {
@@ -86,11 +89,13 @@ class Sequence
 
   respond: =>
 
+  is_dead: => coroutine.status(@co) == "dead"
+
   send_time: (dt) =>
     -- loop until the time is sent
     while true do
       @start! if not @started
-      return false if coroutine.status(@co) == "dead"
+      return false if @is_dead!
 
       signal, val = resume @co, dt
 
