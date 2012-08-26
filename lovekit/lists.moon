@@ -97,6 +97,10 @@ class DrawList
     table.sort self, (a, b) ->
       a.box.y + a.box.h < b.box.y + b.box.h
 
+  sort_pts: =>
+    table.sort self, (a, b) ->
+      a.y < b.y
+
   draw: =>
     for item in *self
       if item.alive

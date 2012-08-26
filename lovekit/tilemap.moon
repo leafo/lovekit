@@ -139,6 +139,20 @@ class TileMap
         tile = @layers[i][tid]
         tile\draw @sprite, self if tile
 
+  -- just draw the whole thing
+  draw_layer: (l, viewport) =>
+    count = 0
+    if viewport
+      for tid in @tiles_for_box viewport
+        tile = @layers[l][tid]
+        if tile
+          tile\draw @sprite, self
+          count += 1
+    else
+      for _, tile in pairs @layers[l]
+        tile\draw @sprite, self
+        count += 1
+
   collides: (thing) =>
     -- test all the tiles
     solid = @layers[@solid_layer]

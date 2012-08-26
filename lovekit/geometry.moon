@@ -59,6 +59,10 @@ class Vec2d
   update: (x, y) =>
     self[1], self[2] = x, y
 
+  adjust: (dx, dy) =>
+    self[1] += dx
+    self[2] += dy
+
   normalized: =>
     len = @len!
     if len == 0
