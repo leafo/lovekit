@@ -30,6 +30,19 @@ bench = (name, fn) ->
 hash_color = (r,g,b,a) ->
   table.concat {r,g,b}, ","
 
+-- chain together tables by __index metatables
+extend = (...) ->
+  tbls = {...}
+  return if #tbls < 2
+
+  for i = 1, #tbls - 1
+    a = tbls[i]
+    b = tbls[i + 1]
+
+    setmetatable a, __index: b
+
+  tbls[1]
+
 -- takes viewport
 -- draws grid on scaled pixel boundaries
 show_grid = (v) ->
