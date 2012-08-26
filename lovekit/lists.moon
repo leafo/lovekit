@@ -91,6 +91,10 @@ class DrawList
 
     updated > 0
 
+  sort: =>
+    table.sort self, (a, b) ->
+      a.box.y + a.box.h < b.box.y + b.box.h
+
   draw: =>
     for item in *self
       item\draw! if item.alive
