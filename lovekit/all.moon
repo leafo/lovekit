@@ -11,6 +11,7 @@ require "lovekit.sequence"
 require "lovekit.lists"
 require "lovekit.state"
 require "lovekit.color"
+require "lovekit.effects"
 
 require "lovekit.ui.window"
 

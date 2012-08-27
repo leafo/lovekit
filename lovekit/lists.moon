@@ -143,3 +143,39 @@ class ReuseList
     with b
       self[#self + 1] = b
 
+
+-- Holds a collection of objects that have update/before/after methods
+-- Only once instance of a class can be in list at a time
+class EffectList
+  new: (@obj) =>
+    @current_effects = {}
+
+  clear: (@obj) =>
+    for k in pairs @current_effects
+      @current_effects[k] = nil
+
+    for i=1,#self
+      self[i] = nil
+
+  add: (effect) =>
+    existing = @current_effects[effect.__class]
+    if existing
+      effect\replace self[existing]
+      self[existing] = effect
+    else
+      table.insert self, effect
+      @current_effects[effect.__class] = #self
+
+  update: (dt) =>
+    for i, e in ipairs self
+      alive = e\update dt
+      if not alive
+        @current_effects[e.__class] = nil
+        table.remove self, i
+
+  apply: (fn) =>
+    e\before @obj for e in *self
+    fn!
+    for i=#self,1,-1 -- reverse order
+      self[e]\after @obj
+

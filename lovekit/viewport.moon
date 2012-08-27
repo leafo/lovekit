@@ -1,7 +1,9 @@
 
 require "lovekit.geometry"
+require "lovekit.effects"
 
 import graphics from love
+import effects from lovekit
 
 export *
 
@@ -60,4 +62,24 @@ class Viewport extends Box
 
       @x = max_x if @x > max_x
       @y = max_y if @y > max_y
+
+
+class EffectViewport extends Viewport
+  new: (...) =>
+    @effects = EffectList!
+    super ...
+
+  shake: =>
+    @effects\add effects.ViewportShake 0.4
+
+  update: (dt) => @effects\update dt
+
+  apply: =>
+    super!
+    e\before @obj for e in *@effects
+
+  pop: =>
+    e\after @obj for e in *@effects
+    super!
+
 
