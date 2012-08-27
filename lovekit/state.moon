@@ -9,6 +9,7 @@ import insert, remove from table
 class Dispatcher
   new: (initial) =>
     @stack = { initial }
+    initial\onload self if initial.onload
 
   send: (event, ...) =>
     current = @top!
@@ -19,11 +20,13 @@ class Dispatcher
 
   push: (state) =>
     insert @stack, state
+    state\onload self if state.onload
 
   pop: (n=1) =>
-    @blend_effect = nil
     while n > 0
       os.exit! if #@stack == 0
+      top = @top!
+      top\onunload self if top and top.unload
       remove @stack
       n -= 1
 
@@ -38,15 +41,8 @@ class Dispatcher
       when "escape" then os.exit!
 
   draw: =>
-    if @blend_effect
-      @blend_effect @elapsed / @effect_time
-    else
-      @send "draw"
+    @send "draw"
 
   update: (dt) =>
-    if @blend_effect
-      @elapsed += dt
-      @blend_effect = nil if @elapsed > @effect_time
-
     @send "update", dt
 
