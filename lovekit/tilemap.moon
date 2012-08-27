@@ -50,8 +50,14 @@ class TileMap
         elseif a == 255
           color_to_tile[hash_color r,g,b,a]
 
-        if not tile and a > 0
-          error "Got unexpected map tile color: " .. hash_color r,g,b,a
+        if type(tile) == "function"
+          tile = tile x * tile_sprite.cell_w, y * tile_sprite.cell_w, len
+
+        if type(tile) == "number"
+          tile = tid: tile
+
+        -- if not tile and a > 0
+        --   error "Got unexpected map tile color: " .. hash_color r,g,b,a
 
         tiles[len] = tile if tile
         len += 1
