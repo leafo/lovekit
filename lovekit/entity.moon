@@ -22,6 +22,16 @@ class Entity
 
   on_stuck: => print "on_stuck: " .. @@__name
 
+  direction_name: (default_dir="down", v=@velocity) =>
+    base = if v\is_zero! then
+      "stand"
+    else
+      @last_direction = v\direction_name!
+      "walk"
+
+    dir = @last_direction or default_dir
+    base .. "_" .. dir
+
   fit_move: (dx, dy) =>
     collided_x = false
     collided_y = false
