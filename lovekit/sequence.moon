@@ -66,6 +66,30 @@ class Sequence
   @extend = (tbl) =>
     @default_scope = setmetatable tbl, __index: @default_scope
 
+  @join = (...) ->
+    seqs =  {...}
+
+    setmetatable {
+      _seqs: seqs
+      update: (dt) =>
+        alive = false
+        for s in *seqs
+          alive = s\update(dt) or alive
+        alive
+    }, __index: (key) =>
+      val = seqs[1][key]
+
+      -- create a joined function
+      if type(val) == "function"
+        print "creating joined function!"
+        val = (...) =>
+          for s in *seqs
+            s[key] s, ...
+
+        self[key] = val
+
+      val
+
   new: (@fn, scope=@@default_scope) =>
     if scope
       old_env = getfenv @fn
