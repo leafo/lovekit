@@ -81,10 +81,9 @@ class Sequence
 
       -- create a joined function
       if type(val) == "function"
-        print "creating joined function!"
         val = (...) =>
           for s in *seqs
-            s[key] s, ...
+            s[key] s, ... if s[key]
 
         self[key] = val
 
