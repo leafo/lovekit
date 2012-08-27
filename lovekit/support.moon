@@ -23,9 +23,9 @@ mixin_object = (object, methods) =>
       object[name](object, ...)
 
 bench = (name, fn) ->
-  start = getMicroTime!
+  start = love.timer.getTime!
   fn!
-  print "++ Benchmark:", name, getMicroTime! - start
+  print "++ Benchmark:", name, love.timer.getTime! - start
 
 hash_color = (r,g,b,a) ->
   table.concat {r,g,b}, ","
