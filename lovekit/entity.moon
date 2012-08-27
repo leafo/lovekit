@@ -35,17 +35,17 @@ class Entity
       start = @box.x
       @box.x += dx
       if @world\collides self
+        collided_x = true
         @box.x = floor @box.x
         while @world\collides self
-          collided_x = true
           @box.x -= 1
     elseif dx < 0
       start = @box.x
       @box.x += dx
       if @world\collides self
+        collided_x = true
         @box.x = ceil @box.x
         while @world\collides self
-          collided_x = true
           @box.x += 1
  
     -- y
@@ -53,17 +53,17 @@ class Entity
       start = @box.y
       @box.y += dy
       if @world\collides self
+        collided_y = true
         @box.y = floor @box.y
         while @world\collides self
-          collided_y = true
           @box.y -= 1
     elseif dy < 0
       start = @box.y
       @box.y += dy
       if @world\collides self
+        collided_y = true
         @box.y = ceil @box.y
         while @world\collides self
-          collided_y = true
           @box.y += 1
 
     collided_x, collided_y
