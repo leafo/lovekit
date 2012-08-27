@@ -1,6 +1,11 @@
 
 import insert, remove from table
 
+box_sort = (a, b) ->
+  abox = a.box
+  bbox = b.box
+  (abox and abox.y + abox.h or a.y) < (bbox and bbox.y + bbox.h or b.y)
+
 export *
 
 Set = (items) ->
@@ -93,20 +98,20 @@ class DrawList
 
     updated > 0
 
-  sort: =>
-    table.sort self, (a, b) ->
-      a.box.y + a.box.h < b.box.y + b.box.h
-
-  sort_pts: =>
-    table.sort self, (a, b) ->
-      a.y < b.y
-
   draw: =>
     for item in *self
       if item.alive
         item\draw!
         item.box\outline! if @show_boxes and item.box
 
+  -- sort based on depth (y value)
+  draw_sorted: (sort_fn=box_sort)=>
+    alive = [item for item in *self when item.alive]
+    table.sort alive, sort_fn
+
+    for item in *alive
+      item\draw!
+      item.box\outline! if @show_boxes and item.box
 
 -- a simple array that reuses the tables created for objects when they are dead
 -- better than "DeadList" above
