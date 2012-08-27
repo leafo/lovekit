@@ -36,10 +36,11 @@ class Viewport extends Box
 
   apply: (scale=true)=>
     @scale! if scale
+    graphics.push!
     graphics.translate -@x, -@y
 
   pop: =>
-    graphics.translate @x, @y -- go back to where we were
+    graphics.pop!
 
   unproject: (x,y) =>
     x, y = x / @screen.scale, y / @screen.scale
