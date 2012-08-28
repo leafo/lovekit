@@ -160,6 +160,27 @@ class TileMap
         count += 1
 
   collides: (thing) =>
+    import width, cell_size from self
+    import floor from math
+    solid = @layers[@solid_layer]
+
+    x1,y1, x2,y2 = thing.box\unpack2!
+
+    x1,y1 = floor(x1 / cell_size), floor(y1 / cell_size)
+    x2,y2 = floor(x2 / cell_size), floor(y2 / cell_size)
+
+    y = y1
+    -- TODO does not work for things outside of the map
+    while y <= y2
+      x = x1
+      while x <= x2
+        return true if solid[y * width + x + 1]
+        x += 1
+      y += 1
+
+    false
+
+  collides_bad: (thing) =>
     -- test all the tiles
     solid = @layers[@solid_layer]
     for x, y, t, i in @each_xyt solid
