@@ -35,8 +35,8 @@ class Viewport extends Box
     graphics.scale s, s
 
   apply: (scale=true)=>
-    @scale! if scale
     graphics.push!
+    @scale! if scale
     graphics.translate -@x, -@y
 
   pop: =>
