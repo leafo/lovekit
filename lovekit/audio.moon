@@ -19,7 +19,7 @@ class Audio
     ext = ext or @ext
     fname = @dir .. "/" .. name .. "." ..ext
     print "loading source(".. tostring(source_type) .. "):", fname
-    source = audio.newSource fname, "static"
+    source = audio.newSource fname, source_type
     with source
       @sources[name] = source
 
