@@ -4,10 +4,11 @@ export *
 
 -- take screenshots every @rate frames, save them in dir
 class ScreenSnap
-  new: (@rate=5, @dir="snapshots_"..os.time!) =>
+  new: (@rate=3, @dir="snapshots_"..os.time!) =>
     @prefix = "snap"
     @i = 1
     @frames = 0
+    @snaps = {}
 
     filesystem.mkdir @dir
 
@@ -15,18 +16,22 @@ class ScreenSnap
     with @dir .. "/" .. @prefix .. "_" .. @i .. "." .. ext
       @i += 1
 
-  take_screenshot: (format="png")=>
-    image_data = graphics.newScreenshot!
-    fname = @next_name format
-    print "++ snap: " .. fname
+  write: (format="png") =>
+    print "++ writing ", #@snaps, "snaps"
+    for image_data in *@snaps
+      fname = @next_name format
+      -- love 7
+      if image.newEncodedImageData
+        image.newEncodedImageData image_data, format
+        filesystem.write fname, ss
+      else
+        print "encoding"
+        image_data\encode fname
 
-    -- love 7
-    if image.newEncodedImageData
-      image.newEncodedImageData image_data, format
-      filesystem.write fname, ss
-    else
-      print "encoding"
-      image_data\encode fname
+  take_screenshot: =>
+    start = love.timer.getTime!
+    @snaps[#@snaps + 1] = graphics.newScreenshot!
+    print "++ snap", love.timer.getTime! - start
 
   tick:  =>
     @take_screenshot! if @frames % @rate == 0
