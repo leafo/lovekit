@@ -1,8 +1,11 @@
 
-export ^
-export watch_class
+module "lovekit.reloader"
 
 return false if disable_reloader
+
+export ^
+export watch_class
+export reloader
 
 import p from require "moon"
 

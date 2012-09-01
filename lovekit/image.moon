@@ -4,13 +4,15 @@ import graphics from love
 export ^
 export imgfy
 
-reloader = require "lovekit.reloader"
-
 class Image
   new: (@fname) =>
     @reload!
-    if reloader and not reloader\is_watching @fname
-      reloader\watch @fname, self\reload
+
+    if lovekit.reloader
+      import reloader from lovekit.reloader
+      if reloader and not reloader\is_watching @fname
+        reloader\watch @fname, self\reload
+
     nil
   
   width: => @tex\getWidth!
