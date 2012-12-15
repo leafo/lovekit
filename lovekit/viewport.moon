@@ -46,9 +46,7 @@ class Viewport extends Box
     x, y = x / @screen.scale, y / @screen.scale
     @x + x, @y + y
 
-  center_on: (thing, map_box) =>
-    cx, cy = thing.box\center!
-
+  center_on_pt: (cx, cy, map_box) =>
     @x = cx - @w / 2
     @y = cy - @h / 2
 
@@ -64,6 +62,9 @@ class Viewport extends Box
       @x = max_x if @x > max_x
       @y = max_y if @y > max_y
 
+
+  center_on: (thing, map_box) =>
+    @center_on_pt thing.box\center!
 
 class EffectViewport extends Viewport
   new: (...) =>
