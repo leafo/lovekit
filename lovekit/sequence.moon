@@ -5,7 +5,7 @@ import min from math
 
 export ^
 
--- Functions here yeild to the sequence object. The sequence object will yeild
+-- Functions here yield to the sequence object. The sequence object will yield
 -- dt so animation can be performed
 
 -- every rate seconds call function
@@ -30,6 +30,16 @@ default_scope = {
       time -= coroutine.yield!
     if time < 0
       coroutine.yield "more", -time
+
+  during: (time, fn) ->
+    while time > 0
+      dt = coroutine.yield!
+      time -= dt
+      dt += time if time < 0
+      if "cancel" == fn dt
+        break
+
+    coroutine.yield "more", -time if time < 0
 
   tween: (obj, time, props, step=smoothstep) ->
     t = 0
