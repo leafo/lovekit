@@ -179,8 +179,14 @@ class EffectList
         table.remove self, i
 
   apply: (fn) =>
-    e\before @obj for e in *self
+    @before!
     fn!
+    @after!
+
+  before: =>
+    e\before @obj for e in *self
+
+  after: =>
     for i=#self,1,-1 -- reverse order
-      self[e]\after @obj
+      self[i]\after @obj
 

@@ -1,4 +1,6 @@
 
+require "lovekit.sequence"
+
 module "lovekit.effects", package.seeall
 
 import graphics from love
@@ -39,4 +41,26 @@ class ViewportShake extends Effect
   after: =>
     graphics.pop!
 
+class ColorEffect extends Sequence
+  new: (...) =>
+    super ...
+    @tmp_color = {}
+
+  before: =>
+    @tmp_color[1], @tmp_color[2], @tmp_color[3] = graphics.getColor!
+    graphics.setColor unpack @color if @color
+
+  after: =>
+    graphics.setColor @tmp_color
+
+class Flash extends ColorEffect
+  new: (duration=0.2, color={255,100,100}) =>
+    half = duration/2
+    super ->
+      start = {graphics.getColor!}
+      @color = {unpack start}
+      tween @color, half, color
+      tween @color, half, start
+
+nil
 
