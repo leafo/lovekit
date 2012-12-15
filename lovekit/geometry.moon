@@ -93,6 +93,13 @@ class Vec2d
       else
         names[3]
 
+  -- x' = x cos f - y sin f
+  -- y' = y cos f + x sin f
+  rotate: (rads) =>
+    {x, y} = @
+    c, s = cos(rads), sin(rads)
+    Vec2d x*c - y*s, y*c + x*s
+
   __mul: (left, right) ->
     if type(left) == "number"
       if type(right) == "number"

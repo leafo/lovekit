@@ -46,6 +46,8 @@ class ColorEffect extends Sequence
     super ...
     @tmp_color = {}
 
+  replace: (other) =>
+
   before: =>
     @tmp_color[1], @tmp_color[2], @tmp_color[3] = graphics.getColor!
     graphics.setColor unpack @color if @color

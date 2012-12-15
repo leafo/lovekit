@@ -58,7 +58,7 @@ class Animator
 
 -- used for blitting
 class Spriter
-  new: (@img, @cell_w, @cell_h=cell_w, @width=0) =>
+  new: (@img, @cell_w=0, @cell_h=cell_w, @width=0) =>
     @img = imgfy @img
 
     @iw, @ih = @img\width!, @img\height!
@@ -76,6 +76,7 @@ class Spriter
         x, y, w, h = i\match "(%d+),(%d+),(%d+),(%d+)"
         graphics.newQuad x, y, w, h, @iw, @ih
       else
+        error "can't draw from index with no cell size" unless @cell_w > 0
         sx, sy = if @width == 0
           @ox + i * @cell_w, @oy
         else
@@ -93,6 +94,9 @@ class Spriter
     @img\drawq q, x, y, 0, sx, sy
 
     nil
+
+  draw: (i,...) =>
+    @img\drawq @quad_for(i), ...
 
   draw_cell: (i, x, y, flip_x=false, flip_y=false) =>
     q = @quad_for i
