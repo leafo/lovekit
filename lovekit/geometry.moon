@@ -190,33 +190,45 @@ class Box
   __tostring: =>
     ("box<(%d, %d), (%d, %d)>")\format @unpack!
 
-hash_pt = (x,y) ->
-  tostring(x)..":"..tostring(y)
+hash_pt = (x,y) -> "#{x}:#{y}"
 
 class SetList
   new: => @contains = {}
-  add: (item) =>
+  add: (item, value) =>
     return if @contains[item]
     @contains[item] = true
-    self[#self+1] = item
+    self[#self+1] = value or item
 
 class UniformGrid
   new: (@cell_size=10) =>
     @buckets = {}
+    @values = {}
 
-  add: (box) =>
+  clear: =>
+    for _, bucket in pairs @buckets
+      for k,v in pairs bucket
+        bucket[k] = nil
+
+    for k,v in pairs @values
+      @values[k] = nil
+
+  add: (box, value) =>
     for bucket, key in @buckets_for_box box, true
-      table.insert bucket, box
+      bucket[#bucket + 1] = box
 
-  get_candidates: (query) =>
+    @values[box] = value
+
+  get_touching: (query_box) =>
+    values = @values
     with SetList!
-      for bucket in @buckets_for_box query
+      for bucket in @buckets_for_box query_box
         for box in *bucket
-          \add box
+          if query_box != box
+            \add box, values[box] if box\touches_box query_box
 
   bucket_for_pt: (x,y, insert=false) =>
-    x = math.floor x / @cell_size
-    y = math.floor y / @cell_size
+    x = _floor x / @cell_size
+    y = _floor y / @cell_size
     key = hash_pt x, y
     b = @buckets[key]
     if not b and insert
