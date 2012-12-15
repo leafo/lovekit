@@ -6,7 +6,7 @@ import rad, atan2, cos, sin from math
 
 export *
 
-_floor, _ceil = math.floor, math.ceil
+_floor, _ceil, _deg = math.floor, math.ceil, math.deg
 
 floor = (n) ->
   if n < 0
@@ -35,12 +35,15 @@ class Vec2d
     theta = rad deg
     Vec2d cos(theta), sin(theta)
 
+  self.from_radians = (rads) ->
+    Vec2d cos(rads), sin(rads)
+
   self.random = (mag=1) ->
     vec = Vec2d.from_angle math.random() * 360
     vec * mag
 
-  angle: =>
-    math.deg atan2 self[2], self[1]
+  angle: => _deg atan2 self[2], self[1]
+  radians: => atan2 @[2], @[1]
 
   new: (x=0, y=0) =>
     self[1] = x
@@ -50,6 +53,8 @@ class Vec2d
     n = self[1]^2 + self[2]^2
     return 0 if n == 0
     math.sqrt n
+
+  dup: => Vec2d unpack @
 
   is_zero: => self[1] == 0 and self[2] == 0
 
