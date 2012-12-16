@@ -1,5 +1,5 @@
 
-module "lovekit.reloader"
+module "lovekit.reloader", package.seeall
 
 return false if disable_reloader
 

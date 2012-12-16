@@ -20,7 +20,6 @@ class Emitter extends Sequence
   draw: =>
   make_particle: => error "implement me"
 
-
 -- a 2d point
 class Particle
   life: 1.0

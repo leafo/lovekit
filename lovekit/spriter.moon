@@ -46,12 +46,17 @@ class Animator
       if @time > @rate
         @time -= @rate
         @i = @i + 1
-        @i = 1 if @i > #@sequence
+        num = #@sequence
+        if @i > num
+          if @once == true
+            @i = num
+          else
+            @i = 1
 
   draw: (x, y) =>
     @sprite\draw_cell @sequence[@i], x, y, @flip_x, @flip_y
 
-  -- draw frame based on time form 0 to 1
+  -- draw frame based on time from 0 to 1
   drawt: (t, x, y) =>
     k = math.max 1, math.ceil t * #@sequence
     @sprite\draw_cell @sequence[k], x, y, @flip_x, @flip_y
