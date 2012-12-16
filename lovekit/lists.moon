@@ -175,6 +175,7 @@ class EffectList
     for i, e in ipairs self
       alive = e\update dt
       if not alive
+        e.on_finish e if e.on_finish
         @current_effects[e.__class] = nil
         table.remove self, i
 
