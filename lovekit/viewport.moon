@@ -84,4 +84,27 @@ class EffectViewport extends Viewport
     e\after @obj for e in *@effects
     super!
 
+class TiledBackground
+  new: (image, viewport) =>
+    @ox = 0
+    @oy = 0
+
+    @img = with imgfy image
+      \set_wrap "repeat", "repeat"
+
+    @tile_w, @tile_h = @img\width!, @img\height!
+    @quad = graphics.newQuad 0,0,
+      viewport.screen.w + @tile_w,
+      viewport.screen.h + @tile_h,
+      @tile_w, @tile_h
+
+  draw: (ox, oy)=>
+    @ox = ox if ox
+    @oy = oy if oy
+
+    ox = @ox % @tile_w
+    oy = @oy % @tile_h
+    @img\drawq @quad, -ox, -oy
+
+nil
 
