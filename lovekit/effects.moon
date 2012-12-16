@@ -5,6 +5,8 @@ module "lovekit.effects", package.seeall
 
 import graphics from love
 
+{:timer} = love
+
 export ^
 
 class Effect
@@ -27,15 +29,17 @@ class Effect
 
 -- for the viewport
 class ViewportShake extends Effect
-  new: (duration, @amount) =>
+  new: (duration, @speed=5) =>
+    @start = timer.getTime!
     @rand = math.random! * math.pi
     super duration
 
   before: =>
-    t = @p!
+    p = @p!
+    t = (timer.getTime! - @start) * @speed
 
     graphics.push!
-    decay = (1 - t) * 2
+    decay = (1 - p) * 2
     graphics.translate decay * math.sin(t*10 + @rand), decay * math.cos(t*11 + @rand)
 
   after: =>

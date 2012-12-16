@@ -71,8 +71,8 @@ class EffectViewport extends Viewport
     @effects = EffectList!
     super ...
 
-  shake: =>
-    @effects\add effects.ViewportShake 0.4
+  shake: (dur=0.4) =>
+    @effects\add effects.ViewportShake dur
 
   update: (dt) => @effects\update dt
 
