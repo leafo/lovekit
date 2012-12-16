@@ -1,6 +1,8 @@
 
 punct = "[%^$()%.%[%]*+%-?]"
 
+_min, _max = math.min, math.max
+
 export *
 
 lovekit = lovekit or {}
@@ -62,4 +64,24 @@ show_grid = (v) ->
 
   graphics.setColor 255,255,255
 
+approach = (val, target, amount) ->
+  return val if val == target
+  if val > target
+    _max target, val - amount
+  else
+    _min target, val + amount
+
+-- go to zero
+dampen = (val, amount, min=0) ->
+  if val > min
+    math.max min, val - amount
+  elseif val < -min
+    math.min -min, val + amount
+  else
+    val
+
+dampen_vector = (vec, amount, min) ->
+  vec[1] = dampen vec[1], amount, min
+  vec[2] = dampen vec[2], amount, min
+  ved
 
