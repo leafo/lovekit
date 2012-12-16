@@ -13,6 +13,7 @@ require "lovekit.state"
 require "lovekit.color"
 require "lovekit.effects"
 require "lovekit.audio"
+require "lovekit.particles"
 
 require "lovekit.ui.window"
 
