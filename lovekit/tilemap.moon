@@ -107,6 +107,8 @@ class TileMap
     }
 
     @add_tiles tiles if tiles
+  
+  to_box: => Box 0,0, @real_width, @real_height
 
   to_xy: (i) =>
     i -= 1

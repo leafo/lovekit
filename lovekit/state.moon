@@ -19,7 +19,8 @@ class Dispatcher
   parent: => @stack[#@stack - 1]
 
   reset: (initial) =>
-    @stack = { initial }
+    @stack = {}
+    @push initial
 
   push: (state) =>
     insert @stack, state

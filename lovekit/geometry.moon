@@ -2,7 +2,7 @@
 -- collision stuff
 
 import rectangle, setColor from love.graphics
-import rad, atan2, cos, sin from math
+import rad, atan2, cos, sin, random from math
 
 export *
 
@@ -193,6 +193,19 @@ class Box
     x1, y1 = @center!
     x2, y2 = other\center!
     Vec2d x2 - x1, y2 - y1
+
+  random_point: =>
+    @x + random! * @w, @y + random! * @h
+
+  shrink: (dx=1, dy=dx) =>
+    hx = dx / 2
+    hy = dy / 2
+
+    w = @w - hx
+    h = @h - hy
+
+    error "box too small" if w < 0 or h < 0
+    Box @x + hx, @y + hy, w, h
 
   __tostring: =>
     ("box<(%d, %d), (%d, %d)>")\format @unpack!
