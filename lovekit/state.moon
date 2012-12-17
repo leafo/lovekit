@@ -18,6 +18,9 @@ class Dispatcher
   top: => @stack[#@stack]
   parent: => @stack[#@stack - 1]
 
+  reset: (initial) =>
+    @stack = { initial }
+
   push: (state) =>
     insert @stack, state
     state\onload self if state.onload
