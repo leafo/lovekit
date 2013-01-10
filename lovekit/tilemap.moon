@@ -1,3 +1,9 @@
+-- Support for rendering tilemaps and doing tile collision. A tile map holds
+-- many layers where each layer is an array of tile instances. Each tile knows
+-- up to draw itself.
+-- Two ways to create a new tile map:
+-- * From a pixel image, where colors associate with tiles
+-- * Creating the tiles objects manually
 
 require "lovekit.support"
 require "lovekit.geometry"
@@ -84,6 +90,8 @@ class TileMap
           Tile tid, @pos_for_xy x, y
         elseif t.animated
           AnimatedTile t, t.delay, @pos_for_xy x, y
+        else
+          t
 
   new: (@width, @height, tiles=nil) =>
     @count = @width * @height
@@ -147,7 +155,6 @@ class TileMap
         tile = @layers[i][tid]
         tile\draw @sprite, self if tile
 
-  -- just draw the whole thing
   draw_layer: (l, viewport) =>
     count = 0
     if viewport
@@ -182,16 +189,13 @@ class TileMap
 
     false
 
-  collides_bad: (thing) =>
-    -- test all the tiles
+  -- tests every tile, don't use this unless you have a good reason
+  collides_all: (thing) =>
     solid = @layers[@solid_layer]
     for x, y, t, i in @each_xyt solid
       return true if solid[i] and solid[i]\touches_box thing.box
 
     false
-    -- for tid in @tiles_for_box thing.box
-    --   return true if solid[tid]
-    -- false
 
   -- tiles for box is bugged, see main.moon example
   show_touching: (thing) =>
