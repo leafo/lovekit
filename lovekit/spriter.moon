@@ -14,12 +14,16 @@ class StateAnim
     @paused = false
 
   set_state: (name) =>
-    @current = @states[name]
-    @current\reset if name != @current_name
-    @current_name = name
+    if new_anim = @states[name]
+      @current = new_anim
+      @current\reset!  if name != @current_name
+      @current_name = name
 
   update: (dt) =>
     @current\update dt if not @paused
+
+  reset: =>
+    @current\reset!
 
   draw: (x,y) =>
     @current\draw x, y
