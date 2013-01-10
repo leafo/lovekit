@@ -1,17 +1,25 @@
-
-module "lovekit.reloader", package.seeall
+-- How to use:
+-- reloader = require "lovekit.reloader"
+-- love.update = (dt) ->
+--   reloader\update!
+--
+-- -- some_file.lua, must not be main!
+-- import watch_class from require "lovekit.reloader"
+-- class Something
+--   watch_class self
+--
+-- -- images will be reloaded automatically by deafult
 
 return false if disable_reloader
-
-export ^
-export watch_class
-export reloader
-
-import p from require "moon"
+require "inotify"
 
 config_char = (n) -> package.config\sub n,n
 -- /, ;, ?
 dirsep, pathsep, wildcard = unpack [config_char n for n in *{1,3,5}]
+
+handle = inotify.init true
+actions = {}
+watching = {} -- directories being watched
 
 Path =
   exists: (path) ->
@@ -37,35 +45,24 @@ Path =
     return a if b == ""
     a .. "/" .. b
 
-class Reloader
-  new: =>
-    require "inotify"
-    -- @handle = inotify.init true
-    @handle = inotify.init true
-    @actions = {}
-    @watching = {} -- directories being watched
+watch = (fname, action) ->
+  dir = Path.basepath fname
+  if not watching[dir]
+    wd = handle\addwatch dir, inotify.IN_CLOSE_WRITE
+    watching[dir] = wd
+    watching[wd] = dir
+  actions[fname] = { action, unpack actions[fname] or {} }
 
-  watch: (fname, action) =>
-    dir = Path.basepath fname
-    if not @watching[dir]
-      wd = @handle\addwatch dir, inotify.IN_CLOSE_WRITE
-      @watching[dir] = wd
-      @watching[wd] = dir
+is_watching = (fname) ->
+  actions[fname]
 
-    @actions[fname] = { action, unpack @actions[fname] or {} }
-
-  is_watching: (fname) =>
-    @actions[fname]
-
-  update: =>
-    events = @handle\read!
-    if events
-      for e in *events
-        file_name = Path.join @watching[e.wd], e.name
-        if @actions[file_name]
-          fn! for fn in *@actions[file_name]
-
-reloader = Reloader!
+update = =>
+  events = handle\read!
+  if events
+    for e in *events
+      file_name = Path.join watching[e.wd], e.name
+      if actions[file_name]
+        fn! for fn in *actions[file_name]
 
 path_to_package = (path) ->
   search_paths = if path\match "%.moon$"
@@ -87,7 +84,6 @@ class_table = {} -- classes are are being watched
 
 -- watch a class for reloading
 watch_class = (cls) ->
-  return if not reloader
   info = debug.getinfo getmetatable(cls).__call
 
   source_name = "./" .. info.source\match"^%@(.*)$" or info.source
@@ -115,12 +111,30 @@ watch_class = (cls) ->
 
   print "Watching", a_name, source_name
   -- don't watch the same file multiple times
-  if not reloader\is_watching source_name
-    reloader\watch source_name, ->
+  unless is_watching source_name
+    watch source_name, ->
       print "Reloading:", pkg_name
       package.loaded[pkg_name] = nil
       require pkg_name
 
   class_table[a_name] = cls
 
-return reloader
+bind = (g=_G) ->
+  {:Image} = g
+
+  -- reload images when they are changed
+  if Image
+    old_constructor = Image.__init
+    Image.__init = (...) =>
+      old_constructor @, ...
+      unless is_watching @fname
+        reloader.watch @fname, @\reload
+
+bind!
+
+{
+  :Path
+  :update, :watch, :watch_class
+  :bind
+}
+

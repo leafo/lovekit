@@ -7,13 +7,6 @@ export imgfy
 class Image
   new: (@fname) =>
     @reload!
-
-    if lovekit.reloader
-      import reloader from lovekit.reloader
-      if reloader and not reloader\is_watching @fname
-        reloader\watch @fname, self\reload
-
-    nil
   
   width: => @tex\getWidth!
   height: => @tex\getHeight!
