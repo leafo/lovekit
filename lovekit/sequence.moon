@@ -2,6 +2,7 @@
 require "lovekit.support"
 
 import min from math
+import keyboard from love
 
 export ^
 
@@ -30,6 +31,13 @@ default_scope = {
       time -= coroutine.yield!
     if time < 0
       coroutine.yield "more", -time
+
+  wait_for_key: (key) ->
+    local dt
+    while true
+      break if keyboard.isDown key
+      dt = coroutine.yield!
+    coroutine.yield "more", dt
 
   during: (time, fn) ->
     while time > 0
