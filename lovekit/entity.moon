@@ -32,49 +32,51 @@ class Entity
     dir = @last_direction or default_dir
     base .. "_" .. dir
 
-  fit_move: (dx, dy) =>
+  fit_move: (dx, dy, world=@world) =>
     collided_x = false
     collided_y = false
 
     -- if you are collided before you move then the world changed, PANIC
-    if @world\collides self
+    if world\collides self
       return @on_stuck!
+
+    box = @box
 
     -- x
     if dx > 0
-      start = @box.x
-      @box.x += dx
-      if @world\collides self
+      start = box.x
+      box.x += dx
+      if world\collides self
         collided_x = true
-        @box.x = floor @box.x
-        while @world\collides self
-          @box.x -= 1
+        box.x = floor box.x
+        while world\collides self
+          box.x -= 1
     elseif dx < 0
-      start = @box.x
-      @box.x += dx
-      if @world\collides self
+      start = box.x
+      box.x += dx
+      if world\collides self
         collided_x = true
-        @box.x = ceil @box.x
-        while @world\collides self
-          @box.x += 1
+        box.x = ceil box.x
+        while world\collides self
+          box.x += 1
  
     -- y
     if dy > 0
-      start = @box.y
-      @box.y += dy
-      if @world\collides self
+      start = box.y
+      box.y += dy
+      if world\collides self
         collided_y = true
-        @box.y = floor @box.y
-        while @world\collides self
-          @box.y -= 1
+        box.y = floor box.y
+        while world\collides self
+          box.y -= 1
     elseif dy < 0
-      start = @box.y
-      @box.y += dy
-      if @world\collides self
+      start = box.y
+      box.y += dy
+      if world\collides self
         collided_y = true
-        @box.y = ceil @box.y
-        while @world\collides self
-          @box.y += 1
+        box.y = ceil box.y
+        while world\collides self
+          box.y += 1
 
     collided_x, collided_y
 
