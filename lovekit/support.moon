@@ -1,7 +1,6 @@
 
 punct = "[%^$()%.%[%]*+%-?]"
-
-_min, _max = math.min, math.max
+{min: _min, max: _max} = math
 
 export *
 
@@ -84,4 +83,50 @@ dampen_vector = (vec, amount, min) ->
   vec[1] = dampen vec[1], amount, min
   vec[2] = dampen vec[2], amount, min
   ved
+
+lazy_key = {}
+lazy_value = (cls, key, fn) ->
+  base = cls.__base
+  old_meta = getmetatable base
+
+  -- reuse the old metatable if it's already lazy
+  if old_meta
+    if lazy_values = old_meta[lazy_key]
+      lazy_values[key] = fn
+      return
+
+  eigen = setmetatable {}, old_meta
+  lazy_values = { [key]: fn }
+  meta = {
+    [lazy_key]: lazy_values
+    __index: (name) =>
+      if fn = lazy_values[name]
+        lazy_values[name] = nil
+        val = fn cls
+        base[name] = val
+        if next(lazy_values) == nil
+          setmetatable base, old_meta
+        val
+      else
+        eigen[name]
+  }
+
+  setmetatable base, meta
+
+if ... == "test"
+  class Base
+    what: "world"
+
+  class Test extends Base
+    real: "hello"
+    lazy_value @, "hello", -> "world"
+    lazy_value @, "eat", -> "me"
+
+  t = Test!
+  print t.real
+  print t.what
+  print t.hello
+  print t.hello
+  print t.real, t.what
+  print t.eat
 
