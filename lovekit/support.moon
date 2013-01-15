@@ -102,7 +102,7 @@ lazy_value = (cls, key, fn) ->
     __index: (name) =>
       if fn = lazy_values[name]
         lazy_values[name] = nil
-        val = fn cls
+        val = fn base, cls
         base[name] = val
         if next(lazy_values) == nil
           setmetatable base, old_meta
