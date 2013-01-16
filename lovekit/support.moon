@@ -113,6 +113,10 @@ lazy_value = (cls, key, fn) ->
 
   setmetatable base, meta
 
+pick_one = (...) ->
+  num = select "#", ...
+  select math.random(1,num), ...
+
 if ... == "test"
   class Base
     what: "world"
