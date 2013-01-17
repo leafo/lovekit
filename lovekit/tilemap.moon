@@ -23,7 +23,14 @@ animated_tile = (frames=error"expecting table") ->
 
 class Tile extends Box
   new: (@tid, ...) => super ...
-  draw: (sprite, map) => sprite\draw_cell @tid, @x, @y
+  draw: (sprite, map) =>
+    sprite\draw_cell @tid, @x, @y
+    -- love.graphics.print "#{@tid}", @x, @y
+
+class SlopeTopTile extends Box
+  new: (@tid, @left, @right, ...) => super ...
+  collides: (thing) -> false
+  draw: Tile.draw
 
 -- frames a array of tids
 class AnimatedTile extends Box
@@ -260,7 +267,12 @@ class TileMap
     while y <= y2
       x = x1
       while x <= x2
-        return true if solid[y * width + x + 1]
+        if t = solid[y * width + x + 1]
+          if fn = t.collides
+            return true if fn t, thing
+          else
+            return true
+        -- return true if solid[y * width + x + 1]
         x += 1
       y += 1
 
