@@ -10,7 +10,9 @@ require "lovekit.geometry"
 require "lovekit.spriter"
 
 import setColor, rectangle from love.graphics
-import modf from math
+import type from _G
+
+{ :modf, :floor, min: _min, max: _max } = math
 
 export *
 
@@ -78,21 +80,37 @@ class TileMap
 
       \add_tiles tiles
 
-  -- adds Tile objects into @layers from tile description tables
-  add_tiles: (tiles) =>
-    for x,y,t,i in @each_xyt tiles
-      if t
-        tid = if t.auto
-          t.auto tiles, x,y,t,i
-        else
-          t.tid
 
-        @layers[t.layer or 1][i] = if tid
-          Tile tid, @pos_for_xy x, y
-        elseif t.animated
-          AnimatedTile t, t.delay, @pos_for_xy x, y
-        else
-          t
+  -- takes an array of tiles
+  -- the key is an index into them map (starting from 1)
+  -- the value is a table that is used to construct the tile, or the tile
+  -- object itself
+  --
+  -- value format:
+  -- {
+  --   tid: 0   -- Tile Id
+  --   layer: 0 -- the layer tile goes into, optional
+  --   auto: (x,y,t,i) -> -- optional, result of this function is tid
+  -- }
+  add_tiles: (tiles) =>
+    import width from @
+
+    for i, t in pairs tiles
+      im1 = i - 1
+      x = im1 % width
+      y = floor im1 / width
+
+      tid = if t.auto
+        t.auto tiles, x,y,t,i
+      else
+        t.tid
+
+      @layers[t.layer or 1][i] = if tid
+        Tile tid, @pos_for_xy x, y
+      elseif t.animated
+        AnimatedTile t, t.delay, @pos_for_xy x, y
+      else
+        t
 
   new: (@width, @height, tiles=nil) =>
     @count = @width * @height
