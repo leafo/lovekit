@@ -73,9 +73,9 @@ approach = (val, target, amount) ->
 -- go to zero
 dampen = (val, amount, min=0) ->
   if val > min
-    math.max min, val - amount
+    _max min, val - amount
   elseif val < -min
-    math.min -min, val + amount
+    _min -min, val + amount
   else
     val
 
