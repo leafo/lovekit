@@ -30,7 +30,7 @@ class AnimatedTile extends Box
   new: (@frames, @delay, ...) =>
     super ...
   draw: (sprite, map) =>
-    fid = math.floor(map.time / @delay % #@frames) + 1
+    fid = floor(map.time / @delay % #@frames) + 1
     sprite\draw_cell @frames[fid], @x, @y
 
 
@@ -39,11 +39,47 @@ class TileMap
   solid_layer: 0 -- the layer that we collide with
   cell_size: 16
 
+  -- read map from a tiled export
+  @from_tiled = (mod_name, callbacks={}) ->
+    data = require mod_name
+    map = TileMap data.width, data.height
+    map.cell_size = data.tilewidth
+
+    tileset = data.tilesets[1]
+    first_tid = tileset.firstgid
+    image = tileset.image\gsub "^%.%./", "" -- make better
+    map.sprite = Spriter image, map.cell_size, map.cell_size
+
+    l = 1
+    for layer in *data.layers
+      if layer.objects
+        for obj in *layer.objects
+          if fn = callbacks.object
+            fn obj, l
+
+      if layer.data
+        tiles = {}
+        i = 0
+        for t in *layer.data
+          i += 1
+          tid = t - first_tid
+          continue if tid < 0
+          tiles[i] = tid: tid, layer: l
+
+        map\add_tiles tiles
+
+      if layer.properties.solid
+        map.solid_layer = l
+
+      l += 1
+
+    map
+
   -- reads the pixels from image located at fname
   -- applies color_to_tile for each pixel of the image
   -- it can be either a function or a table. table keys
   -- are created by `hash_color`
-  self.from_image = (fname, tile_sprite, color_to_tile) ->
+  @from_image = (fname, tile_sprite, color_to_tile) ->
     data = love.image.newImageData fname
     width, height = data\getWidth!, data\getHeight!
 
@@ -121,26 +157,30 @@ class TileMap
     @real_width = @width * @cell_size
     @real_height = @height * @cell_size
 
-    -- automatically creates layer when we access it
+    -- automatically creates layer and upates min/max when it's acessed
     @layers = setmetatable {}, {
       __index: (layers, layer) ->
         l = {}
         layers[layer] = l
 
-        @min_layer = not @min_layer and layer or math.min @min_layer, layer
-        @max_layer = not @max_layer and layer or math.max @max_layer, layer
+        @min_layer = not @min_layer and layer or _min @min_layer, layer
+        @max_layer = not @max_layer and layer or _max @max_layer, layer
+        @draw = nil -- ready to draw
 
         l
     }
 
     @add_tiles tiles if tiles
-  
+
+    -- this is stripped when the first layer is added
+    @draw = -> error "map has no layers!"
+
   to_box: => Box 0,0, @real_width, @real_height
 
   to_xy: (i) =>
     i -= 1
     x = i % @width
-    y = math.floor(i / @width)
+    y = floor(i / @width)
     x, y
 
   to_i: (x,y) =>
@@ -161,7 +201,7 @@ class TileMap
         t = tiles[i]
         i -= 1
         x = i % @width
-        y = math.floor(i / @width)
+        y = floor(i / @width)
         coroutine.yield x, y, t, i + 1
 
   update: (dt) =>
@@ -239,8 +279,8 @@ class TileMap
     -- get all tile id touching box
   tiles_for_box: (box) =>
     xy_to_i = (x,y) ->
-      col = math.floor x / @cell_size
-      row = math.floor y / @cell_size
+      col = floor x / @cell_size
+      row = floor y / @cell_size
       col + @width * row + 1 -- 1 indexed
 
     coroutine.wrap ->
