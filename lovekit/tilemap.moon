@@ -29,7 +29,21 @@ class Tile extends Box
 
 class SlopeTopTile extends Box
   new: (@tid, @left, @right, ...) => super ...
-  collides: (thing) -> false
+  collides: (thing) =>
+    import left, right from @
+    thing_box = thing.box or thing
+
+    cx = thing_box.x + thing_box.w / 2
+    t = (cx - @x) / @w
+    bottom = thing_box.y + thing_box.h
+
+    if left < right
+      p = t * (right - left) + left
+      min = (@y + @h) - p
+      bottom > min
+    else
+      error "not yet"
+
   draw: Tile.draw
 
 -- frames a array of tids
