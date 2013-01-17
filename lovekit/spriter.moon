@@ -4,6 +4,8 @@ import push, pop, scale, translate from graphics
 
 require "lovekit.image"
 
+{:floor} = math
+
 export *
 
 -- holds a collection of Animators assigned to a state
@@ -66,14 +68,18 @@ class Animator
     @sprite\draw_cell @sequence[k], x, y, @flip_x, @flip_y
 
 -- used for blitting
+-- use @width of 0 to prevent the tiles from wrapping
 class Spriter
-  new: (@img, @cell_w=0, @cell_h=cell_w, @width=0) =>
+  new: (@img, @cell_w=0, @cell_h=cell_w, @width=nil) =>
     @img = imgfy @img
 
     @iw, @ih = @img\width!, @img\height!
 
     @ox = 0
     @oy = 0
+
+    unless @width
+      @width = floor @iw / @cell_w
 
     @quads = {}
 
@@ -89,7 +95,7 @@ class Spriter
         sx, sy = if @width == 0
           @ox + i * @cell_w, @oy
         else
-          @ox + (i % @width) * @cell_w, @oy + math.floor(i / @width) * @cell_h
+          @ox + (i % @width) * @cell_w, @oy + floor(i / @width) * @cell_h
 
         graphics.newQuad sx, sy, @cell_w, @cell_h, @iw, @ih
 
