@@ -58,13 +58,19 @@ class TileMap
             fn obj, l
 
       if layer.data
+        is_solid = layer.properties.solid
         tiles = {}
         i = 0
         for t in *layer.data
           i += 1
           tid = t - first_tid
           continue if tid < 0
-          tiles[i] = tid: tid, layer: l
+          tile = tid: tid, layer: l
+
+          if callbacks.solid_tile and is_solid
+            tile = callbacks.solid_tile tile, layer, i
+
+          tiles[i] = tile
 
         map\add_tiles tiles
 
@@ -127,6 +133,7 @@ class TileMap
   --   tid: 0   -- Tile Id
   --   layer: 0 -- the layer tile goes into, optional
   --   auto: (x,y,t,i) -> -- optional, result of this function is tid
+  --   type: cls -- class to instantiate with, numeric indices become args
   -- }
   add_tiles: (tiles) =>
     import width from @
@@ -142,7 +149,12 @@ class TileMap
         t.tid
 
       @layers[t.layer or 1][i] = if tid
-        Tile tid, @pos_for_xy x, y
+        if cls = t.type
+          k = #t
+          t[k+1], t[k+2], t[k+3], t[k+4] = @pos_for_xy x, y
+          cls tid, unpack t
+        else
+          Tile tid, @pos_for_xy x, y
       elseif t.animated
         AnimatedTile t, t.delay, @pos_for_xy x, y
       else
