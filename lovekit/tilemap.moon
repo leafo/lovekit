@@ -39,7 +39,7 @@ class SlopeTopTile extends Box
 
     if left < right
       p = t * (right - left) + left
-      min = (@y + @h) - p
+      min = floor (@y + @h) - p
       bottom > min
     else
       error "not yet"
