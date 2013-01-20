@@ -9,7 +9,7 @@ require "lovekit.support"
 require "lovekit.geometry"
 require "lovekit.spriter"
 
-import setColor, rectangle from love.graphics
+import setColor, rectangle, triangle from love.graphics
 import type from _G
 
 { :modf, :floor, min: _min, max: _max } = math
@@ -26,6 +26,7 @@ class Tile extends Box
   draw: (sprite, map) =>
     sprite\draw_cell @tid, @x, @y
     -- love.graphics.print "#{@tid}", @x, @y
+    -- Box.draw @, {100,100,255}
 
 class SlopeTopTile extends Box
   new: (@tid, @left, @right, ...) => super ...
@@ -35,6 +36,7 @@ class SlopeTopTile extends Box
 
     cx = thing_box.x + thing_box.w / 2
     t = (cx - @x) / @w
+    return false if t < 0 or t > 1
     bottom = thing_box.y + thing_box.h
 
     if left < right
@@ -44,7 +46,45 @@ class SlopeTopTile extends Box
     else
       error "not yet"
 
+  height_for_pt: (x) =>
+    import left from @
+    t = (x - @x) / @w
+    p = t * (@right - left) + left
+    floor (@y + @h) - p
+
+  -- try to move box by dx,dy across tile
+  fit_move: (thing, dx, dy, world) =>
+    box = thing.box or thing
+    import x,y from box
+
+    box.x = x + dx
+    box.y = @height_for_pt(box.x + box.w / 2) - box.h
+    if world\collides thing
+      box.y -= 1 -- nudge it up a little to fit around, TODO: make this better
+      if world\collides thing
+        box.x = x
+        box.y = y
+        return false
+
+    true
+
   draw: Tile.draw
+  -- draw: =>
+  --   y = _min @left, @right
+
+  --   setColor 255,100,255
+
+  --   unless y == 0
+  --     rectangle "fill", @x, @y + @h - y, @w, y
+
+  --   setColor 100,255,100
+  --   triangle "fill",
+  --     @x, @y + @h - @left,
+  --     @x + @w, @y + @h - @right,
+  --     @x + @w, @y + @h - @left
+
+  __tostring: =>
+    "Slope<#{@left}, #{@right}>"
 
 -- frames a array of tids
 class AnimatedTile extends Box
@@ -260,6 +300,12 @@ class TileMap
         tile\draw @sprite, self
         count += 1
 
+  tile_for_point: (x,y, layer=@solid_layer) =>
+    tiles = @layers[layer]
+    x = floor x / @cell_size
+    y = floor y / @cell_size
+    tiles[y * @width + x + 1]
+
   collides: (thing) =>
     import width, cell_size from self
     import floor from math
@@ -314,7 +360,7 @@ class TileMap
         b\draw {255, 128, 128, 128}
 
 
-    -- get all tile id touching box
+  -- get all tile id touching box
   tiles_for_box: (box) =>
     xy_to_i = (x,y) ->
       col = floor x / @cell_size
@@ -339,5 +385,4 @@ class TileMap
           coroutine.yield xy_to_i x, y
           x += @cell_size
         y += @cell_size
-
 
