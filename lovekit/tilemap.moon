@@ -30,19 +30,17 @@ class Tile extends Box
 
 class SlopeTopTile extends Box
   new: (@tid, @left, @right, ...) => super ...
-  collides: (thing) =>
+  collides: (x1,y1, x2,y2) =>
     import left, right from @
-    thing_box = thing.box or thing
 
-    cx = thing_box.x + thing_box.w / 2
-    t = (cx - @x) / @w
+    center = (x1 + x2) / 2
+    t = (center - @x) / @w
     return false if t < 0 or t > 1
-    bottom = thing_box.y + thing_box.h
 
     if left < right
       p = t * (right - left) + left
       min = floor (@y + @h) - p
-      bottom > min
+      y2 > min
     else
       error "not yet"
 
@@ -56,15 +54,14 @@ class SlopeTopTile extends Box
   fit_move: (thing, dx, dy, world) =>
     box = thing.box or thing
     import x,y from box
+    import map from world
 
     box.x = x + dx
     box.y = @height_for_pt(box.x + box.w / 2) - box.h
-    if world\collides thing
-      box.y -= 1 -- nudge it up a little to fit around, TODO: make this better
-      if world\collides thing
-        box.x = x
-        box.y = y
-        return false
+    if map\collides thing
+      box.x = x
+      box.y = y
+      return false
 
     true
 
@@ -306,30 +303,33 @@ class TileMap
     y = floor y / @cell_size
     tiles[y * @width + x + 1]
 
-  collides: (thing) =>
+  -- either takes all args, or first argument is a thing/box
+  collides: (x1, y1, x2, y2) =>
     import width, cell_size from self
     import floor from math
-    import box from thing
+
+    unless y1
+      box = x1.box or x1
+      x1,y1, x2,y2 = box\unpack2!
+
     solid = @layers[@solid_layer]
 
-    x1,y1, x2,y2 = box\unpack2!
+    tx1, ty1 = floor(x1 / cell_size), floor(y1 / cell_size)
 
-    x1,y1 = floor(x1 / cell_size), floor(y1 / cell_size)
+    tx2, tx2_fract = modf x2 / cell_size
+    tx2 -= 1 if tx2_fract == 0
 
-    x2, x2_fract = modf x2 / cell_size
-    x2 -= 1 if x2_fract == 0
+    ty2, ty2_fract = modf y2 / cell_size
+    ty2 -= 1 if ty2_fract == 0
 
-    y2, y2_fract = modf y2 / cell_size
-    y2 -= 1 if y2_fract == 0
-
-    y = y1
+    y = ty1
     -- TODO does not work for things outside of the map
-    while y <= y2
-      x = x1
-      while x <= x2
+    while y <= ty2
+      x = tx1
+      while x <= tx2
         if t = solid[y * width + x + 1]
           if fn = t.collides
-            return true if fn t, thing
+            return true if fn t, x1,y1, x2,y2
           else
             return true
         -- return true if solid[y * width + x + 1]
