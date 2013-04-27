@@ -32,15 +32,13 @@ class Entity
     dir = @last_direction or default_dir
     base .. "_" .. dir
 
-  fit_move: (dx, dy, world=@world) =>
+  fit_move: (dx, dy, world=@world, box=@box) =>
     collided_x = false
     collided_y = false
 
     -- if you are collided before you move then the world changed, PANIC
     if world\collides self
       return @on_stuck!
-
-    box = @box
 
     -- x
     if dx > 0
