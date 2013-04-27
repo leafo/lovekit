@@ -6,9 +6,12 @@ export *
 class Emitter extends Sequence
   y: 0 -- so it can be sorted *_*
   alive: true
+  duration: 0.2
+  count: 5
 
-  new: (@world, x, y, duration=0.2, count=5, @make_particle, callback) =>
-    dt = duration / count
+  new: (@world, x, y, @duration, @count, @make_particle, callback) =>
+    count = @count
+    dt = @duration / count
     super ->
       while count > 0
         count -= 1
