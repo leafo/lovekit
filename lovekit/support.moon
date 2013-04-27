@@ -7,7 +7,7 @@ export *
 lovekit = lovekit or {}
 
 rand = (min, max) ->
-  _random! * (min - max) + min
+  _random! * (max - min) + min
 
 smoothstep = (a, b, t) ->
   t = t*t*t*(t*(t*6 - 15) + 10)
