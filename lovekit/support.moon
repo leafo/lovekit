@@ -1,10 +1,13 @@
 
 punct = "[%^$()%.%[%]*+%-?]"
-{min: _min, max: _max} = math
+{min: _min, max: _max, random: _random} = math
 
 export *
 
 lovekit = lovekit or {}
+
+rand = (min, max) ->
+  _random! * (min - max) + min
 
 smoothstep = (a, b, t) ->
   t = t*t*t*(t*(t*6 - 15) + 10)
