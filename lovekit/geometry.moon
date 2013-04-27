@@ -63,6 +63,7 @@ class Vec2d
 
   update: (x, y) =>
     self[1], self[2] = x, y
+    @
 
   adjust: (dx, dy) =>
     self[1] += dx
@@ -75,6 +76,14 @@ class Vec2d
       Vec2d!
     else
       Vec2d self[1] / len, self[2] / len
+
+  -- rotates it 90 degress
+  cross: =>
+    Vec2d -@[2], @[1]
+
+  -- mirrors around origin
+  flip: =>
+    Vec2d -@[1], -@[2]
 
   truncate: (max_len) =>
     l = @len!
