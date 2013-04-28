@@ -2,7 +2,7 @@
 -- collision stuff
 
 import rectangle, setColor from love.graphics
-import rad, atan2, cos, sin, random from math
+import rad, atan2, cos, sin, random, abs from math
 
 export *
 
@@ -92,7 +92,7 @@ class Vec2d
       self[2] = self[2] / l * max_len
 
   direction_name:(names={"up", "right", "down", "left"}) =>
-    if math.abs(self[1]) > math.abs(self[2])
+    if abs(self[1]) > abs(self[2])
       if self[1] < 0
         names[4]
       else
