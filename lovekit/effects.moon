@@ -29,7 +29,7 @@ class Effect
 
 -- for the viewport
 class ViewportShake extends Effect
-  new: (duration, @speed=5) =>
+  new: (duration, @speed=5, @amount=1) =>
     @start = timer.getTime!
     @rand = math.random! * math.pi
     super duration
@@ -40,7 +40,8 @@ class ViewportShake extends Effect
 
     graphics.push!
     decay = (1 - p) * 2
-    graphics.translate decay * math.sin(t*10 + @rand), decay * math.cos(t*11 + @rand)
+    graphics.translate @amount * decay * math.sin(t*10 + @rand),
+      @amount * decay * math.cos(t*11 + @rand)
 
   after: =>
     graphics.pop!
