@@ -96,7 +96,7 @@ class DrawList
 
       i += 1
 
-    updated > 0
+    updated > 0, updated
 
   draw: =>
     for item in *self
