@@ -128,7 +128,7 @@ bind = (g=_G) ->
     Image.__init = (...) =>
       old_constructor @, ...
       unless is_watching @fname
-        reloader.watch @fname, @\reload
+        watch @fname, @\reload
 
 bind!
 
