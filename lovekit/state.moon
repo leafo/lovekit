@@ -28,11 +28,15 @@ class Dispatcher
 
   pop: (n=1) =>
     while n > 0
-      os.exit! if #@stack == 0
+      love.event.push "quit" if #@stack == 0
       top = @top!
       top\onunload self if top and top.unload
+
       remove @stack
       n -= 1
+
+      new_top = @top!
+      top\onreload self if new_top and new_top.onreload
 
   bind: (love) =>
     for fn in *{"draw", "update", "keypressed", "mousepressed", "mousereleased"}
