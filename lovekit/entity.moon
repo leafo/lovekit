@@ -3,22 +3,19 @@ require "lovekit.geometry"
 
 export *
 
-class Entity
+-- a box that has a velocity
+class Entity extends Box
   w: 20
   h: 20
 
-  loc: => Vec2d @box.x, @box.y
+  loc: => Vec2d @x, @y
 
-  new: (@world, x, y) =>
-    @box = Box x, y, @w, @h
+  new: (x, y) =>
+    super x, y
     @velocity = Vec2d 0, 0
-
-  draw: =>
-    @box\draw!
 
   update: (dt) =>
     @fit_move unpack @velocity * dt
-    -- @box\move unpack @velocity * dt
 
   on_stuck: => print "on_stuck: " .. @@__name
 
@@ -32,7 +29,7 @@ class Entity
     dir = @last_direction or default_dir
     base .. "_" .. dir
 
-  fit_move: (dx, dy, world=@world, box=@box) =>
+  fit_move: (dx, dy, world, box=@) =>
     collided_x = false
     collided_y = false
 
