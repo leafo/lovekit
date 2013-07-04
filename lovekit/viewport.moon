@@ -46,6 +46,10 @@ class Viewport extends Box
     x, y = x / @screen.scale, y / @screen.scale
     @x + x, @y + y
 
+  project: (x,y) =>
+    x, y = x * @screen.scale, y * @screen.scale
+    x - @x, y - @y
+
   center_on_pt: (cx, cy, map_box) =>
     @x = cx - @w / 2
     @y = cy - @h / 2
