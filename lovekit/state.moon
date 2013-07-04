@@ -9,7 +9,7 @@ import insert, remove from table
 class Dispatcher
   new: (initial) =>
     @stack = { initial }
-    initial\onload self if initial.onload
+    initial\on_show self if initial.on_show
 
   send: (event, ...) =>
     current = @top!
@@ -24,7 +24,7 @@ class Dispatcher
 
   push: (state) =>
     insert @stack, state
-    state\onload self if state.onload
+    state\on_show self if state.on_show
 
   pop: (n=1) =>
     while n > 0
