@@ -5,7 +5,6 @@ export *
 -- take screenshots every @rate frames, save them in dir
 class ScreenSnap
   new: (@rate=3, @dir="snapshots_"..os.time!) =>
-    @prefix = "snap"
     @i = 1
     @frames = 0
     @snaps = {}
@@ -13,7 +12,7 @@ class ScreenSnap
     filesystem.mkdir @dir
 
   next_name: (ext) =>
-    with @dir .. "/" .. @prefix .. "_" .. @i .. "." .. ext
+    with @dir .. "/" .. ("%09d"\format @i) .. "." .. ext
       @i += 1
 
   write: (format="png") =>
@@ -25,7 +24,7 @@ class ScreenSnap
         image.newEncodedImageData image_data, format
         filesystem.write fname, ss
       else
-        print "encoding"
+        print "encoding #{fname}"
         image_data\encode fname
 
   take_screenshot: =>
