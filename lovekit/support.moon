@@ -116,6 +116,22 @@ lazy_value = (cls, key, fn) ->
 
   setmetatable base, meta
 
+
+get_local = (search_name, level=1) ->
+  level += 1
+  i = 1
+  while true
+    name, val = debug.getlocal level, i
+    break unless name
+    if name == search_name
+      return val
+    i += 1
+
+lazy = (props) ->
+  cls = get_local "self", 2
+  for k,v in pairs props
+    lazy_value cls, k, v
+
 pick_one = (...) ->
   num = select "#", ...
   select math.random(1,num), ...
@@ -124,16 +140,24 @@ if ... == "test"
   class Base
     what: "world"
 
-  class Test extends Base
-    real: "hello"
-    lazy_value @, "hello", -> "world"
-    lazy_value @, "eat", -> "me"
+  do
+    print "With Instance"
+    class Test extends Base
+      real: "hello"
+      lazy_value @, "hello", -> "world"
+      lazy_value @, "eat", -> "me"
 
-  t = Test!
-  print t.real
-  print t.what
-  print t.hello
-  print t.hello
-  print t.real, t.what
-  print t.eat
+    t = Test!
+    print t.real
+    print t.what
+    print t.hello
+    print t.hello
+    print t.real, t.what
+    print t.eat
+
+  do
+    class Thing
+      lazy color: -> "blue"
+
+    print Thing.color
 
