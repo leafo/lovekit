@@ -14,8 +14,12 @@ class Entity extends Box
     super x, y
     @velocity = Vec2d 0, 0
 
-  update: (dt) =>
-    @fit_move unpack @velocity * dt
+  update: (dt, world) =>
+    {dx, dy} = @velocity
+    dx *= dt
+    dy *= dt
+
+    @fit_move dx, dy, world
 
   on_stuck: => print "on_stuck: " .. @@__name
 

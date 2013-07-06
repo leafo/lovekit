@@ -22,6 +22,10 @@ class FadeTransition extends Sequence
     @p = 0
     super -> tween @, @time, p: 1.0
 
+  update: (dt) =>
+    @after\update dt if @p > 0.5
+    super dt
+
   draw: =>
     alpha = if @p < 0.5
       @before\draw!
