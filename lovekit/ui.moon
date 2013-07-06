@@ -1,8 +1,3 @@
-
-module "lui", package.seeall
-
-export ^
-
 import graphics from love
 import max from math
 
@@ -18,15 +13,16 @@ border = {
   back: 8
 }
 
-class Window
+class Frame extends Box
   shadow: true
 
-  new: (@sprite) =>
+  new: (@sprite, ...) =>
     @border_size = @sprite.cell_w
-    assert @sprite.cell_w == @sprite.cell_h -- TODO remove this
+    super ...
 
-  -- TODO see if it's worth caching this
-  draw: (x, y, w, h) =>
+  draw: =>
+    {:x, :y, :w, :h} = @
+
     w = max w, @border_size*2
     h = max h, @border_size*2
 
@@ -59,4 +55,4 @@ class Window
       -- back, TODO: tile it?
       \draw_sized border.back, x + s, y + s, w - s2, h - s2
 
-
+{ :Frame }
