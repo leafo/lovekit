@@ -96,12 +96,15 @@ class AnimatedTile extends Box
 class TileMap
   solid_layer: 0 -- the layer that we collide with
   cell_size: 16
+  invert_collision: false
 
   -- read map from a tiled export
   @from_tiled = (mod_name, callbacks={}) ->
     data = require mod_name
     map = TileMap data.width, data.height
     map.cell_size = data.tilewidth
+
+    invert_collision = true if data.properties.invert_collision
 
     tileset = data.tilesets[1]
     first_tid = tileset.firstgid
@@ -131,6 +134,8 @@ class TileMap
           tiles[i] = tile
 
         map\add_tiles tiles
+        if layer.properties.hidden
+          map.hidden_layers[l] = true
 
       if layer.properties.solid
         map.solid_layer = l
@@ -222,6 +227,7 @@ class TileMap
     @count = @width * @height
     @min_layer, @max_layer = nil
     @time = 0 -- time used for animating tiles
+    @hidden_layers = {}
 
     -- pixel size of the map
     @real_width = @width * @cell_size
@@ -281,8 +287,9 @@ class TileMap
     box = viewport and viewport.box or Box 0,0, @real_width, @real_height
     for tid in @tiles_for_box box
       for i=@min_layer, @max_layer
-        tile = @layers[i][tid]
-        tile\draw @sprite, self if tile
+        unless @hidden_layers[i]
+          tile = @layers[i][tid]
+          tile\draw @sprite, self if tile
 
   draw_layer: (l, viewport) =>
     count = 0
@@ -322,6 +329,8 @@ class TileMap
     ty2, ty2_fract = modf y2 / cell_size
     ty2 -= 1 if ty2_fract == 0
 
+    touching = false
+
     y = ty1
     -- TODO does not work for things outside of the map
     while y <= ty2
@@ -329,14 +338,17 @@ class TileMap
       while x <= tx2
         if t = solid[y * width + x + 1]
           if fn = t.collides
-            return true if fn t, x1,y1, x2,y2
+            if fn t, x1,y1, x2,y2
+              touching = true
+              break
           else
-            return true
-        -- return true if solid[y * width + x + 1]
+            touching = true
+            break
         x += 1
       y += 1
 
-    false
+    touching = not touching if @invert_collision
+    touching
 
   -- tests every tile, don't use this unless you have a good reason
   collides_all: (thing) =>
