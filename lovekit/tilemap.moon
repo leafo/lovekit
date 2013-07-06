@@ -103,8 +103,7 @@ class TileMap
     data = require mod_name
     map = TileMap data.width, data.height
     map.cell_size = data.tilewidth
-
-    invert_collision = true if data.properties.invert_collision
+    map.invert_collision = true if data.properties.invert_collision
 
     tileset = data.tilesets[1]
     first_tid = tileset.firstgid
@@ -312,7 +311,7 @@ class TileMap
 
   -- either takes all args, or first argument is a thing/box
   collides: (x1, y1, x2, y2) =>
-    import width, cell_size from self
+    import width, cell_size, invert_collision from self
     import floor from math
 
     unless y1
@@ -336,19 +335,21 @@ class TileMap
     while y <= ty2
       x = tx1
       while x <= tx2
-        if t = solid[y * width + x + 1]
-          if fn = t.collides
-            if fn t, x1,y1, x2,y2
-              touching = true
-              break
-          else
-            touching = true
-            break
+        t = solid[y * width + x + 1]
+
+        if invert_collision
+          return true unless t
+        else
+          if t
+            if fn = t.collides
+              return true if fn t, x1,y1, x2,y2
+            else
+              return true
+
         x += 1
       y += 1
 
-    touching = not touching if @invert_collision
-    touching
+    false
 
   -- tests every tile, don't use this unless you have a good reason
   collides_all: (thing) =>
