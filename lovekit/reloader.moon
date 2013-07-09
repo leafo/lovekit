@@ -1,16 +1,6 @@
 -- How to use:
--- reloader = require "lovekit.reloader"
--- love.update = (dt) ->
---   reloader\update!
---
--- -- some_file.lua, must not be main!
--- import watch_class from require "lovekit.reloader"
--- class Something
---   watch_class self
---
--- -- images will be reloaded automatically by deafult
+-- require "lovekit.reloader"
 
-return false if disable_reloader
 require "inotify"
 
 config_char = (n) -> package.config\sub n,n
@@ -56,7 +46,7 @@ watch = (fname, action) ->
 is_watching = (fname) ->
   actions[fname]
 
-update = =>
+update = ->
   events = handle\read!
   if events
     for e in *events
@@ -100,12 +90,12 @@ watch_class = (cls) ->
       -- clear old one
       for key in *[key for key in pairs old_cls.__base]
         old_cls.__base[key] = nil
-      
+
       -- copy new methods
       for key, value in pairs cls.__base
         old_cls.__base[key] = value
       old_cls = old_cls.__reload_parent
-    
+
     class_table[a_name] = cls
     return
 
@@ -119,6 +109,20 @@ watch_class = (cls) ->
 
   class_table[a_name] = cls
 
+reload_require = do
+  require = require
+  (mod_name) ->
+    seen = package.loaded[mod_name] != nil
+    mod = require mod_name
+
+    -- find all moonscript classes and watch class them all
+    unless seen
+      for name, val in pairs mod
+        if type(val) == "table" and val.__base
+          watch_class val
+
+    mod
+
 bind = (g=_G) ->
   {:Image} = g
 
@@ -129,6 +133,16 @@ bind = (g=_G) ->
       old_constructor @, ...
       unless is_watching @fname
         watch @fname, @\reload
+
+  -- watch requires
+  g.require = reload_require
+
+  -- insert reloader to run with timer.step :)
+  import timer from love
+  old_step = timer.step
+  timer.step = ->
+    update!
+    old_step!
 
 bind!
 
