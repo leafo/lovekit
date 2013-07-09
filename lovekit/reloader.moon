@@ -133,8 +133,15 @@ scan_for_classes = (to_scan, accum={}) ->
       break unless name
       continue if not is_class(val) or accum[val]
       insert accum, val
+      scan_for_classes val, accum
 
   accum
+
+
+-- main isn't a module so we scan love.load for upvalues
+handle_main_reload = ->
+  for cls in *scan_for_classes love.load
+    watch_class cls
 
 reload_require = do
   require = require
@@ -142,8 +149,11 @@ reload_require = do
     seen = package.loaded[mod_name] != nil
     mod = require mod_name
 
+    if mod_name == "main"
+      handle_main_reload!
+
     -- look for moonscript classes to call watch_class on
-    unless seen
+    if not seen and type(mod) == "table"
       for name, val in pairs mod
         if is_class val
           watch_class val
@@ -174,6 +184,13 @@ bind = (g=_G) ->
   timer.step = ->
     update!
     old_step!
+
+  -- add reloader to main
+  old_run = love.run
+  love.run = (...) ->
+    handle_main_reload!
+    love.run = old_run
+    love.run ...
 
 bind!
 
