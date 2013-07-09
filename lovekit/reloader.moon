@@ -11,6 +11,8 @@ handle = inotify.init true
 actions = {}
 watching = {} -- directories being watched
 
+import insert from table
+
 Path =
   exists: (path) ->
     file = io.open path
@@ -70,19 +72,22 @@ path_to_package = (path) ->
 absolute_name = (cls, pkg_name) ->
   cls.__name  .. "::" .. pkg_name
 
-class_table = {} -- classes are are being watched
+class_by_name = {} -- classes being watched indexed by name
+seen_classes = setmetatable {}, __mode: "k"
 
 -- watch a class for reloading
 watch_class = (cls) ->
+  return if seen_classes[cls]
+  seen_classes[cls] = true
   info = debug.getinfo getmetatable(cls).__call
 
   source_name = "./" .. info.source\match"^%@(.*)$" or info.source
   pkg_name = path_to_package source_name
   a_name = absolute_name cls, pkg_name
 
-  if class_table[a_name]
+  if class_by_name[a_name]
     print "Replacing class...", a_name
-    old_cls = class_table[a_name]
+    old_cls = class_by_name[a_name]
 
     cls.__reload_parent = old_cls
 
@@ -96,10 +101,10 @@ watch_class = (cls) ->
         old_cls.__base[key] = value
       old_cls = old_cls.__reload_parent
 
-    class_table[a_name] = cls
+    class_by_name[a_name] = cls
     return
 
-  print "Watching", a_name, source_name
+  print "Watching", "#{a_name}[#{source_name}]"
   -- don't watch the same file multiple times
   unless is_watching source_name
     watch source_name, ->
@@ -107,7 +112,29 @@ watch_class = (cls) ->
       package.loaded[pkg_name] = nil
       require pkg_name
 
-  class_table[a_name] = cls
+  class_by_name[a_name] = cls
+
+is_class = (obj) ->
+  type(obj) == "table" and obj.__base
+
+-- tries to find classes from locals in a function or a class's methods
+scan_for_classes = (to_scan, accum={}) ->
+  if is_class(to_scan) and not accum[to_scan]
+    accum[to_scan] = true
+    -- scan constructor or methods
+    scan_for_classes to_scan.__init, accum
+    for k,v in pairs to_scan.__base
+      scan_for_classes v, accum
+  elseif type(to_scan) == "function"
+    i = 1
+    while true
+      name, val = debug.getupvalue to_scan, i
+      i += 1
+      break unless name
+      continue if not is_class(val) or accum[val]
+      insert accum, val
+
+  accum
 
 reload_require = do
   require = require
@@ -115,11 +142,15 @@ reload_require = do
     seen = package.loaded[mod_name] != nil
     mod = require mod_name
 
-    -- find all moonscript classes and watch class them all
+    -- look for moonscript classes to call watch_class on
     unless seen
       for name, val in pairs mod
-        if type(val) == "table" and val.__base
+        if is_class val
           watch_class val
+          -- scan constructor and methods for more classes to watch
+          upvalue_classes = scan_for_classes val
+          for cls in *upvalue_classes
+            watch_class cls
 
     mod
 
