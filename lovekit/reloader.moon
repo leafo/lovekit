@@ -67,7 +67,7 @@ path_to_package = (path) ->
     pattern = "^" .. pattern\gsub("%"..wildcard, "(.-)") .. "$"
     pkg_path = path\match pattern
     if pkg_path
-      return (pkg_path\gsub dirsep, ".")
+      return (pkg_path\gsub(dirsep, ".")\gsub "^%.+", "")
 
 absolute_name = (cls, pkg_name) ->
   cls.__name  .. "::" .. pkg_name
