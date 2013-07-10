@@ -70,6 +70,12 @@ class Viewport extends Box
   center_on: (thing, map_box) =>
     @center_on_pt thing.box\center!
 
+  on_bottom: (size, margin=0) =>
+    @h - (size + margin)
+
+  on_right: (size, margin=0) =>
+    @w - (size + margin)
+
 class EffectViewport extends Viewport
   new: (...) =>
     @effects = EffectList!
