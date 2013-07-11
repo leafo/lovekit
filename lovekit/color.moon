@@ -17,7 +17,7 @@ rgb_helper = (comp, temp1, temp2) ->
 export *
 
 -- h: 0 to 360
--- s, l: 0 to 100 
+-- s, l: 0 to 100
 hsl_to_rgb = (h,s,l) ->
   h = h / 360
   s = s / 100
@@ -72,4 +72,23 @@ rgb_to_hsl = (r,g,b) ->
   h += 6 if h < 0
   h * 60, s * 100, l * 100
 
+-- hmm
+hash_string = do
+  cache = {}
+  (str) ->
+    hash = cache[str]
+
+    unless hash
+      bytes = { string.byte str, 1, #str }
+      hash = 0
+      for i,b in ipairs bytes
+        hash += bytes[i] ^ (4 - (i - 1) % 4)
+      cache[str] = hash
+
+    hash
+
+-- hash to hue
+hash_to_color = (str, s=60, l=60) ->
+  num = hash_string(str) % 360
+  hsl_to_rgb num, s, l
 
