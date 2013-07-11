@@ -134,7 +134,21 @@ lazy = (props) ->
 
 pick_one = (...) ->
   num = select "#", ...
-  select math.random(1,num), ...
+  select _random(2,num), ...
+
+shuffle = (array) ->
+  for i=#array, 2, -1
+    j = _random 2, i
+    array[i], array[j] = array[j], array[i]
+  array
+
+instance_of = (object, cls) ->
+  return false unless type(object) == "table"
+  ocls = object.__class
+  while true
+    return true if ocls == cls
+    ocls = type(ocls) == "table" and ocls.__parent
+    break unless ocls
 
 if ... == "test"
   class Base
