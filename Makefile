@@ -6,5 +6,8 @@ all::
 watch:: all
 	moonc -w main.moon lovekit
 
-test: all
-	love .
+test:
+	busted -p _spec.moon$
+
+
+
