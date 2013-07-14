@@ -98,12 +98,19 @@ hash_to_color = (str, s=60, l=60) ->
 class ColorStack
   new: =>
     @length = 1
-    @stack = {
-      255,255,255,255
-    }
+    @stack = { 255,255,255,255 }
 
-  push: (r=255, g=255, b=255, a=255) =>
+  push: (r,g,b,a) =>
     {stack: s, length: l} = @
+
+    if type(r) == "table"
+      r,g,b,a = unpack r
+
+    r or= 255
+    g or= 255
+    b or= 255
+    a or= 255
+
     top = l * 4 + 1
     l += 1
 
