@@ -1,7 +1,7 @@
 
 -- collision stuff
 
-import rectangle, setColor from love.graphics
+import rectangle from love.graphics
 import rad, atan2, cos, sin, random, abs from math
 
 export *
@@ -195,12 +195,22 @@ class Box
     self.y <= box.y + box.h
 
   draw: (color=nil) =>
-    setColor color if color
+    if color
+      COLOR\push unpack color
+
     rectangle "fill", @unpack!
 
+    if color
+      COLOR\pop!
+
   outline: (color=nil) =>
-    setColor color if color
+    if color
+      COLOR\push unpack color
+
     rectangle "line", @unpack!
+
+    if color
+      COLOR\pop!
 
   -- center to center vector
   vector_to: (other) =>

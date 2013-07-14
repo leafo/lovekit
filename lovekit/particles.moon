@@ -50,5 +50,6 @@ class PixelParticle extends Particle
   size: 2
   draw: =>
     half = @size/2
-    g.setColor @r, @g, @b, @a * 255
+    COLOR\push @r, @g, @b, @a * 255
     g.rectangle "fill", @x - half, @y - half, @size, @size
+    COLOR\pop!

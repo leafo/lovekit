@@ -52,7 +52,7 @@ extend = (...) ->
 show_grid = (v) ->
   return if v.screen.scale == 1
   graphics.setLineWidth 1/v.screen.scale
-  graphics.setColor 255,255,255, 128
+  COLOR\pusha 128
 
   w, h = v.w + 1, v.h + 1
   sx = math.floor v.x
@@ -64,7 +64,7 @@ show_grid = (v) ->
   for x = sx, sx + w
     graphics.line x, sy, x, sy + h
 
-  graphics.setColor 255,255,255
+  COLOR\pop!
 
 approach = (val, target, amount) ->
   return val if val == target

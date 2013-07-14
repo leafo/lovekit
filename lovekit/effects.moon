@@ -47,18 +47,15 @@ class ViewportShake extends Effect
     graphics.pop!
 
 class ColorEffect extends Sequence
-  new: (...) =>
-    super ...
-    @tmp_color = {}
-
   replace: (other) =>
 
   before: =>
-    @tmp_color[1], @tmp_color[2], @tmp_color[3] = graphics.getColor!
-    graphics.setColor unpack @color if @color
+    if @color
+      COLOR\push unpack @color
 
   after: =>
-    graphics.setColor @tmp_color
+    if @color
+      COLOR\pop!
 
 class Flash extends ColorEffect
   new: (duration=0.2, color={255,100,100}) =>

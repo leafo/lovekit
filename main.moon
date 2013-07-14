@@ -62,9 +62,9 @@ love.load = ->
     map\draw box: v
     v\outline!
 
-    graphics.setColor 255,255,255, 64
+    COLOR\pusha 64
     graphics.rectangle "fill", b\unpack!
-    graphics.setColor 255,255,255
+    COLOR\pop!
 
     map\show_touching me
 

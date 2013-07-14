@@ -9,7 +9,7 @@ require "lovekit.support"
 require "lovekit.geometry"
 require "lovekit.spriter"
 
-import setColor, rectangle, triangle from love.graphics
+import rectangle, triangle from love.graphics
 import type from _G
 
 { :modf, :floor, min: _min, max: _max } = math
@@ -370,9 +370,6 @@ class TileMap
         b = Box x * @cell_size, y * @cell_size, @cell_size, @cell_size
         b = b\pad 10
         b\draw {255, 200, 200, 200}
-
-    setColor 255,255,255
-
 
   -- get all tile id touching box
   tiles_for_box: (box) =>

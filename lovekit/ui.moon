@@ -33,9 +33,9 @@ class Frame extends Box
     s2 = s*2
 
     if @shadow
-      graphics.setColor 0,0,0, 64
+      COLOR\push 0,0,0, 64
       graphics.rectangle "fill", x + 1, y + 1, w, h
-      graphics.setColor 255, 255, 255
+      COLOR\pop!
 
     with @sprite
       -- corners

@@ -35,9 +35,9 @@ class FadeTransition extends Sequence
       (1 - @p) * 2
 
     {_r, _g, _b} = @color
-    g.setColor _r, _g, _b, alpha * 255
+    COLOR\push _r, _g, _b, alpha * 255
     g.rectangle "fill", 0, 0, g.getWidth!, g.getHeight!
-    g.setColor 255,255,255
+    COLOR\pop!
 
 -- handles a stack of objects that can respond to events
 class Dispatcher
