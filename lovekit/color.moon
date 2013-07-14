@@ -96,6 +96,10 @@ hash_to_color = (str, s=60, l=60) ->
 
 -- stacks colors by multiplying them
 class ColorStack
+  @red: {255,0,0}
+  @green: {0,255,0}
+  @blue: {0,0,255}
+
   new: =>
     @length = 1
     @stack = { 255,255,255,255 }
@@ -126,6 +130,11 @@ class ColorStack
 
     @length = l
     graphics.setColor r,g,b,a
+
+  -- override the color on top, multiplying with one before
+  set: (...) =>
+    @length -= 1
+    @push ...
 
   -- push just alpha, stupid optimization?
   pusha: (a) =>
@@ -164,4 +173,8 @@ class ColorStack
     s = @stack
     start = (@length - 1) * 4 + 1
     s[start], s[start + 1], s[start + 2], s[start + 3]
+
+  -- only use this to reset color if something else changes it
+  apply: =>
+    graphics.setColor @current!
 

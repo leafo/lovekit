@@ -53,3 +53,9 @@ describe "color", ->
 
     assert.same current_color, { 128,0,0,255 }
 
+    before = colors.length
+    colors\set 123,123,123,123
+
+    assert.same colors.length, before
+    assert.same current_color, { 123,0,0,123 }
+
