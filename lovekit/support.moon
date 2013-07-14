@@ -150,28 +150,3 @@ instance_of = (object, cls) ->
     ocls = type(ocls) == "table" and ocls.__parent
     break unless ocls
 
-if ... == "test"
-  class Base
-    what: "world"
-
-  do
-    print "With Instance"
-    class Test extends Base
-      real: "hello"
-      lazy_value @, "hello", -> "world"
-      lazy_value @, "eat", -> "me"
-
-    t = Test!
-    print t.real
-    print t.what
-    print t.hello
-    print t.hello
-    print t.real, t.what
-    print t.eat
-
-  do
-    class Thing
-      lazy color: -> "blue"
-
-    print Thing.color
-
