@@ -92,3 +92,66 @@ hash_to_color = (str, s=60, l=60) ->
   num = hash_string(str) % 360
   hsl_to_rgb num, s, l
 
+-- stacks colors by multiplying them
+class ColorStack
+  new: =>
+    @length = 1
+    @stack = {
+      255,255,255,255
+    }
+
+  push: (r=255, g=255, b=255, a=255) =>
+    {stack: s, length: l} = @
+    top = l * 4 + 1
+    l += 1
+
+    r = r * s[top - 4] / 255
+    g = g * s[top - 3] / 255
+    b = b * s[top - 2] / 255
+    a = a * s[top - 1] / 255
+
+    s[top]     = r
+    s[top + 1] = g
+    s[top + 2] = b
+    s[top + 3] = a
+
+    @length = l
+    love.setColor r,g,b,a
+
+  -- push just alpha, stupid optimization?
+  pusha: (a) =>
+    {stack: s, length: l} = @
+    top = l * 4 + 1
+    l += 1
+
+    r = s[top - 4]
+    g = s[top - 3]
+    b = s[top - 2]
+    a = a * s[top - 1] / 255
+
+    s[top]     = r
+    s[top + 1] = g
+    s[top + 2] = b
+    s[top + 3] = a
+
+    @length = l
+    love.setColor r,g,b,a
+
+  pop: =>
+    {stack: s, length: l} = @
+    l -= 1
+    top = l * 4 + 1
+
+    s[top + 3] = nil
+    s[top + 2] = nil
+    s[top + 1] = nil
+    s[top] = nil
+
+    @length = l
+    love.setColor s[top - 4], s[top - 3], s[top - 2], s[top - 1]
+
+  current: =>
+    s = @stack
+    start = (@length - 1) * 4 + 1
+    s[start], s[start + 1], s[start + 2], s[start + 3]
+
