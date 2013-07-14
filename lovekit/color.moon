@@ -96,9 +96,9 @@ hash_to_color = (str, s=60, l=60) ->
 
 -- stacks colors by multiplying them
 class ColorStack
-  @red: {255,0,0}
-  @green: {0,255,0}
-  @blue: {0,0,255}
+  red: {255,0,0}
+  green: {0,255,0}
+  blue: {0,0,255}
 
   new: =>
     @length = 1
