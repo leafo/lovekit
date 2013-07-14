@@ -51,8 +51,7 @@ class SlopeTopTile extends Box
     floor (@y + @h) - p
 
   -- try to move box by dx,dy across tile
-  fit_move: (thing, dx, dy, world) =>
-    box = thing.box or thing
+  fit_move: (box, dx, dy, world) =>
     import x,y from box
     import map from world
 
@@ -355,14 +354,14 @@ class TileMap
   collides_all: (thing) =>
     solid = @layers[@solid_layer]
     for x, y, t, i in @each_xyt solid
-      return true if solid[i] and solid[i]\touches_box thing.box
+      return true if solid[i] and solid[i]\touches_box thing
 
     false
 
   -- tiles for box is bugged, see main.moon example
   show_touching: (thing) =>
     solid = @layers[@solid_layer]
-    for tid in @tiles_for_box thing.box
+    for tid in @tiles_for_box thing
       tile = solid[tid]
       if tile
         Box.draw tile, {255, 128, 128, 128}

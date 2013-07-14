@@ -68,7 +68,7 @@ class Viewport extends Box
 
 
   center_on: (thing, map_box) =>
-    @center_on_pt thing.box\center!
+    @center_on_pt thing\center!
 
   on_bottom: (size, margin=0) =>
     @h - (size + margin)
