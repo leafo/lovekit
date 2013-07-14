@@ -1,4 +1,6 @@
 
+import insert, remove from table
+
 get_local = (search_name, level=1) ->
   level += 1
   i = 1
@@ -38,4 +40,20 @@ mixin = do
       cls.__init = (...) ->
         old_ctor ...
         mix.__init ...
+
+
+-- holds a queue of sequences
+class Sequenced
+  new: =>
+    @sequence_queue = {}
+
+  add_sequence: =>
+
+  update: (dt) =>
+    if not @current_seq and next @sequence_queue
+      @current_seq = remove @sequence_queue, 1
+
+    if @current_seq
+      unless @current_seq\update dt
+        @current_seq = nil
 
