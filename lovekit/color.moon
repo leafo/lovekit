@@ -1,4 +1,6 @@
 
+import graphics from love
+
 rgb_helper = (comp, temp1, temp2) ->
   if comp < 0
     comp += 1
@@ -116,7 +118,7 @@ class ColorStack
     s[top + 3] = a
 
     @length = l
-    love.setColor r,g,b,a
+    graphics.setColor r,g,b,a
 
   -- push just alpha, stupid optimization?
   pusha: (a) =>
@@ -135,9 +137,9 @@ class ColorStack
     s[top + 3] = a
 
     @length = l
-    love.setColor r,g,b,a
+    graphics.setColor r,g,b,a
 
-  pop: =>
+  pop: (n=1) =>
     {stack: s, length: l} = @
     l -= 1
     top = l * 4 + 1
@@ -148,7 +150,8 @@ class ColorStack
     s[top] = nil
 
     @length = l
-    love.setColor s[top - 4], s[top - 3], s[top - 2], s[top - 1]
+    return @pop n - 1 if n > 1
+    graphics.setColor s[top - 4], s[top - 3], s[top - 2], s[top - 1]
 
   current: =>
     s = @stack

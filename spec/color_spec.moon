@@ -2,8 +2,10 @@
 current_color = { 255,255,255,255 }
 
 export love = {
-  setColor: (r=255,g=255,b=255,a=255) ->
-    current_color = {r,g,b,a}
+  graphics: {
+    setColor: (r=255,g=255,b=255,a=255) ->
+      current_color = {r,g,b,a}
+  }
 }
 
 require "lovekit.color"
