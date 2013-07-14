@@ -47,7 +47,8 @@ class Sequenced
   new: =>
     @sequence_queue = {}
 
-  add_sequence: =>
+  add_seq: (seq) =>
+    insert @sequence_queue, seq
 
   update: (dt) =>
     if not @current_seq and next @sequence_queue
