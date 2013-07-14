@@ -364,12 +364,14 @@ class TileMap
     for tid in @tiles_for_box thing
       tile = solid[tid]
       if tile
-        Box.draw tile, {255, 128, 128, 128}
+        Box.draw tile, {255, 200, 200, 200}
       else -- show candidates
         x, y = @to_xy tid
         b = Box x * @cell_size, y * @cell_size, @cell_size, @cell_size
         b = b\pad 10
-        b\draw {255, 128, 128, 128}
+        b\draw {255, 200, 200, 200}
+
+    setColor 255,255,255
 
 
   -- get all tile id touching box
