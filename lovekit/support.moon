@@ -191,6 +191,11 @@ all_values = do
 
     each, s
 
- 
+count_garbage_collections = ->
+  export GARBAGE_COLLECTIONS = 0
+  count_gc = ->
+    GARBAGE_COLLECTIONS += 1
+    getmetatable(newproxy(true)).__gc = count_gc
 
+  getmetatable(newproxy(true)).__gc = count_gc
 
