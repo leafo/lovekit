@@ -150,3 +150,47 @@ instance_of = (object, cls) ->
     ocls = type(ocls) == "table" and ocls.__parent
     break unless ocls
 
+-- for thing in all_values {1,2,3}, {4,5,6}
+all_values = do
+  free = setmetatable {}, __mode: "k"
+
+  fill_t = (t, i, first, ...) ->
+    if first
+      t[i] = first
+      fill_t t, i + 1, ...
+    else
+      t
+
+  each = (s) ->
+    val = s[s.outer][s.inner]
+    if val == nil
+      s[s.outer] = nil
+      s.outer += 1
+      outer = s[s.outer]
+      if outer == nil
+        s[s.outer] = nil
+        free[s] = true
+        return nil
+
+      s.inner = 1
+      val = outer[s.inner]
+
+    s.inner += 1
+
+    val
+
+  (...) ->
+    local s
+    if s = next free
+      free[s] = nil
+      s.inner = 1
+      s.outer = 1
+      fill_t s, 1, ...
+    else
+      s = { inner: 1, outer: 1, ... }
+
+    each, s
+
+ 
+
+
