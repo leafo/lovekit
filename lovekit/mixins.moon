@@ -44,15 +44,19 @@ mixin = do
 
 -- holds a queue of sequences
 class Sequenced
-  new: =>
-    @sequence_queue = {}
-
   add_seq: (seq) =>
+    if type(seq) == "function"
+      seq = Sequence seq
+
+    @sequence_queue or= {}
     insert @sequence_queue, seq
 
   update: (dt) =>
-    if not @current_seq and next @sequence_queue
-      @current_seq = remove @sequence_queue, 1
+    queue = @sequence_queue
+    return unless queue
+
+    if not @current_seq and next queue
+      @current_seq = remove queue, 1
 
     if @current_seq
       unless @current_seq\update dt
