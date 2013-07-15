@@ -37,7 +37,13 @@ default_scope = {
     while true
       break if keyboard.isDown key
       dt = coroutine.yield!
-    coroutine.yield "more", dt
+    coroutine.yield "more", dt if dt
+
+  wait_until: (fn) ->
+    local dt
+    while not fn!
+      dt = coroutine.yield!
+    coroutine.yield "more", dt if dt
 
   during: (time, fn) ->
     while time > 0
@@ -149,5 +155,5 @@ class Sequence
         else
           break
     true
-    
+
   update: (dt) => @send_time dt
