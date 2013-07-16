@@ -3,6 +3,9 @@ require "lovekit.support"
 
 import min from math
 import keyboard from love
+import insert from table
+
+select = select
 
 export ^
 
@@ -44,6 +47,27 @@ default_scope = {
     while not fn!
       dt = coroutine.yield!
     coroutine.yield "more", dt if dt
+
+  -- flattens an async function
+  await: (fn, ...) ->
+    local out
+    called = false
+
+    callback = (...) ->
+      called = true
+      out = {...}
+
+    if select("#", ...) > 0
+      args = {...}
+      insert args, callback
+      fn unpack args
+    else
+      fn callback
+
+    while not called
+      coroutine.yield!
+
+    unpack out
 
   during: (time, fn) ->
     while time > 0
