@@ -2,11 +2,12 @@
 -- collision stuff
 
 import rectangle from love.graphics
-import rad, atan2, cos, sin, random, abs from math
+import atan2, cos, sin, random, abs from math
+import type, pairs, ipairs from _G
 
 export *
 
-_floor, _ceil, _deg = math.floor, math.ceil, math.deg
+{ floor: _floor, ceil: _ceil, deg: _deg, rad: _rad } = math
 
 floor = (n) ->
   if n < 0
@@ -22,32 +23,32 @@ ceil = (n) ->
     _ceil n
 
 class Vec2d
-  base = self.__base
-  self.__base.__index = (name) =>
+  base = @__base
+  @__base.__index = (name) =>
     if name == "x"
-      self[1]
+      @[1]
     elseif name == "y"
-      self[2]
+      @[2]
     else
       base[name]
 
-  self.from_angle = (deg) ->
-    theta = rad deg
+  getmetatable(@).__call = do
+    import __base from @
+    (cls, x,y) -> setmetatable {x, y}, __base
+
+  @from_angle: (deg) ->
+    theta = _rad deg
     Vec2d cos(theta), sin(theta)
 
-  self.from_radians = (rads) ->
+  @from_radians: (rads) ->
     Vec2d cos(rads), sin(rads)
 
-  self.random = (mag=1) ->
-    vec = Vec2d.from_angle math.random() * 360
+  @random: (mag=1) ->
+    vec = Vec2d.from_angle random! * 360
     vec * mag
 
   angle: => _deg atan2 self[2], self[1]
   radians: => atan2 @[2], @[1]
-
-  new: (x=0, y=0) =>
-    self[1] = x
-    self[2] = y
 
   len: =>
     n = self[1]^2 + self[2]^2
@@ -91,17 +92,19 @@ class Vec2d
       self[1] = self[1] / l * max_len
       self[2] = self[2] / l * max_len
 
-  direction_name:(names={"up", "right", "down", "left"}) =>
-    if abs(self[1]) > abs(self[2])
-      if self[1] < 0
-        names[4]
+  direction_name: do
+    _direction_names = {"up", "right", "down", "left"}
+    (names=_direction_names) =>
+      if abs(self[1]) > abs(self[2])
+        if self[1] < 0
+          names[4]
+        else
+          names[2]
       else
-        names[2]
-    else
-      if self[2] < 0
-        names[1]
-      else
-        names[3]
+        if self[2] < 0
+          names[1]
+        else
+          names[3]
 
   -- x' = x cos f - y sin f
   -- y' = y cos f + x sin f
@@ -110,14 +113,19 @@ class Vec2d
     c, s = cos(rads), sin(rads)
     Vec2d x*c - y*s, y*c + x*s
 
+  -- rotate randomly -spread/2 to spread/2 degrees
+  random_heading: (spread=10, r=random!) =>
+    offset = (r - 0.5) * spread
+    @rotate _rad offset
+
   __mul: (left, right) ->
     if type(left) == "number"
-      if type(right) == "number"
-        error "put dot product here!"
-      else
-        Vec2d left * right[1], left * right[2]
+      Vec2d left * right[1], left * right[2]
     else
-      Vec2d left[1] * right, left[2] * right
+      if type(right) != "number"
+        left[1] * right[1] + left[2] * right[2]
+      else
+        Vec2d left[1] * right, left[2] * right
 
   __div: (left, right) ->
     if type(left) == "number"
