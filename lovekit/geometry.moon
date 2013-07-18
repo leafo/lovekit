@@ -34,7 +34,7 @@ class Vec2d
 
   getmetatable(@).__call = do
     import __base from @
-    (cls, x,y) -> setmetatable {x, y}, __base
+    (cls, x,y) -> setmetatable {x or 0, y or 0}, __base
 
   @from_angle: (deg) ->
     theta = _rad deg
