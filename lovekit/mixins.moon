@@ -62,3 +62,13 @@ class Sequenced
       unless @current_seq\update dt
         @current_seq = nil
 
+class HasParticles
+  new: =>
+    @particles = DrawList!
+
+  draw_inner: =>
+    @particles\draw_sorted!
+
+  update: (dt) =>
+    @particles\update dt
+
