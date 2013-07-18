@@ -9,6 +9,9 @@ lovekit = lovekit or {}
 rand = (min, max) ->
   _random! * (max - min) + min
 
+random_normal = ->
+  (_random! + _random! + _random! + _random! + _random! + _random! + _random! + _random! + _random! + _random! + _random! + _random!) / 12
+
 smoothstep = (a, b, t) ->
   t = t*t*t*(t*(t*6 - 15) + 10)
   a + (b - a)*t

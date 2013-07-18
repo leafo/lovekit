@@ -23,6 +23,8 @@ love.load = ->
   speed = 150
   me = Entity 0,0
 
+  particles = DrawList!
+
   speed_i = 0
   love.keypressed = (name, code) ->
     switch name
@@ -40,6 +42,23 @@ love.load = ->
     tween b, 1, x: 0, y: 0
     again!
 
+  make_particles = Sequence ->
+    base_dir = Vec2d(1, 0) * 50
+
+    class P extends PixelParticle
+      life: 2
+
+    while true
+      dir = base_dir\random_heading 60, random_normal!
+      particles\add P 50, 50, dir
+      wait 0.05
+
+  love.mousepressed = (x, y) ->
+    x,y = viewport\unproject x, y
+    x, y = math.floor(x), math.floor(y)
+    b\set_pos x,y
+    print "CLICK", x, y
+
   love.update = (dt) ->
     me.velocity\update unpack movement_vector speed
 
@@ -47,12 +66,9 @@ love.load = ->
     map\update dt
 
     seq\update dt
+    make_particles\update dt
 
-  love.mousepressed = (x, y) ->
-    x,y = viewport\unproject x, y
-    x, y = math.floor(x), math.floor(y)
-    b\set_pos x,y
-    print "CLICK", x, y
+    particles\update dt
 
   love.draw = ->
     viewport\center_on me
@@ -71,6 +87,11 @@ love.load = ->
     me\draw!
 
     viewport\pop!
+
+    graphics.push!
+    graphics.scale 4, 4
+    particles\draw_sorted!
+    graphics.pop!
 
     graphics.print love.timer.getFPS!, 10, 10
 
