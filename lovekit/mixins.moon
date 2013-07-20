@@ -72,3 +72,13 @@ class HasParticles
   update: (dt) =>
     @particles\update dt
 
+class KeyRepeat
+  push_key_repeat: (...) =>
+    @_key_repeat_d, @_key_repeat_i = love.keyboard.getKeyRepeat!
+    love.keyboard.setKeyRepeat ...
+
+  pop_key_repeat: =>
+   love.keyboard.setKeyRepeat @_key_repeat_d, @_key_repeat_i
+   @_key_repeat_d, @_key_repeat_i = nil
+
+
