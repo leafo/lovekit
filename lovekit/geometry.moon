@@ -55,6 +55,15 @@ class Vec2d
     return 0 if n == 0
     math.sqrt n
 
+  -- shink to len if longer
+  cap: (len) =>
+    _len = @len!
+    if _len > len
+      @[1] / _len * len
+      @[2] / _len * len
+
+    @
+
   dup: => Vec2d unpack @
 
   is_zero: => self[1] == 0 and self[2] == 0

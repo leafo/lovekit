@@ -88,9 +88,13 @@ dampen = (val, amount, min=0) ->
     val
 
 dampen_vector = (vec, amount, min) ->
-  vec[1] = dampen vec[1], amount, min
-  vec[2] = dampen vec[2], amount, min
-  ved
+  len = vec\len!
+  return if len == 0
+
+  new_len = dampen len, amount, min
+  vec[1] = vec[1] / len * new_len
+  vec[2] = vec[2] / len * new_len
+  vec
 
 lazy_key = {}
 lazy_value = (cls, key, fn) ->
