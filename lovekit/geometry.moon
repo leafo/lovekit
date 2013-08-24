@@ -386,7 +386,8 @@ class VectorSelector extends Selector
       @origin = Vec2d(@mx, @my)
 
     if @origin and not love.mouse.isDown "l"
-      print "Done!"
+      v = Vec2d(@mx - @origin[1], @my - @origin[2])
+      print "Vec:", v, "Dir:", v\normalized!
       @dest = nil
       @origin = nil
 
