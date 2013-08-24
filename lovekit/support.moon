@@ -16,6 +16,8 @@ smoothstep = (a, b, t) ->
   t = t*t*t*(t*(t*6 - 15) + 10)
   a + (b - a)*t
 
+lerp = (a,b,t) -> a + (b - a)*t
+
 escape_patt = (str) ->
   (str\gsub punct, (p) -> "%"..p)
 
