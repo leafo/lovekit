@@ -1,7 +1,7 @@
 
--- collision stuff
+-- geometric primitives
 
-import rectangle from love.graphics
+import rectangle, line from love.graphics
 import atan2, cos, sin, random, abs from math
 import type, pairs, ipairs from _G
 
@@ -322,20 +322,22 @@ class UniformGrid
         x += @cell_size
 
 
-
-class BoxSelector
+class Selector
   cursor_size: 3
+  color: {255,100,100, 100}
 
   new: (@viewport) =>
-    @current = nil
 
-  draw: =>
-    x,y = @mx, @my
+  update_mouse: =>
+    @mx, @my = @viewport\unproject love.mouse.getPosition!
 
+    @mx = math.floor @mx
+    @my = math.floor @my
+
+  draw_cursor: =>
     love.mouse.setVisible false
-
-    if @current
-      @current\draw {255,100,100, 100}
+    x,y = @mx, @my
+    return unless x and y
 
     --- draw curosr
     Box(x, y - @cursor_size, 1, @cursor_size)\draw {255,255,255}
@@ -344,11 +346,15 @@ class BoxSelector
     Box(x - @cursor_size, y, @cursor_size, 1)\draw {255,255,255}
     Box(x+1, y, @cursor_size, 1)\draw {255,255,255}
 
-  update: (dt) =>
-    @mx, @my = @viewport\unproject love.mouse.getPosition!
+class BoxSelector extends Selector
+  draw: =>
+    @draw_cursor!
 
-    @mx = math.floor @mx
-    @my = math.floor @my
+    if @current
+      @current\draw @color
+
+  update: (dt) =>
+    @update_mouse!
 
     if not @current and love.mouse.isDown "l"
       @current = Box @mx, @my, 1, 1
@@ -360,6 +366,29 @@ class BoxSelector
     if @current
       @current.w = @mx - @current.x
       @current.h = @my - @current.y
+
+    true
+
+
+class VectorSelector extends Selector
+  draw: =>
+    @draw_cursor!
+
+    if @origin
+      COLOR\push unpack @color
+      line @origin[1], @origin[2], @mx, @my
+      COLOR\pop!
+
+  update: (dt) =>
+    @update_mouse!
+
+    if not @origin and love.mouse.isDown "l"
+      @origin = Vec2d(@mx, @my)
+
+    if @origin and not love.mouse.isDown "l"
+      print "Done!"
+      @dest = nil
+      @origin = nil
 
     true
 
