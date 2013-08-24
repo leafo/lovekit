@@ -229,6 +229,11 @@ class Box
   random_point: =>
     @x + random! * @w, @y + random! * @h
 
+  scale: (sx=1, sy=sx, center=false) =>
+    scaled = Box @x, @y, @w * sx, @h * sy
+    scaled\move_center @center! if center
+    scaled
+
   shrink: (dx=1, dy=dx) =>
     hx = dx / 2
     hy = dy / 2
