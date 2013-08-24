@@ -143,7 +143,7 @@ lazy = (props) ->
 
 pick_one = (...) ->
   num = select "#", ...
-  select _random(1,num), ...
+  (select _random(1,num), ...)
 
 shuffle = (array) ->
   for i=#array, 2, -1
