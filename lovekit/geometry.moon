@@ -161,10 +161,12 @@ class Box
   move: (x, y) =>
     @x += x
     @y += y
+    @
 
   move_center: (x,y) =>
     @x = x - @w / 2
     @y = y - @h / 2
+    @
 
   center: =>
     @x + @w / 2, @y + @h / 2
