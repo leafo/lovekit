@@ -229,6 +229,20 @@ class Box
   random_point: =>
     @x + random! * @w, @y + random! * @h
 
+  -- make sure width and height aren't negative
+  fix: =>
+    x,y,w,h = @unpack!
+
+    if w < 0
+      x += w
+      w = -w
+
+    if h < 0
+      y += h
+      h = -h
+
+    Box x,y,w,h
+
   scale: (sx=1, sy=sx, center=false) =>
     scaled = Box @x, @y, @w * sx, @h * sy
     scaled\move_center @center! if center
@@ -304,4 +318,47 @@ class UniformGrid
           coroutine.yield b, k if b
           y += @cell_size
         x += @cell_size
+
+
+
+class BoxSelector
+  cursor_size: 3
+
+  new: (@viewport) =>
+    @current = nil
+
+  draw: =>
+    x,y = @mx, @my
+
+    love.mouse.setVisible false
+
+    if @current
+      @current\draw {255,100,100, 100}
+
+    --- draw curosr
+    Box(x, y - @cursor_size, 1, @cursor_size)\draw {255,255,255}
+    Box(x, y+1, 1, @cursor_size)\draw {255,255,255}
+
+    Box(x - @cursor_size, y, @cursor_size, 1)\draw {255,255,255}
+    Box(x+1, y, @cursor_size, 1)\draw {255,255,255}
+
+  update: (dt) =>
+    @mx, @my = @viewport\unproject love.mouse.getPosition!
+
+    @mx = math.floor @mx
+    @my = math.floor @my
+
+    if not @current and love.mouse.isDown "l"
+      @current = Box @mx, @my, 1, 1
+
+    if @current and not love.mouse.isDown "l"
+      print @current\fix!
+      @current = nil
+
+    if @current
+      @current.w = @mx - @current.x
+      @current.h = @my - @current.y
+
+    true
+
 
