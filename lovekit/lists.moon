@@ -82,6 +82,10 @@ class DrawList
     item.alive = true
     self[i] = item
 
+  add_all: (items) =>
+    for item in *items
+      @add item
+
   update: (dt, ...) =>
     i = 1
     updated = 0
