@@ -147,7 +147,7 @@ pick_one = (...) ->
 
 shuffle = (array) ->
   for i=#array, 2, -1
-    j = _random 2, i
+    j = _random i
     array[i], array[j] = array[j], array[i]
   array
 
