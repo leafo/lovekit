@@ -44,6 +44,21 @@ class Particle
 
   p: => 1 - @life / @@life
 
+  -- returns value from 1 to 0 when p is past `after`
+  fade_out: (after=0.5) =>
+    p = @p!
+    if p > after
+      1 - (p - after) / (1 - after)
+    else
+      1
+
+  fade_in: (before=0.5) =>
+    p = @p!
+    if p < before
+      p / before
+    else
+      1
+
   draw: =>
 
 class PixelParticle extends Particle
