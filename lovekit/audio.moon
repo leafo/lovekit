@@ -23,12 +23,12 @@ class Audio
     with source
       @sources[name] = source
 
-  play_music: (name) =>
+  play_music: (name, looping=true) =>
     @music\stop! if @music
 
     @music = with @get_source name, "ogg", "stream"
       \setVolume 0.5
-      \setLooping true
+      \setLooping looping
       \play!
 
   play: (name) =>
