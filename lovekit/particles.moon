@@ -9,13 +9,13 @@ class Emitter extends Sequence
   duration: 0.2
   count: 5
 
-  new: (@world, x, y, @duration, @count, @make_particle, callback) =>
+  new: (@world, @x, @y, @duration, @count, @make_particle, callback) =>
     count = @count
     dt = @duration / count
     super ->
       while count > 0
         count -= 1
-        @world.particles\add @make_particle x,y
+        @world.particles\add @make_particle @x, @y
         wait dt
 
       callback! if callback

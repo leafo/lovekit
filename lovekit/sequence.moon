@@ -181,3 +181,4 @@ class Sequence
     true
 
   update: (dt) => @send_time dt
+  draw: => -- do nothing, so we can store in entity lists
