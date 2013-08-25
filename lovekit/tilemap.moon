@@ -111,6 +111,8 @@ class TileMap
 
     l = 1
     for layer in *data.layers
+      continue if layer.visible == false
+
       if layer.objects
         for obj in *layer.objects
           if fn = callbacks.object
