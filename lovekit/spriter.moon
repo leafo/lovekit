@@ -30,6 +30,21 @@ class StateAnim
   draw: (x,y) =>
     @current\draw x, y
 
+  -- dupes Animators using frame indexes in idx when fn returns a new state name
+  splice_states: (idx, fn) =>
+    current_states =[{k,v} for k,v in pairs @states]
+
+    idx_set = {i, true for i in *idx}
+
+    for {name, anim} in *current_states
+      new_name = fn name
+      continue unless new_name and new_name != name
+
+      new_sequence = for i, frame in ipairs anim.sequence
+        continue unless idx_set[i]
+        frame
+
+      @states[new_name] = Animator anim.sprite, new_sequence, anim.rate, anim.flip_x, anim.flip_y
 
 -- animating a series of cells from a Spriter
 class Animator
