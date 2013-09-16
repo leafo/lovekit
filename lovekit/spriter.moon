@@ -15,17 +15,17 @@ class StateAnim
     @set_state initial
     @paused = false
 
-  set_state: (name) =>
+  set_state: (name, ...) =>
     if new_anim = @states[name]
       @current = new_anim
-      @current\reset!  if name != @current_name
+      @current\reset ... if name != @current_name
       @current_name = name
 
   update: (dt) =>
     @current\update dt if not @paused
 
-  reset: =>
-    @current\reset!
+  reset: (...) =>
+    @current\reset ...
 
   draw: (x,y) =>
     @current\draw x, y
@@ -42,9 +42,9 @@ class Animator
   new: (@sprite, @sequence, @rate=0, @flip_x=false, @flip_y=false) =>
     @reset!
 
-  reset: =>
+  reset: (frame=1) =>
     @time = 0
-    @i = 1
+    @i = frame
 
   update: (dt) =>
     if @rate > 0
