@@ -137,10 +137,14 @@ class Sequence
 
       val
 
-  new: (@fn, scope=@@default_scope) =>
+  new: (fn, scope) =>
+    @fn = @_setfenv fn, scope
+    @create!
+
+  _setfenv: (fn, scope=@@default_scope) =>
     if scope
-      old_env = getfenv @fn
-      setfenv @fn, setmetatable {}, {
+      old_env = getfenv fn
+      setfenv fn, setmetatable {}, {
         __index: (name) =>
           val = scope[name]
           if val
@@ -148,7 +152,8 @@ class Sequence
           else
             old_env[name]
       }
-    @create!
+
+    fn
 
   create: =>
     @co = coroutine.create @fn
