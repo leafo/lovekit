@@ -100,21 +100,28 @@ class Spriter
 
   seq: (...) => Animator self, ...
 
-  quad_for: (i) =>
-    if not @quads[i]
-      @quads[i] = if type(i) == "string" -- "x,y,w,h"
-        x, y, w, h = i\match "(%d+),(%d+),(%d+),(%d+)"
-        graphics.newQuad x, y, w, h, @iw, @ih
+  -- return x,y,w,h of named quad
+  _quad_dimensions: (i) =>
+    if type(i) == "string" -- "x,y,w,h"
+      x, y, w, h = i\match "(%d+),(%d+),(%d+),(%d+)"
+      tonumber(x), tonumber(y), tonumber(w), tonumber(h)
+    else
+      error "can't draw from index with no cell size" unless @cell_w > 0
+      sx, sy = if @width == 0
+        @ox + i * @cell_w, @oy
       else
-        error "can't draw from index with no cell size" unless @cell_w > 0
-        sx, sy = if @width == 0
-          @ox + i * @cell_w, @oy
-        else
-          @ox + (i % @width) * @cell_w, @oy + floor(i / @width) * @cell_h
+        @ox + (i % @width) * @cell_w, @oy + floor(i / @width) * @cell_h
 
-        graphics.newQuad sx, sy, @cell_w, @cell_h, @iw, @ih
+      sx, sy, @cell_w, @cell_h
 
-    @quads[i]
+  quad_for: (i) =>
+    if q = @quads[i]
+      return q
+
+    x,y,w,h = @_quad_dimensions(i)
+    q = graphics.newQuad x, y, w, h, @iw, @ih
+    @quads[i] = q
+    q
 
   draw_sized: (i, x,y, w,h) =>
     q = @quad_for i
@@ -138,5 +145,4 @@ class Spriter
     else
       @img\drawq q, x, y
     nil
-
 
