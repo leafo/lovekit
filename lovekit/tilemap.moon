@@ -12,6 +12,7 @@ require "lovekit.spriter"
 import rectangle, triangle from love.graphics
 import type from _G
 
+{ graphics: g } = love
 { :modf, :floor, min: _min, max: _max } = math
 
 export *
@@ -23,6 +24,10 @@ animated_tile = (frames=error"expecting table") ->
 
 class Tile extends Box
   new: (@tid, ...) => super ...
+
+  add: (batch, sprite, map) =>
+    batch\addq sprite\quad_for(@tid), @x, @y
+
   draw: (sprite, map) =>
     sprite\draw_cell @tid, @x, @y
     -- love.graphics.print "#{@tid}", @x, @y
@@ -96,6 +101,7 @@ class TileMap
   solid_layer: 0 -- the layer that we collide with
   cell_size: 16
   invert_collision: false
+  batch_size: 1000
 
   -- read map from a tiled export
   @from_tiled = (mod_name, callbacks={}) ->
@@ -283,26 +289,32 @@ class TileMap
   update: (dt) =>
     @time += dt
 
-  draw: (viewport) =>
-    box = viewport and viewport.box or Box 0,0, @real_width, @real_height
-    for tid in @tiles_for_box box
-      for i=@min_layer, @max_layer
-        unless @hidden_layers[i]
-          tile = @layers[i][tid]
-          tile\draw @sprite, self if tile
+  -- draw some layers
+  draw: (viewport, min_layer=@min_layer, max_layer=@max_layer) =>
+    viewport or= Box 0,0, @real_width, @real_height
+
+    batch = @batch
+    if batch
+      batch\clear!
+    else
+      batch = g.newSpriteBatch @sprite.img.tex, @batch_size
+      @batch = batch
+
+    count = 0
+    for i=min_layer, max_layer
+      unless @hidden_layers[i]
+        for tid in @tiles_for_box viewport
+          if tile = @layers[i][tid]
+            tile\add batch, @sprite, self
+            count += 1
+
+    if count > @batch_size
+      error "Added too many tiles to batch, #{count} > #{@batch_size}"
+
+    g.draw batch, 0, 0
 
   draw_layer: (l, viewport) =>
-    count = 0
-    if viewport
-      for tid in @tiles_for_box viewport
-        tile = @layers[l][tid]
-        if tile
-          tile\draw @sprite, self
-          count += 1
-    else
-      for _, tile in pairs @layers[l]
-        tile\draw @sprite, self
-        count += 1
+    @draw viewport, l, l
 
   tile_for_point: (x,y, layer=@solid_layer) =>
     tiles = @layers[layer]
