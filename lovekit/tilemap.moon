@@ -33,6 +33,20 @@ class Tile extends Box
     -- love.graphics.print "#{@tid}", @x, @y
     -- Box.draw @, {100,100,255}
 
+-- frames a array of tids
+class AnimatedTile extends Box
+  new: (@frames, @delay, ...) =>
+    super ...
+
+  _get_tid: (map) =>
+    @frames[floor(map.time / @delay % #@frames) + 1]
+
+  add: (batch, sprite, map) =>
+    batch\addq sprite\quad_for(@_get_tid(map)), @x, @y
+
+  draw: (sprite, map) =>
+    sprite\draw_cell @_get_tid(map), @x, @y
+
 class SlopeTopTile extends Box
   new: (@tid, @left, @right, ...) => super ...
   collides: (x1,y1, x2,y2) =>
@@ -86,14 +100,6 @@ class SlopeTopTile extends Box
 
   __tostring: =>
     "Slope<#{@left}, #{@right}>"
-
--- frames a array of tids
-class AnimatedTile extends Box
-  new: (@frames, @delay, ...) =>
-    super ...
-  draw: (sprite, map) =>
-    fid = floor(map.time / @delay % #@frames) + 1
-    sprite\draw_cell @frames[fid], @x, @y
 
 
 -- a grid of tiles with a preset map size (should be infinite soon)
@@ -164,11 +170,12 @@ class TileMap
     len = 1
     for y=0,height - 1
       for x=0,width - 1
-        r,g,b,a = data\getPixel x, y
+        _r, _g, _b, _a = data\getPixel x, y
+
         tile = if call_map
-          color_to_tile x,y,r,g,b,a
-        elseif a == 255
-          color_to_tile[hash_color r,g,b,a]
+          color_to_tile x,y,_r,_g,_b,_a
+        else
+          color_to_tile[hash_color _r,_g,_b,_a]
 
         if type(tile) == "function"
           tile = tile x * tile_sprite.cell_w, y * tile_sprite.cell_w, len
@@ -176,7 +183,7 @@ class TileMap
         if type(tile) == "number"
           tile = tid: tile
 
-        -- if not tile and a > 0
+        -- if not tile and _a > 0
         --   error "Got unexpected map tile color: " .. hash_color r,g,b,a
 
         tiles[len] = tile if tile

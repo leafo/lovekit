@@ -75,7 +75,7 @@ love.load = ->
     viewport\apply!
 
     v = viewport\pad 20
-    map\draw box: v
+    map\draw v
     v\outline!
 
     COLOR\pusha 64
