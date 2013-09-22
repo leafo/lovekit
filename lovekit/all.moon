@@ -15,6 +15,7 @@ require "lovekit.effects"
 require "lovekit.audio"
 require "lovekit.particles"
 require "lovekit.mixins"
+require "lovekit.paths"
 
 export COLOR = ColorStack!
 
