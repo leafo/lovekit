@@ -18,6 +18,11 @@ load_example = (num) ->
   fn!
   print "example load", love.timer.getMicroTime() - start
 
+  unless love.keypressed
+    love.keypressed = (key) ->
+      if key == "escape"
+        love.event.quit()
+
 love.load = ->
   love.draw = ->
     g.print "Choose an example:", 10, 10
