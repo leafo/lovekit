@@ -65,6 +65,10 @@ class Dispatcher
     insert @stack, state
     state\on_show self if state.on_show
 
+  replace: (state) =>
+    insert @stack, #@stack, state
+    @pop!
+
   pop: (n=1, transition=@default_transition) =>
     @transition = if transition
       transition @top!,@stack[#@stack - n]
