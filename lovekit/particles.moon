@@ -68,3 +68,41 @@ class PixelParticle extends Particle
     COLOR\push @r, @g, @b, @a * 255
     g.rectangle "fill", @x - half, @y - half, @size, @size
     COLOR\pop!
+
+class TextParticle extends Particle
+  dspin: 0
+  dscale: 0
+
+  new: (@str, ...) =>
+    super ...
+
+    @spin = 0
+    @scale = 1
+
+    font = g.getFont!
+    @w = font\getWidth @str
+    @h = font\getHeight!
+
+  update: (dt, ...) =>
+    @spin += dt * @dspin
+    @scale += dt * @dscale
+    super dt, ...
+
+  draw: =>
+    COLOR\pusha (1 - @p!) * 255
+    g.push!
+    g.translate @x, @y
+    g.rotate @spin
+    g.scale @scale, @scale
+    g.print @str, -@w/2, -@h/2
+    g.pop!
+    COLOR\pop!
+
+class TextEmitter extends Emitter
+  count: 1
+  new: (@str, ...) =>
+    super ...
+
+  make_particle: (...) =>
+    TextParticle @str, ...
+
