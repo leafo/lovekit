@@ -109,12 +109,17 @@ resume = (co, ...) ->
   err, v
 
 class Sequence
-  @default_scope = default_scope
+  @default_scope: default_scope
 
-  @extend = (tbl) =>
+  @after: (time, fn) =>
+    Sequence ->
+      wait time
+      fn!
+
+  @extend: (tbl) =>
     @default_scope = setmetatable tbl, __index: @default_scope
 
-  @join = (...) ->
+  @join: (...) ->
     seqs =  {...}
 
     setmetatable {
