@@ -12,10 +12,10 @@ class Entity extends Box
 
   new: (x, y) =>
     super x, y
-    @velocity = Vec2d 0, 0
+    @vel = Vec2d 0, 0
 
   update: (dt, world) =>
-    {dx, dy} = @velocity
+    {dx, dy} = @vel
     dx *= dt
     dy *= dt
 
@@ -23,7 +23,7 @@ class Entity extends Box
 
   on_stuck: => print "on_stuck: " .. @@__name
 
-  direction_name: (default_dir="down", v=@velocity) =>
+  direction_name: (default_dir="down", v=@vel) =>
     base = if v\is_zero! then
       "stand"
     else
