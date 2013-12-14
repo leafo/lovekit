@@ -145,6 +145,19 @@ pick_one = (...) ->
   num = select "#", ...
   (select _random(1,num), ...)
 
+pick_dist = (t) ->
+  sum = 0
+  dist = for k, v in pairs t
+    with {sum + v, k}
+      sum += v
+
+  r = math.random! * sum
+  for {prob, v} in *dist
+    if r <= prob
+      return v
+
+  error "got nothing!"
+
 shuffle = (array) ->
   for i=#array, 2, -1
     j = _random i
