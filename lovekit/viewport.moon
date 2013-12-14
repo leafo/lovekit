@@ -76,6 +76,19 @@ class Viewport extends Box
   on_right: (size, margin=0) =>
     @w - (size + margin)
 
+  -- relative to viewport position
+  left: (offset=0) =>
+    @x + offset
+
+  right: (offset=0) =>
+    @x + @w - offset
+
+  top: (offset=0) =>
+    @y + offset
+
+  bottom: (offset=0) =>
+    @y + @h - offset
+
 class EffectViewport extends Viewport
   new: (...) =>
     @effects = EffectList!
