@@ -294,7 +294,7 @@ class UniformGrid
     for k,v in pairs @values
       @values[k] = nil
 
-  add: (box, value) =>
+  add: (box, value=box) =>
     for bucket, key in @buckets_for_box box, true
       bucket[#bucket + 1] = box
 
