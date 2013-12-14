@@ -78,16 +78,16 @@ class Viewport extends Box
 
   -- relative to viewport position
   left: (offset=0) =>
-    @x + offset
+    offset
 
   right: (offset=0) =>
-    @x + @w - offset
+    @w - offset
 
   top: (offset=0) =>
-    @y + offset
+    offset
 
   bottom: (offset=0) =>
-    @y + @h - offset
+    @h - offset
 
 class EffectViewport extends Viewport
   new: (...) =>
