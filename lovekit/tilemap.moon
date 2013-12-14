@@ -121,6 +121,9 @@ class TileMap
     image = tileset.image\gsub "^%.%./", "" -- make better
     map.sprite = Spriter image, map.cell_size, map.cell_size
 
+    if data.properties and next(data.properties) and callbacks.map_properties
+      callbacks.map_properties data.properties
+
     l = 1
     for layer in *data.layers
       continue if layer.visible == false
