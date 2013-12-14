@@ -89,7 +89,7 @@ class TextParticle extends Particle
     super dt, ...
 
   draw: =>
-    COLOR\pusha (1 - @p!) * 255
+    COLOR\pusha ad_curve(@p!, 0, 0.1, 0.5) * 255
     g.push!
     g.translate @x, @y
     g.rotate @spin

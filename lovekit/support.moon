@@ -18,6 +18,24 @@ smoothstep = (a, b, t) ->
 
 lerp = (a,b,t) -> a + (b - a)*t
 
+
+-- goes 0 to 1 from start to attack
+-- goes 1 from 0 to decay to stop
+ad_curve = (t, start, attack, decay, stop=1) ->
+  if t < start
+    return 0
+
+  if t > stop
+    return 0
+
+  if t < attack
+    return (t - start) / (attack - start)
+
+  if t > decay
+    return 1 - (t - decay) / (stop - decay)
+
+  1
+
 escape_patt = (str) ->
   (str\gsub punct, (p) -> "%"..p)
 
