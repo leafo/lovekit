@@ -102,11 +102,13 @@ class DrawList
 
     updated > 0, updated
 
-  draw: =>
+  draw: (...) =>
     for item in *self
       if item.alive
-        item\draw!
-        item.box\outline! if @show_boxes and item.box
+        item\draw ...
+        if @show_boxes
+          item.box\outline! if item.box
+          item\outline! if item.w
 
   -- sort based on depth (y value)
   draw_sorted: (sort_fn=box_sort)=>
