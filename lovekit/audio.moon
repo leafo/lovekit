@@ -25,7 +25,7 @@ class Audio
 
   play_music: (name, looping=true) =>
     @music\stop! if @music
-
+    @current_music = name
     @music = with @get_source name, "ogg", "stream"
       \setVolume 0.5
       \setLooping looping
