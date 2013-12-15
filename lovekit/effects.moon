@@ -1,8 +1,6 @@
 
 require "lovekit.sequence"
 
-module "lovekit.effects", package.seeall
-
 import graphics from love
 
 {:timer} = love
@@ -27,8 +25,7 @@ class Effect
   before: =>
   after: =>
 
--- for the viewport
-class ViewportShake extends Effect
+class ShakeEffect extends Effect
   new: (duration, @speed=5, @amount=1) =>
     @start = timer.getTime!
     @rand = math.random! * math.pi
@@ -57,7 +54,7 @@ class ColorEffect extends Sequence
     if @color
       COLOR\pop!
 
-class Flash extends ColorEffect
+class FlashEffect extends ColorEffect
   new: (duration=0.2, color={255,100,100}) =>
     half = duration/2
     super ->

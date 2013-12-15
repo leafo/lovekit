@@ -3,9 +3,8 @@ require "lovekit.geometry"
 require "lovekit.effects"
 
 import graphics from love
-import effects from lovekit
 
-export *
+export ^
 
 class Viewport extends Box
   self.build_screen = (scale=2) ->
@@ -95,7 +94,7 @@ class EffectViewport extends Viewport
     super ...
 
   shake: (dur=0.4) =>
-    @effects\add effects.ViewportShake dur
+    @effects\add ShakeEffect dur
 
   update: (dt) => @effects\update dt
 
