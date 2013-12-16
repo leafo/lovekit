@@ -4,7 +4,7 @@ import insert, remove from table
 box_sort = (a, b) ->
   abox = a.box
   bbox = b.box
-  (abox and abox.y + abox.h or a.y) < (bbox and bbox.y + bbox.h or b.y)
+  (abox and abox.y + abox.h or a.y or 0) < (bbox and bbox.y + bbox.h or b.y or 0)
 
 export *
 
