@@ -69,6 +69,40 @@ class PixelParticle extends Particle
     g.rectangle "fill", @x - half, @y - half, @size, @size
     COLOR\pop!
 
+class ImageParticle extends Particle
+  dspin: 0
+  dscale: 0
+
+  w: 0
+  h: 0
+
+  sprite: nil
+  quad: 0
+
+  new: (...) =>
+    super ...
+    @spin = 0
+    @scale = 1
+
+
+  update: (dt, ...) =>
+    @spin += dt * @dspin
+    @scale += dt * @dscale
+    super dt, ...
+
+  draw: =>
+    COLOR\pusha ad_curve(@p!, 0, 0.1, 0.5) * 255
+    g.push!
+    g.translate @x, @y
+    g.rotate @spin
+    g.scale @scale, @scale
+
+    @sprite\draw @quad, 0, 0
+
+    g.pop!
+    COLOR\pop!
+
+
 class TextParticle extends Particle
   dspin: 0
   dscale: 0

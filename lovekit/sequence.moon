@@ -49,6 +49,7 @@ default_scope = {
     coroutine.yield "more", dt if dt
 
   -- flattens an async function
+  -- callback must be last arg
   await: (fn, ...) ->
     local out
     called = false
