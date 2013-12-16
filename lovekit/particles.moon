@@ -97,7 +97,7 @@ class ImageParticle extends Particle
     g.rotate @spin
     g.scale @scale, @scale
 
-    @sprite\draw @quad, 0, 0
+    @sprite\draw @quad, -@w/2, -@h/2
 
     g.pop!
     COLOR\pop!
