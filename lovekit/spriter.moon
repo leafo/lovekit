@@ -139,10 +139,15 @@ class Spriter
     q = @quad_for i
 
     if flip_x or flip_y
-      q\flip flip_x, flip_y
-      @img\draw q, x, y
-      q\flip flip_x, flip_y
+      _, _, qw, qh = q\getViewport!
+      sx = flip_x and -1 or 1
+      sy = flip_y and -1 or 1
+
+      ox = flip_x and qw or 0
+      oy = flip_y and qh or 0
+      @img\draw q, x, y, 0, sx, sy, ox, oy
     else
       @img\draw q, x, y
+
     nil
 
