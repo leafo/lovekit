@@ -9,7 +9,7 @@ class ScreenSnap
     @frames = 0
     @snaps = {}
 
-    filesystem.mkdir @dir
+    filesystem.createDirectory @dir
 
   next_name: (ext) =>
     with @dir .. "/" .. ("%09d"\format @i) .. "." .. ext
