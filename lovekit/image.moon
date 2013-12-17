@@ -16,9 +16,6 @@ class Image
   draw: (...) =>
     graphics.draw @tex, ...
 
-  drawq: (...) =>
-    graphics.drawq @tex, ...
-
   reload: =>
     @tex = graphics.newImage @fname
 

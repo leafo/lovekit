@@ -126,7 +126,7 @@ class TiledBackground
 
     ox = @ox % @tile_w
     oy = @oy % @tile_h
-    @img\drawq @quad, -ox, -oy
+    @img\draw @quad, -ox, -oy
 
 nil
 

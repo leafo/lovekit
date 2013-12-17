@@ -128,21 +128,21 @@ class Spriter
 
     sx = w / @cell_w
     sy = h / @cell_h
-    @img\drawq q, x, y, 0, sx, sy
+    @img\draw q, x, y, 0, sx, sy
 
     nil
 
   draw: (i,...) =>
-    @img\drawq @quad_for(i), ...
+    @img\draw @quad_for(i), ...
 
   draw_cell: (i, x, y, flip_x=false, flip_y=false) =>
     q = @quad_for i
 
     if flip_x or flip_y
       q\flip flip_x, flip_y
-      @img\drawq q, x, y
+      @img\draw q, x, y
       q\flip flip_x, flip_y
     else
-      @img\drawq q, x, y
+      @img\draw q, x, y
     nil
 
