@@ -26,7 +26,7 @@ class Tile extends Box
   new: (@tid, ...) => super ...
 
   add: (batch, sprite, map) =>
-    batch\addq sprite\quad_for(@tid), @x, @y
+    batch\add sprite\quad_for(@tid), @x, @y
 
   draw: (sprite, map) =>
     sprite\draw_cell @tid, @x, @y
@@ -42,7 +42,7 @@ class AnimatedTile extends Box
     @frames[floor(map.time / @delay % #@frames) + 1]
 
   add: (batch, sprite, map) =>
-    batch\addq sprite\quad_for(@_get_tid(map)), @x, @y
+    batch\add sprite\quad_for(@_get_tid(map)), @x, @y
 
   draw: (sprite, map) =>
     sprite\draw_cell @_get_tid(map), @x, @y
