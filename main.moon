@@ -14,9 +14,9 @@ load_example = (num) ->
 
   fn = require example_prefix .. assert(examples[num], "invalid example")
 
-  start = love.timer.getMicroTime()
+  start = love.timer.getTime!
   fn!
-  print "example load", love.timer.getMicroTime() - start
+  print "example load", love.timer.getTime() - start
 
   unless love.keypressed
     love.keypressed = (key) ->

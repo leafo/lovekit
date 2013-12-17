@@ -60,7 +60,7 @@ import graphics, keyboard from love
     print "CLICK", x, y
 
   love.update = (dt) ->
-    me.velocity\update unpack movement_vector speed
+    me.vel\update unpack movement_vector speed
 
     me\update dt, world
     map\update dt
