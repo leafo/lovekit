@@ -74,11 +74,11 @@ class HasParticles
 
 class KeyRepeat
   push_key_repeat: (...) =>
-    @_key_repeat_d, @_key_repeat_i = love.keyboard.getKeyRepeat!
+    @_key_repeat = love.keyboard.hasKeyRepeat!
     love.keyboard.setKeyRepeat ...
 
   pop_key_repeat: =>
-   love.keyboard.setKeyRepeat @_key_repeat_d, @_key_repeat_i
-   @_key_repeat_d, @_key_repeat_i = nil
+   love.keyboard.setKeyRepeat @_key_repeat
+   @_key_repeat = nil
 
 
