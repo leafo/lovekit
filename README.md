@@ -9,6 +9,7 @@ that I use to build games. I've made (or started) the following games:
 * https://github.com/leafo/ludum-dare-25
 * https://github.com/leafo/ludum-dare-26
 * https://github.com/leafo/ludum-dare-27
+* https://github.com/leafo/ludum-dare-28
 * https://github.com/leafo/game-1
 * https://github.com/leafo/game-2
 
