@@ -176,6 +176,12 @@ pick_dist = (t) ->
 
   error "got nothing!"
 
+duty_on = (rate=1.2, duty=0.6, start_time=0) ->
+  t = love.timer.getTime() - start_time
+  t = t / rate
+  t = t - math.floor t
+  t <= duty
+
 shuffle = (array) ->
   for i=#array, 2, -1
     j = _random i
