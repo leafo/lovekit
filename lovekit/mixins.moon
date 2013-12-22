@@ -1,16 +1,7 @@
 
 import insert, remove from table
 
-get_local = (search_name, level=1) ->
-  level += 1
-  i = 1
-  while true
-    name, val = debug.getlocal level, i
-    break unless name
-    if name == search_name
-      return val
-    i += 1
-
+require "lovekit.support"
 
 export *
 

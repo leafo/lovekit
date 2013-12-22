@@ -239,3 +239,21 @@ count_garbage_collections = ->
 
   getmetatable(newproxy(true)).__gc = count_gc
 
+get_local = (search_name, level=1) ->
+  level += 1
+  i = 1
+  while true
+    name, val = debug.getlocal level, i
+    break unless name
+    if name == search_name
+      return val, true, i
+    i += 1
+
+  nil, false, i
+
+find_local = (name, level=1) ->
+  while true
+    val, found, idx = get_local name, level + 1
+    return val, level if found
+    level += 1
+
