@@ -1,5 +1,6 @@
-import graphics from love
 import max from math
+
+{graphics: g } = love
 
 border = {
   tl: 0
@@ -34,7 +35,7 @@ class Frame extends Box
 
     if @shadow
       COLOR\push 0,0,0, 64
-      graphics.rectangle "fill", x + 1, y + 1, w, h
+      g.rectangle "fill", x + 1, y + 1, w, h
       COLOR\pop!
 
     with @sprite
