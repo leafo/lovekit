@@ -152,7 +152,7 @@ class RevealLabel extends Label
     super dt
 
 
-class BaseList
+class BaseList extends Box
   padding: 5
   xalign: "left"
   yalign: "top"
