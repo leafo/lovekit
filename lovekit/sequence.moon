@@ -35,12 +35,30 @@ default_scope = {
     if time < 0
       coroutine.yield "more", -time
 
-  wait_for_key: (key) ->
-    local dt
-    while true
-      break if keyboard.isDown key
-      dt = coroutine.yield!
-    coroutine.yield "more", dt if dt
+  -- wait_for_key "a"
+  -- key = wait_for_key! -- waits for any key
+  wait_for_key: (expect_key, ...) ->
+    if expect_key
+      local dt
+      while true
+        break if keyboard.isDown expect_key, ...
+        dt = coroutine.yield!
+      coroutine.yield "more", dt if dt
+    else
+      old_keypressed = love.keypressed
+      local key
+
+      love.keypressed = (...) ->
+        key = ...
+        love.keypressed = old_keypressed
+        old_keypressed ...
+
+      local dt
+      while not key
+        dt = coroutine.yield!
+
+      coroutine.yield "more", dt if dt
+      key
 
   wait_until: (fn) ->
     local dt
