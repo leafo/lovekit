@@ -116,9 +116,12 @@ class TileMap
     map.cell_size = data.tilewidth
     map.invert_collision = true if data.properties.invert_collision
 
+    fix_image_path = (path) ->
+      path\gsub "^%.%./", "" -- TODO: make better
+
     tileset = data.tilesets[1]
     first_tid = tileset.firstgid
-    image = tileset.image\gsub "^%.%./", "" -- make better
+    image = fix_image_path tileset.image
     map.sprite = Spriter image, map.cell_size, map.cell_size
 
     if data.properties and next(data.properties) and callbacks.map_properties
@@ -132,6 +135,9 @@ class TileMap
         for obj in *layer.objects
           if fn = callbacks.object
             fn obj, l
+
+      if layer.type == "imagelayer"
+        map.layers[l].image = imgfy fix_image_path layer.image
 
       if layer.data
         is_solid = layer.properties.solid
@@ -312,11 +318,17 @@ class TileMap
 
     count = 0
     for i=min_layer, max_layer
-      unless @hidden_layers[i]
-        for tid in @tiles_for_box viewport
-          if tile = @layers[i][tid]
-            tile\add batch, @sprite, self
-            count += 1
+      continue if @hidden_layers[i]
+      _sprite = @sprite
+      curr_layer = @layers[i]
+
+      if bg = curr_layer.image
+        bg\draw 0, 0
+
+      for tid in @tiles_for_box viewport
+        if tile = curr_layer[tid]
+          tile\add batch, _sprite, @
+          count += 1
 
     if count > @batch_size
       error "Added too many tiles to batch, #{count} > #{@batch_size}"
