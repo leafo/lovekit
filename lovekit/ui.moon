@@ -58,9 +58,15 @@ class Frame extends Box
 
 
 -- a piece of text that knows its size
+-- set max_width to wrap it
 class Label extends Box
   new: (text, @x=0, @y=0) =>
     @set_text text
+
+  set_max_width: (max_width) =>
+    return if max_width == @max_width
+    @max_width = max_width
+    @_set_size @text unless @is_func
 
   set_text: (@text) =>
     @is_func = type(@text) == "function"
@@ -70,7 +76,13 @@ class Label extends Box
   _set_size: (text) =>
     font = g.getFont!
     @w = font\getWidth text
-    @h = font\getHeight!
+
+    if @max_width
+      @w = math.min @max_width, @w
+      @w, num_lines = font\getWrap text, @max_width
+      @h = num_lines * font\getHeight!
+    else
+      @h = font\getHeight!
 
   _update_from_fun: =>
     if @is_func
@@ -83,7 +95,10 @@ class Label extends Box
 
   draw: =>
     text = @is_func and @_text or @text
-    g.print text, @x, @y
+    if @max_width
+      g.printf text, @x, @y, @max_width
+    else
+      g.print text, @x, @y
 
     -- COLOR\push 255,100,100, 200
     -- g.rectangle "fill", @x,@y, 2,2
