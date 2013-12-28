@@ -192,7 +192,8 @@ class BaseList extends Box
 
   update: (dt, ...) =>
     for item in *@items
-      item\update dt, ...
+      if item.update
+        item\update dt, ...
     @update_size!
     true
 
