@@ -160,6 +160,8 @@ class Box
   unpack: => @x, @y, @w, @h
   unpack2: => @x, @y, @x + @w, @y + @h
 
+  dup: => Box @unpack!
+
   pad: (amount) =>
     amount2 = amount * 2
     Box @x + amount, @y + amount, @w - amount2, @h - amount2
