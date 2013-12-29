@@ -70,6 +70,14 @@ extend = (...) ->
 
   tbls[1]
 
+-- merge tables by copying
+merge = (first, second, ...) ->
+  return first unless first and second
+  for k,v in pairs second
+    first[k] = v
+
+  merge first, ...
+
 -- takes viewport
 -- draws grid on scaled pixel boundaries
 show_grid = (v) ->
