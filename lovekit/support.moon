@@ -154,6 +154,12 @@ get_local = (search_name, level=1) ->
       return val
     i += 1
 
+
+lazy_tbl = (tbl) ->
+  setmetatable {}, __index: (name) =>
+    @[name] = tbl[name]!
+    @[name]
+
 lazy = (props) ->
   cls = get_local "self", 2
   for k,v in pairs props
