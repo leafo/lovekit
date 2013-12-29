@@ -252,4 +252,19 @@ class HList extends BaseList
       item\draw!
 
 
-{ :Frame, :Label, :AnimatedLabel, :BlinkingLabel, :RevealLabel, :VList, :HList }
+class CenterBin extends Box
+  w: 0
+  h: 0
+
+  new: (@x, @y, @item) =>
+
+  update: (dt) =>
+    @item\update dt
+    @item.x = @x - @item.w / 2
+    @item.y = @y - @item.h / 2
+    true
+
+  draw: =>
+    @item\draw!
+
+{ :Frame, :Label, :AnimatedLabel, :BlinkingLabel, :RevealLabel, :VList, :HList, :CenterBin }
