@@ -148,9 +148,12 @@ class BlinkingLabel extends Label
 
 class RevealLabel extends Label
   rate: 0.03
+  fixed_size: false
 
   new: (text, @x, @y, fn) =>
     @chr = 0
+    @set_text -> text\sub 1, @chr
+
     @seq = Sequence ->
       while @chr < #text
         @chr += 1
@@ -160,7 +163,17 @@ class RevealLabel extends Label
       @seq = nil
       fn @ if fn
 
-    @set_text -> text\sub 1, @chr
+    if type(fn) == "table"
+      for k,v in pairs fn
+        if type(k) == "string"
+          @[k] = v
+
+      fn = fn[1]
+
+    if @fixed_size
+      @_set_size = =>
+        RevealLabel._set_size @, text
+
 
   update: (dt) =>
     @seq\update dt if @seq
