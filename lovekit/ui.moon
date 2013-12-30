@@ -60,10 +60,13 @@ class Frame extends Box
 -- a piece of text that knows its size
 -- set max_width to wrap it
 class Label extends Box
+  alive: true
+  align: "left"
+
   new: (text, @x=0, @y=0) =>
     @set_text text
 
-  set_max_width: (max_width) =>
+  set_max_width: (max_width, @align) =>
     return if max_width == @max_width
     @max_width = max_width
     @_set_size @text unless @is_func
@@ -96,7 +99,7 @@ class Label extends Box
   draw: =>
     text = @is_func and @_text or @text
     if @max_width
-      g.printf text, @x, @y, @max_width
+      g.printf text, @x, @y, @max_width, @align
     else
       g.print text, @x, @y
 
