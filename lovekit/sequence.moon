@@ -161,9 +161,9 @@ class Sequence
 
       val
 
-  new: (fn, scope) =>
+  new: (fn, scope, ...) =>
     @fn = @_setfenv fn, scope
-    @create!
+    @create ...
 
   _setfenv: (fn, scope=@@default_scope) =>
     if scope
@@ -179,13 +179,14 @@ class Sequence
 
     fn
 
-  create: =>
+  create: (...) =>
+    @args = {...}
     @co = coroutine.create @fn
     @started = false
 
-  start: =>
+  start: (...) =>
     @started = true
-    resume @co
+    resume @co, ...
 
   respond: =>
 
@@ -194,7 +195,7 @@ class Sequence
   send_time: (dt) =>
     -- loop until the time is sent
     while true do
-      @start! if not @started
+      @start unpack @args unless @started
       return false if @is_dead!
 
       signal, val = resume @co, dt
