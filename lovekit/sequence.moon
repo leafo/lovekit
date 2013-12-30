@@ -117,6 +117,12 @@ default_scope = {
     leftover = t - 1.0
     if leftover > 0
       coroutine.yield "more", leftover
+
+  -- run another function in the correct scope
+  run: (fn, ...) ->
+    env = getfenv 2
+    setfenv fn, env
+    fn ...
 }
 
 -- safely resumes a coroutine
