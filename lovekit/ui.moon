@@ -269,25 +269,22 @@ class Anchor extends Box
   new: (@x, @y, @item, @xalign, @yalign=xalign) =>
 
   update: (...) =>
-    @item\update ...
+    with @item\update ...
+      @item.x = switch @xalign
+        when "right"
+          @x - @item.w
+        when "center"
+          @x - @item.w / 2
+        else
+          @x
 
-    @item.x = switch @xalign
-      when "right"
-        @x - @item.w
-      when "center"
-        @x - @item.w / 2
-      else
-        @x
-
-    @item.y = switch @yalign
-      when "bottom"
-        @y - @item.h
-      when "center"
-        @y - @item.h / 2
-      else
-        @y
-
-    true
+      @item.y = switch @yalign
+        when "bottom"
+          @y - @item.h
+        when "center"
+          @y - @item.h / 2
+        else
+          @y
 
   draw: =>
     @item\draw!
@@ -296,5 +293,22 @@ class CenterAnchor extends Anchor
   new: (x,y, item) =>
     super x, y, item, "center"
 
+
+-- fixed size container that holds 1 item that is aligned
+class Bin extends Box
+  xalign: 0.5
+  yalign: 0.5
+
+  new: (x,y,w,h, @item, @xalign, @yalign) =>
+    super x,y,w,h
+
+  update: (...) =>
+    with @item\update ...
+      @item.x = math.floor @x + (@w - @item.w) * @xalign
+      @item.y = math.floor @y + (@h - @item.h) * @yalign
+
+  draw: =>
+    @item\draw!
+
 { :Frame, :Label, :AnimatedLabel, :BlinkingLabel, :RevealLabel, :VList, :HList,
-  :Anchor, :CenterAnchor }
+  :Anchor, :CenterAnchor, :Bin }
