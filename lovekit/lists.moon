@@ -13,7 +13,7 @@ Set = (items) ->
   self[key] = true for key in *items
   self
 
--- a basic hashed linked list
+-- a linked list set
 class List
   new: => @clear!
 
@@ -62,6 +62,39 @@ class List
         coroutine.yield curr.value
         curr = curr.next
 
+
+-- nothing efficient about this, same API as draw list but preserves insert order
+class EntityList
+  new: =>
+
+  add: (item) =>
+    insert @, item
+
+  update: (...) =>
+    i = 1
+    len = #@
+
+    while i <= len
+      item = @[i]
+      alive = item\update ...
+
+      if alive
+        i +=1
+      else
+        item.alive = false
+        item\onremove! if item.onremove
+        table.remove @, i
+        len -= 1
+
+    len > 0, updated
+
+  draw: (...) =>
+    i = 1
+    for item in *@
+      i += 1
+      item\draw ...
+
+  draw_sorted: => @draw!
 
 -- a lua array that fills dead slots added items
 -- uses .alive property of items in list to keep track of state
