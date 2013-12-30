@@ -264,20 +264,36 @@ class HList extends BaseList
       x += @padding + item.w
       item\draw!
 
-
-class CenterBin extends Box
+-- fixes a UI element relative to a point
+class Anchor extends Box
   w: 0
   h: 0
 
-  new: (@x, @y, @item) =>
+  new: (@x, @y, @item, @xalign, @yalign=xalign) =>
 
-  update: (dt) =>
-    @item\update dt
-    @item.x = @x - @item.w / 2
-    @item.y = @y - @item.h / 2
+  update: (...) =>
+    @item\update ...
+
+    switch @xalign
+      when "right"
+        @item.x = @x - @item.w
+      when "center"
+        @item.x = @x - @item.w / 2
+
+    switch @yalign
+      when "bottom"
+        @item.y = @y - @item.h
+      when "center"
+        @item.y = @y - @item.h / 2
+
     true
 
   draw: =>
     @item\draw!
 
-{ :Frame, :Label, :AnimatedLabel, :BlinkingLabel, :RevealLabel, :VList, :HList, :CenterBin }
+class CenterAnchor extends Anchor
+  new: (x,y, item) =>
+    super x, y, item, "center"
+
+{ :Frame, :Label, :AnimatedLabel, :BlinkingLabel, :RevealLabel, :VList, :HList,
+  :Anchor, :CenterAnchor }
