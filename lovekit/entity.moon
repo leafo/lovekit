@@ -10,8 +10,8 @@ class Entity extends Box
 
   loc: => Vec2d @x, @y
 
-  new: (x, y) =>
-    super x, y
+  new: (...) =>
+    super ...
     @vel = Vec2d 0, 0
 
   update: (dt, world) =>
