@@ -5,6 +5,7 @@ example_prefix = "examples."
 examples = {
   "tilemap"
   "curves"
+  "ui"
 }
 
 load_example = (num) ->

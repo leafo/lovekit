@@ -221,27 +221,18 @@ class VList extends BaseList
     @h -= @padding if @h > 0
 
   draw: =>
-    {:x, :y} = @
-
-    dy = if @yalign == "bottom"
-      total_height = 0
-      for item in *@items
-        total_height += item.h
-
-      if total_height > 0
-        total_height += @padding * #@items
-
-      -total_height
-    else
-      0
+    {:x, :y, :w, :xalign} = @
 
     for item in *@items
-      item.x = if @xalign == "right"
-        x - item.w
+      item.x = if xalign == "right"
+        x + w - item.w
+      elseif xalign == "center"
+        x + (w - item.w) /2
       else
         x
 
-      item.y = y + dy
+      item.y = y
+
       y += @padding + item.h
       item\draw!
 
@@ -256,11 +247,17 @@ class HList extends BaseList
     @w -= @padding if @w > 0
 
   draw: =>
-    {:x, :y} = @
+    {:x, :y, :h, :yalign} = @
 
     for item in *@items
       item.x = x
-      item.y = y
+      item.y = if yalign == "bottom"
+        y + h - item.h
+      elseif yalign == "center"
+        y + (h - item.h) / 2
+      else
+        y
+
       x += @padding + item.w
       item\draw!
 
@@ -274,17 +271,21 @@ class Anchor extends Box
   update: (...) =>
     @item\update ...
 
-    switch @xalign
+    @item.x = switch @xalign
       when "right"
-        @item.x = @x - @item.w
+        @x - @item.w
       when "center"
-        @item.x = @x - @item.w / 2
+        @x - @item.w / 2
+      else
+        @x
 
-    switch @yalign
+    @item.y = switch @yalign
       when "bottom"
-        @item.y = @y - @item.h
+        @y - @item.h
       when "center"
-        @item.y = @y - @item.h / 2
+        @y - @item.h / 2
+      else
+        @y
 
     true
 
