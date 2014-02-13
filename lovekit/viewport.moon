@@ -34,8 +34,13 @@ class Viewport extends Box
 
       margin = opts.margin or 0
 
-      scale_x = (screen_w - margin) / @w
-      scale_y = (screen_h - margin) / @h
+      margin_x, margin_y = if margin > 0 and margin < 1
+        math.floor(screen_w * margin), math.floor(screen_h * margin)
+      else
+        margin, margin
+
+      scale_x = (screen_w - margin_x) / @w
+      scale_y = (screen_h - margin_y) / @h
 
       @scale = math.min scale_x, scale_y
 
