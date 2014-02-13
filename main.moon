@@ -6,6 +6,7 @@ examples = {
   "tilemap"
   "curves"
   "ui"
+  "viewport"
 }
 
 load_example = (num) ->
