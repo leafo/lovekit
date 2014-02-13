@@ -7,6 +7,7 @@ examples = {
   "curves"
   "ui"
   "viewport"
+  "joystick"
 }
 
 load_example = (num) ->
