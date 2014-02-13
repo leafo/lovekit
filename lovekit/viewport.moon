@@ -6,22 +6,50 @@ import graphics from love
 
 export ^
 
+-- x,y,w,h are in game coordinate space
 class Viewport extends Box
-  self.build_screen = (scale=2) ->
-    {
-      w: graphics.getWidth! / scale
-      h: graphics.getHeight! / scale
-      scale: scale
-    }
+  x: 0
+  y: 0
+  scale: 1
+
+  offset_x: 0
+  offset_y: 0
+
+  crop: false
 
   -- screen is table with w, h, and scale
   new: (opts={}) =>
-    @screen = if opts.screen
-      opts.screen
-    else
-      Viewport.build_screen opts.scale
+    screen_w, screen_h = graphics.getWidth!, graphics.getHeight!
 
-    super 0,0, @screen.w, @screen.h
+    if opts.scale
+      @scale = opts.scale
+      @w = screen_w / @scale
+      @h = screen_h / @scale
+      return
+
+    -- got size, figure out scale and offset
+    if opts.w and opts.h
+      @w = opts.w
+      @h = opts.h
+
+      margin = opts.margin or 0
+
+      scale_x = (screen_w - margin) / @w
+      scale_y = (screen_h - margin) / @h
+
+      @scale = math.min scale_x, scale_y
+
+      real_w = @w * @scale
+      real_h = @h * @scale
+
+      @offset_x = math.floor (screen_w - real_w)/ 2
+      @offset_y = math.floor (screen_h - real_h)/ 2
+
+      @crop = true
+
+      return
+
+    error "don't know how to create viewport"
 
   update: (dt) => -- animations: screen shake, screen zoom
 
@@ -29,24 +57,32 @@ class Viewport extends Box
     x,y,w,h = @unpack!
     Box x - w/2, y - h/2, w*2,h*2
 
-  scale: =>
-    s = @screen.scale
-    graphics.scale s, s
-
   apply: (scale=true)=>
+    if @crop
+      s = @scale
+      graphics.setScissor @offset_x, @offset_y, @w * s, @h * s
+
     graphics.push!
-    @scale! if scale
+
+    graphics.translate @offset_x, @offset_y
+
+    if s = @scale
+      graphics.scale s, s
+
     graphics.translate -@x, -@y
 
   pop: =>
     graphics.pop!
 
+    if @crop
+      graphics.setScissor!
+
   unproject: (x,y) =>
-    x, y = x / @screen.scale, y / @screen.scale
+    x, y = x / @scale, y / @scale
     @x + x, @y + y
 
   project: (x,y) =>
-    x, y = x * @screen.scale, y * @screen.scale
+    x, y = x * @scale, y * @scale
     x - @x, y - @y
 
   center_on_pt: (cx, cy, map_box) =>
