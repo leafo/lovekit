@@ -77,13 +77,13 @@ class Viewport extends Box
     if @crop
       graphics.setScissor!
 
+  -- screen coords -> viewport coords
   unproject: (x,y) =>
-    x, y = x / @scale, y / @scale
-    @x + x, @y + y
+    (x - @offset_x) / @scale + @x, (y - @offset_y) / @scale + @y
 
+  -- viewport cords -> screen cords
   project: (x,y) =>
-    x, y = x * @scale, y * @scale
-    x - @x, y - @y
+    (x - @x) * @scale + @offset_x, (y - @y) * @scale + @offset_y
 
   center_on_pt: (cx, cy, map_box) =>
     @x = cx - @w / 2
