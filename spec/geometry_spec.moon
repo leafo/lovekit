@@ -1,4 +1,6 @@
 
+export love = { graphics: { } }
+
 require "lovekit.geometry"
 
 describe "Vec2d", ->
