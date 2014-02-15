@@ -28,3 +28,26 @@ make_mover = (up, down, left, right) ->
     out
 
 movement_vector = make_mover "up", "down", "left", "right"
+
+joystick_deadzone_normalize = (vec, amount=.2) ->
+  x, y = unpack vec
+  len = vec\len!
+  new_len = if len < amount
+    0
+  else
+    math.min 1, (len - amount) / (1 - amount)
+
+  Vec2d x/len * new_len, y/len * new_len
+
+
+make_joystick_mover = (i=1, xaxis="leftx", yaxis="lefty") ->
+  joystick = assert love.joystick.getJoysticks![i], "Missing joystick"
+
+  (speed) ->
+    x = joystick\getGamepadAxis xaxis
+    y = joystick\getGamepadAxis yaxis
+    vec = joystick_deadzone_normalize Vec2d(x,y)
+    vec = vec * speed if speed
+    vec
+
+
