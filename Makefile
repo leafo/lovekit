@@ -1,10 +1,10 @@
 
 
 all::
-	moonc lovekit
+	moonc main.moon lovekit examples
 
 watch:: all
-	moonc -w main.moon lovekit
+	moonc -w main.moon lovekit examples
 
 test:
 	busted -p _spec.moon$
