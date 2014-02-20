@@ -63,23 +63,20 @@ make_joystick_mover = (joystick=1, xaxis="leftx", yaxis="lefty") ->
     vec = vec * speed if speed
     vec
 
--- c = Controller {
---   confirm: "x"
---   confirm: {"x", "y"}
---
---   confirm: {
---     keyboard: "x"
---   }
---
---   confirm: {
---     keyboard: {"x", "y"}
---   }
---
---
--- }, joystick
-
 class Controller
   @next_joystick: 1
+
+  @default: =>
+    @ {
+      left: "left"
+      right: "right"
+      up: "up"
+      down: "down"
+
+      confirm: "x"
+      cancel: "c"
+    }, "auto"
+
 
   new: (mapping, @joystick) =>
     if @joystick == "auto"
