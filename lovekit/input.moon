@@ -72,13 +72,13 @@ make_joystick_mover = (i=1, xaxis="leftx", yaxis="lefty") ->
 -- }, joystick
 
 class Controller
+  @next_joystick: 1
+
   new: (mapping, @joystick) =>
     if @joystick == "auto"
       error "automatically get joystick"
 
-
     @add_mapping mapping
-
 
   add_mapping: (mapping) =>
     @key_mapping or= table_table!
@@ -108,13 +108,14 @@ class Controller
 
     @joy_mapping = nil unless next @joy_mapping
 
-
   is_down: (name, ...) =>
     if keys = @key_mapping[name]
       pressed = keyboard.isDown unpack keys
       return true if pressed
 
-    -- if @joy_mapping
+    if btns = @joy_mapping and @joy_mapping[name]
+      pressed = @joystick\isDown unpack btns
+      return true if pressed
 
     if ...
       @is_down ...

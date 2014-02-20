@@ -22,9 +22,9 @@ describe "lovekit.input", ->
     DOWN_KEYS.up = true
     DOWN_KEYS.down = false
 
-    assert.same true, love.keyboard.isDown "up"
-    assert.same false, love.keyboard.isDown "down"
-    assert.same true, love.keyboard.isDown "down", "up"
+    assert.truthy love.keyboard.isDown "up"
+    assert.falsy love.keyboard.isDown "down"
+    assert.truthy love.keyboard.isDown "down", "up"
 
   it "should create controller", ->
     c = Controller {
