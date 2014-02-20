@@ -12,19 +12,24 @@ table_table = ->
 export *
 
 make_mover = (up, down, left, right) ->
+  up = {up} unless type(up) == "table"
+  down = {down} unless type(down) == "table"
+  left = {left} unless type(left) == "table"
+  right = {right} unless type(right) == "table"
+
   (speed) ->
     vel = Vec2d 0, 0
 
-    vel[1] = if keyboard.isDown left
+    vel[1] = if keyboard.isDown unpack left
       -1
-    elseif keyboard.isDown right
+    elseif keyboard.isDown unpack right
       1
     else
       0
 
-    vel[2] = if keyboard.isDown down
+    vel[2] = if keyboard.isDown unpack down
       1
-    elseif keyboard.isDown up
+    elseif keyboard.isDown unpack up
       -1
     else
       0
