@@ -8,6 +8,7 @@ examples = {
   "ui"
   "viewport"
   "joystick"
+  "controller"
 }
 
 load_example = (num) ->
