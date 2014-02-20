@@ -137,7 +137,7 @@ class Controller
 
     for name, inputs in pairs mapping
       if type(inputs) == "string"
-        table.insert @key_mapping[name], inputs
+        insert @key_mapping[name], inputs
         continue
 
       for key in *inputs
