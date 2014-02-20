@@ -1,9 +1,13 @@
 
-export love = { graphics: { } }
-
-require "lovekit.geometry"
+import restore from require "spec.helpers"
 
 describe "Vec2d", ->
+  setup ->
+    export love = { graphics: { } }
+    require "lovekit.geometry"
+
+  teardown restore
+
   it "should create a vector", ->
     v = Vec2d 10, 20
     assert.same {10, 20}, v

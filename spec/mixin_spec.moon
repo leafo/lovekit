@@ -1,8 +1,13 @@
-require "lovekit.mixins"
 
+import restore from require "spec.helpers"
 import insert from table
 
 describe "mixins", ->
+  setup ->
+    require "lovekit.mixins"
+
+  teardown restore
+
   it "should mixin mixins", ->
     log = {}
 

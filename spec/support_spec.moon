@@ -1,7 +1,12 @@
 
-require "lovekit.support"
+import restore from require "spec.helpers"
 
 describe "support", ->
+  setup ->
+    require "lovekit.support"
+
+  teardown restore
+
   it "should set lazy value", ->
     cats_called = 0
     hello_called = 0

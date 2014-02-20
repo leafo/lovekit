@@ -1,16 +1,21 @@
 
+import restore from require "spec.helpers"
+
 current_color = { 255,255,255,255 }
 
-export love = {
-  graphics: {
-    setColor: (r=255,g=255,b=255,a=255) ->
-      current_color = {r,g,b,a}
-  }
-}
-
-require "lovekit.color"
-
 describe "color", ->
+  setup ->
+    export love = {
+      graphics: {
+        setColor: (r=255,g=255,b=255,a=255) ->
+          current_color = {r,g,b,a}
+      }
+    }
+
+    require "lovekit.color"
+
+  teardown restore
+
   it "should hash colors", ->
     for n in *{"Arkeus", "Leafo", "Adam D."}
       hash_string n
