@@ -5,6 +5,7 @@ import graphics, keyboard from love
 
 ->
   viewport = Viewport scale: 4
+  controller = Controller\default!
 
   sprite = Spriter "scrap/tileset.png", 16, 16
   map = TileMap.from_image "scrap/map.png", sprite, {
@@ -60,7 +61,7 @@ import graphics, keyboard from love
     print "CLICK", x, y
 
   love.update = (dt) ->
-    me.vel\update unpack movement_vector speed
+    me.vel\update unpack controller\movement_vector speed
 
     me\update dt, world
     map\update dt
