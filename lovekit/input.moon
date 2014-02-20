@@ -2,7 +2,8 @@
 require "lovekit.geometry"
 
 import keyboard from love
-import insert from require "table"
+import insert from table
+import unpack from _G
 
 table_table = ->
   setmetatable {}, __index: (key) =>
@@ -51,8 +52,9 @@ joystick_deadzone_normalize = (vec, amount=.2) ->
   Vec2d x/len * new_len, y/len * new_len
 
 
-make_joystick_mover = (i=1, xaxis="leftx", yaxis="lefty") ->
-  joystick = assert love.joystick.getJoysticks![i], "Missing joystick"
+make_joystick_mover = (joystick=1, xaxis="leftx", yaxis="lefty") ->
+  if type(joystick) == "number"
+    joystick = assert love.joystick.getJoysticks![i], "Missing joystick"
 
   (speed) ->
     x = joystick\getGamepadAxis xaxis
@@ -81,9 +83,56 @@ class Controller
 
   new: (mapping, @joystick) =>
     if @joystick == "auto"
-      error "automatically get joystick"
+      @joystick = love.joystick.getJoysticks![@@next_joystick]
+      if @joystick
+        @@next_joystick += 1
 
     @add_mapping mapping
+    @make_mover!
+
+  make_mover: =>
+    left = rawget @key_mapping, "left"
+    right = rawget @key_mapping, "right"
+    down = rawget @key_mapping, "down"
+    up = rawget @key_mapping, "up"
+
+    keyboard_mover = if left and right and down and up
+      make_mover up, down, left, right
+
+    joystick_mover = if @joystick
+      make_joystick_mover @joystick
+
+    if keyboard_mover and joystick_mover
+      @movement_vector = (...) =>
+        kv = keyboard_mover ...
+        jv = joystick_mover ...
+
+        -- mix together the vectors
+        x = if kv[1] != 0
+          if jv[1] != 0
+            (kv[1] + jv[1]) / 2
+          else
+            kv[1]
+        else
+          jv[1]
+
+        y = if kv[2] != 0
+          if jv[2] != 0
+            (kv[2] + jv[2]) / 2
+          else
+            kv[2]
+        else
+          jv[2]
+
+        kv[1] = x
+        kv[2] = y
+        kv
+    elseif keyboard_mover
+      @movement_vector = (...) =>
+        keyboard_mover ...
+    elseif joystick_mover
+      @movement_vector = (...) =>
+        joystick_mover ...
 
   add_mapping: (mapping) =>
     @key_mapping or= table_table!
@@ -128,5 +177,7 @@ class Controller
       false
 
   movement_vector: =>
+    error "don't know how to make movement vector"
+
   wait_for: =>
 
