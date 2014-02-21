@@ -16,8 +16,6 @@ rgb_helper = (comp, temp1, temp2) ->
   else
     temp1
 
-export *
-
 -- h: 0 to 360
 -- s, l: 0 to 100
 hsl_to_rgb = (h,s,l) ->
@@ -177,4 +175,8 @@ class ColorStack
   -- only use this to reset color if something else changes it
   apply: =>
     graphics.setColor @current!
+
+
+{ :hsl_to_rgb, :rgb_to_hsl, :hash_string, :hash_to_color, :ColorStack }
+
 

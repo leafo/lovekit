@@ -3,8 +3,6 @@ import insert, remove from table
 
 require "lovekit.support"
 
-export *
-
 -- adds methods, wraps constructor
 mixin = do
   empty_func = string.dump ->
@@ -73,3 +71,9 @@ class KeyRepeat
    @_key_repeat = nil
 
 
+{
+  :mixin
+  :Sequenced
+  :HasParticles
+  :KeyRepeat
+}

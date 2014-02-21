@@ -2,9 +2,7 @@
 punct = "[%^$()%.%[%]*+%-?]"
 {min: _min, max: _max, random: _random} = math
 
-export *
-
-lovekit = lovekit or {}
+local *
 
 rand = (min, max) ->
   _random! * (max - min) + min
@@ -152,17 +150,6 @@ lazy_value = (cls, key, fn) ->
   setmetatable base, meta
 
 
-get_local = (search_name, level=1) ->
-  level += 1
-  i = 1
-  while true
-    name, val = debug.getlocal level, i
-    break unless name
-    if name == search_name
-      return val
-    i += 1
-
-
 lazy_tbl = (tbl) ->
   setmetatable {}, __index: (name) =>
     @[name] = tbl[name]!
@@ -276,4 +263,35 @@ find_local = (name, level=1) ->
     val, found, idx = get_local name, level + 1
     return val, level if found
     level += 1
+
+{
+  :rand
+  :random_normal
+  :smoothstep
+  :lerp
+  :ad_curve
+  :escape_patt
+  :split
+  :mixin_object
+  :bench
+  :hash_color
+  :extend
+  :merge
+  :show_grid
+  :approach
+  :dampen
+  :dampen_vector
+  :lazy_value
+  :get_local
+  :lazy_tbl
+  :lazy
+  :pick_one
+  :pick_dist
+  :duty_on
+  :shuffle
+  :instance_of
+  :all_values
+  :count_garbage_collections
+  :find_local
+}
 

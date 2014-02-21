@@ -313,5 +313,5 @@ class Bin extends Box
   draw: =>
     @item\draw!
 
-{ :Frame, :Label, :AnimatedLabel, :BlinkingLabel, :RevealLabel, :VList, :HList,
-  :Anchor, :CenterAnchor, :Bin }
+{ :Frame, :Label, :AnimatedLabel, :BlinkingLabel, :RevealLabel, :VList,
+  :HList, :Anchor, :CenterAnchor, :Bin }

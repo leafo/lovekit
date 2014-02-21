@@ -3,8 +3,6 @@ require "lovekit.support"
 
 {graphics: g} = love
 
-export ^
-
 import insert, remove from table
 
 class Transition
@@ -115,3 +113,8 @@ class Dispatcher
     else
       @send "update", dt
 
+{
+  :Transition
+  :FadeTransition
+  :Dispatcher
+}

@@ -6,7 +6,6 @@ box_sort = (a, b) ->
   bbox = b.box
   (abox and abox.y + abox.h or a.y or 0) < (bbox and bbox.y + bbox.h or b.y or 0)
 
-export *
 
 Set = (items) ->
   self = {}
@@ -229,4 +228,13 @@ class EffectList
   after: =>
     for i=#self,1,-1 -- reverse order
       self[i]\after @obj
+
+{
+  :Set
+  :List
+  :EntityList
+  :DrawList
+  :ReuseList
+  :EffectList
+}
 

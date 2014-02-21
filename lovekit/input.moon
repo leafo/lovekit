@@ -10,8 +10,6 @@ table_table = ->
     with new = {}
       @[key] = new
 
-export *
-
 make_mover = (up, down, left, right) ->
   up = {up} unless type(up) == "table"
   down = {down} unless type(down) == "table"
@@ -178,3 +176,10 @@ class Controller
 
   wait_for: =>
 
+
+{
+  :make_mover
+  :movement_vector
+  :make_joystick_mover
+  :Controller
+}

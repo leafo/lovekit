@@ -1,7 +1,5 @@
 import graphics, image, filesystem from love
 
-export *
-
 -- take screenshots every @rate frames, save them in dir
 class ScreenSnap
   new: (@rate=3, @dir="snapshots_"..os.time!) =>
@@ -36,3 +34,5 @@ class ScreenSnap
     @take_screenshot! if @frames % @rate == 0
     @frames += 1
 
+
+{ :ScreenSnap }

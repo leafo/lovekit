@@ -1,12 +1,9 @@
 
 import graphics from love
 import push, pop, scale, translate from graphics
+import floor from math
 
 require "lovekit.image"
-
-{:floor} = math
-
-export *
 
 -- holds a collection of Animators assigned to a state
 class StateAnim
@@ -151,3 +148,9 @@ class Spriter
 
     nil
 
+
+{
+  :StateAnim
+  :Animator
+  :Spriter
+}

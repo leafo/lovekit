@@ -1,0 +1,6 @@
+{
+  whitelist_globals: {
+    ["."]: { "love" }
+  }
+}
+

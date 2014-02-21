@@ -1,11 +1,8 @@
 
 -- geometric primitives
-
 import rectangle, line from love.graphics
 import atan2, cos, sin, random, abs from math
 import type, pairs, ipairs from _G
-
-export *
 
 { floor: _floor, ceil: _ceil, deg: _deg, rad: _rad } = math
 
@@ -404,4 +401,17 @@ class VectorSelector extends Selector
 
     true
 
+
+{
+  :floor, :ceil, :hash_pt
+
+  :Vec2d
+  :Box
+  :UniformGrid
+  :SetList
+
+  :Selector
+  :BoxSelector
+  :VectorSelector
+}
 

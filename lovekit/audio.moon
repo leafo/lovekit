@@ -1,10 +1,6 @@
 
 import audio from love
 
-module "lovekit.audio", package.seeall
-
-export  ^
-
 class Audio
   new: (@dir="audio", @ext="wav") =>
     @sources = {}
@@ -37,3 +33,5 @@ class Audio
       s\rewind!
       s\play!
 
+
+{ :Audio }

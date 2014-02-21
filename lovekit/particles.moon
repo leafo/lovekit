@@ -1,7 +1,6 @@
 
 {graphics: g} = love
 
-export *
 
 class Emitter extends Sequence
   y: 0 -- so it can be sorted *_*
@@ -140,3 +139,12 @@ class TextEmitter extends Emitter
   make_particle: (...) =>
     TextParticle @str, ...
 
+
+{
+  :Emitter
+  :Particle
+  :PixelParticle
+  :ImageParticle
+  :TextParticle
+  :TextEmitter
+}

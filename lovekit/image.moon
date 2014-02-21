@@ -1,9 +1,6 @@
 
 import graphics from love
 
-export ^
-export imgfy
-
 class Image
   new: (@fname) =>
     @reload!
@@ -38,4 +35,6 @@ imgfy = (img) ->
   img
 
 
-
+{
+  :imgfy, :Image
+}

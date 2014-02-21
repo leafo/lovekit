@@ -1,7 +1,7 @@
 -- How to use:
 -- require "lovekit.reloader"
 
-require "inotify"
+inotify = require "inotify"
 
 config_char = (n) -> package.config\sub n,n
 -- /, ;, ?

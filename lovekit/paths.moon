@@ -1,8 +1,6 @@
 
 import graphics from love
 
-export *
-
 hermite_interpolate = do
   h00 = (t, t2, t3) ->
     2 * t3 - 3 * t2 + 1
@@ -107,3 +105,8 @@ class CatmullRomPath
     graphics.setPointSize pt
 
 
+{
+  :hermite_interpolate
+  :PathWalker
+  :CatmullRomPath
+}

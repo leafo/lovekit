@@ -1,4 +1,10 @@
 
+-- require module, put into global
+r = (mod) ->
+  tbl = require mod
+  for k,v in pairs tbl
+    _G[k] = v
+
 require "lovekit.support"
 
 require "lovekit.geometry"

@@ -4,10 +4,7 @@ require "lovekit.support"
 import min from math
 import keyboard from love
 import insert from table
-
-select = select
-
-export ^
+import select from _G
 
 -- Functions here yield to the sequence object. The sequence object will yield
 -- dt so animation can be performed
@@ -218,3 +215,9 @@ class Sequence
 
   update: (dt) => @send_time dt
   draw: => -- do nothing, so we can store in entity lists
+
+
+{
+  :Sequence
+}
+

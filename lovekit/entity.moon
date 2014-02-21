@@ -1,8 +1,6 @@
 
 require "lovekit.geometry"
 
-export *
-
 -- a box that has a velocity
 class Entity extends Box
   w: 20
@@ -104,4 +102,7 @@ class PlatformEntity extends Entity
         @on_ground = false
 
     true
+
+
+{ :Entity, :PlatformEntity }
 

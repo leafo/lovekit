@@ -4,8 +4,6 @@ require "lovekit.effects"
 
 import graphics from love
 
-export ^
-
 -- x,y,w,h are in game coordinate space
 class Viewport extends Box
   x: 0
@@ -169,5 +167,9 @@ class TiledBackground
     oy = @oy % @tile_h
     @img\draw @quad, -ox, -oy
 
-nil
 
+{
+  :Viewport
+  :EffectViewport
+  :TiledBackground
+}

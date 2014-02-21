@@ -15,8 +15,6 @@ import type from _G
 { graphics: g } = love
 { :modf, :floor, min: _min, max: _max } = math
 
-export *
-
 animated_tile = (frames=error"expecting table") ->
   frames.animated = true
   frames.delay = frames.delay or 0.5
@@ -433,3 +431,11 @@ class TileMap
           x += @cell_size
         y += @cell_size
 
+
+{
+  :animated_tile
+  :Tile
+  :AnimatedTile
+  :SlopeTopTile
+  :TileMap
+}

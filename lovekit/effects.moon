@@ -1,11 +1,7 @@
 
+import graphics, timer from love
+
 require "lovekit.sequence"
-
-import graphics from love
-
-{:timer} = love
-
-export ^
 
 class Effect
   new: (@duration) =>
@@ -63,5 +59,5 @@ class FlashEffect extends ColorEffect
       tween @color, half, color
       tween @color, half, start
 
-nil
 
+{ :Effect, :ShakeEffect, :ColorEffect, :FlashEffect }
