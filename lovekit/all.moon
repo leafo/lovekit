@@ -21,6 +21,5 @@ for mod in *{
 }
   tbl = require "lovekit.#{mod}"
   for k,v in pairs tbl
-    print "Adding", k
     _G[k] = v
 
