@@ -1,6 +1,5 @@
 
-import Box, Vec2d from require "lovekit.geometry"
-import floor, ceil from require "lovekit.support"
+import Box, Vec2d, ceil, floor from require "lovekit.geometry"
 
 -- a box that has a velocity
 class Entity extends Box
