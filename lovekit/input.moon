@@ -151,11 +151,12 @@ class Controller
           insert @key_mapping[name], extra_keys
 
       if joy_buttons = inputs.joystick
+        -- subtract 1 from buttons for love 9 fix
         if type(joy_buttons) == "table"
           for btn in *joy_buttons
-            insert @joy_mapping[name], btn
+            insert @joy_mapping[name], btn - 1
         else
-          insert @joy_mapping[name], joy_buttons
+          insert @joy_mapping[name], joy_buttons - 1
 
     @joy_mapping = nil unless next @joy_mapping
 
