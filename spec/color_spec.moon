@@ -3,6 +3,8 @@ import restore from require "spec.helpers"
 
 current_color = { 255,255,255,255 }
 
+local ColorStack, hash_string, hash_to_color
+
 describe "color", ->
   setup ->
     export love = {
@@ -12,7 +14,11 @@ describe "color", ->
       }
     }
 
-    require "lovekit.color"
+    import
+      ColorStack
+      hash_string
+      hash_to_color
+      from require "lovekit.color"
 
   teardown restore
 

@@ -4,6 +4,11 @@ require "lovekit.effects"
 
 import graphics from love
 
+import Box from require "lovekit.geometry"
+import imgfy from require "lovekit.image"
+import EffectList from require "lovekit.lists"
+import ShakeEffect from require "lovekit.effects"
+
 -- x,y,w,h are in game coordinate space
 class Viewport extends Box
   x: 0

@@ -2,6 +2,8 @@
 punct = "[%^$()%.%[%]*+%-?]"
 {min: _min, max: _max, random: _random} = math
 
+import COLOR from require "lovekit.color"
+
 local *
 
 rand = (min, max) ->
@@ -80,7 +82,7 @@ merge = (first, second, ...) ->
 -- draws grid on scaled pixel boundaries
 show_grid = (v) ->
   return if v.screen.scale == 1
-  graphics.setLineWidth 1/v.screen.scale
+  love.graphics.setLineWidth 1/v.screen.scale
   COLOR\pusha 128
 
   w, h = v.w + 1, v.h + 1
@@ -88,10 +90,10 @@ show_grid = (v) ->
   sy = math.floor v.y
 
   for y = sy, sy + h
-    graphics.line sx, y, sx + w, y
+    love.graphics.line sx, y, sx + w, y
 
   for x = sx, sx + w
-    graphics.line x, sy, x, sy + h
+    love.line x, sy, x, sy + h
 
   COLOR\pop!
 

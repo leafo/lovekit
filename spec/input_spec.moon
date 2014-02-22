@@ -3,6 +3,8 @@ import restore from require "spec.helpers"
 
 DOWN_KEYS = setmetatable {}, __index: => false
 
+local Controller
+
 describe "lovekit.input", ->
   setup ->
     export love = {
@@ -14,7 +16,10 @@ describe "lovekit.input", ->
       }
       graphics: {}
     }
-    require "lovekit.input"
+
+    import
+      Controller
+      from require "lovekit.input"
 
   teardown restore
 

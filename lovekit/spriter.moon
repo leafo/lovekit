@@ -3,7 +3,9 @@ import graphics from love
 import push, pop, scale, translate from graphics
 import floor from math
 
-require "lovekit.image"
+import imgfy from require "lovekit.image"
+
+local *
 
 -- holds a collection of Animators assigned to a state
 class StateAnim

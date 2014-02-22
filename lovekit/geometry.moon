@@ -6,6 +6,8 @@ import type, pairs, ipairs from _G
 
 { floor: _floor, ceil: _ceil, deg: _deg, rad: _rad } = math
 
+import COLOR from require "lovekit.color"
+
 floor = (n) ->
   if n < 0
     -_floor -n

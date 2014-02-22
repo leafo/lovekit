@@ -85,7 +85,7 @@ class EntityList
         table.remove @, i
         len -= 1
 
-    len > 0, updated
+    len > 0
 
   draw: (...) =>
     i = 1

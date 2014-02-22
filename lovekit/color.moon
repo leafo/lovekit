@@ -176,7 +176,8 @@ class ColorStack
   apply: =>
     graphics.setColor @current!
 
+COLOR = ColorStack!
 
-{ :hsl_to_rgb, :rgb_to_hsl, :hash_string, :hash_to_color, :ColorStack }
+{ :hsl_to_rgb, :rgb_to_hsl, :hash_string, :hash_to_color, :ColorStack, :COLOR }
 
 

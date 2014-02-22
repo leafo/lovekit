@@ -1,5 +1,6 @@
 
-require "lovekit.support"
+import COLOR from require "lovekit.color"
+import Sequence from require "lovekit.sequence"
 
 {graphics: g} = love
 

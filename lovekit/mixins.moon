@@ -1,7 +1,9 @@
 
 import insert, remove from table
 
-require "lovekit.support"
+import get_local from require "lovekit.support"
+import DrawList from require "lovekit.lists"
+import Sequence from require "lovekit.sequence"
 
 -- adds methods, wraps constructor
 mixin = do

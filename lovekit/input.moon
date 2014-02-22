@@ -5,6 +5,8 @@ import keyboard from love
 import insert from table
 import unpack from _G
 
+import Vec2d from require "lovekit.geometry"
+
 table_table = ->
   setmetatable {}, __index: (key) =>
     with new = {}
@@ -52,7 +54,7 @@ joystick_deadzone_normalize = (vec, amount=.2) ->
 
 make_joystick_mover = (joystick=1, xaxis="leftx", yaxis="lefty") ->
   if type(joystick) == "number"
-    joystick = assert love.joystick.getJoysticks![i], "Missing joystick"
+    joystick = assert love.joystick.getJoysticks![joystick], "Missing joystick"
 
   (speed) ->
     x = joystick\getGamepadAxis xaxis

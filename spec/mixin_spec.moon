@@ -2,9 +2,12 @@
 import restore from require "spec.helpers"
 import insert from table
 
+local mixin
+
 describe "mixins", ->
   setup ->
-    require "lovekit.mixins"
+    export love = setmetatable {}, __index: =>
+    import mixin from require "lovekit.mixins"
 
   teardown restore
 

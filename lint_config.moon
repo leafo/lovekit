@@ -1,6 +1,15 @@
+
+sequence = {
+  "wait"
+  "tween"
+}
+
 {
   whitelist_globals: {
-    ["."]: { "love" }
+    ["."]: {
+      "love", "newproxy"
+      unpack sequence
+    }
   }
 }
 

@@ -5,9 +5,12 @@
 -- * From a pixel image, where colors associate with tiles
 -- * Creating the tiles objects manually
 
-require "lovekit.support"
-require "lovekit.geometry"
-require "lovekit.spriter"
+import hash_color from require "lovekit.support"
+import Spriter from require "lovekit.spriter"
+import imgfy from require "lovekit.image"
+
+import Box from require "lovekit.geometry"
+
 
 import rectangle, triangle from love.graphics
 import type from _G
@@ -74,7 +77,7 @@ class SlopeTopTile extends Box
 
     box.x = x + dx
     box.y = @height_for_pt(box.x + box.w / 2) - box.h
-    if map\collides thing
+    if map\collides box
       box.x = x
       box.y = y
       return false

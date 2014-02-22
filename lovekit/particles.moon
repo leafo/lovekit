@@ -1,6 +1,10 @@
 
 {graphics: g} = love
 
+import Sequence from require "lovekit.sequence"
+import COLOR from require "lovekit.color"
+import Vec2d from require "lovekit.geometry"
+import ad_curve from require "lovekit.support"
 
 class Emitter extends Sequence
   y: 0 -- so it can be sorted *_*

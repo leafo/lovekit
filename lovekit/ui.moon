@@ -2,6 +2,11 @@ import max from math
 
 {graphics: g } = love
 
+import Box from require "lovekit.geometry"
+import COLOR from require "lovekit.color"
+import Sequence from require "lovekit.sequence"
+import EffectList from require "lovekit.lists"
+
 border = {
   tl: 0
   l: 1

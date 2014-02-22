@@ -1,6 +1,9 @@
 
 import graphics from love
 
+import Vec2d from require "lovekit.geometry"
+import COLOR from require "lovekit.color"
+
 hermite_interpolate = do
   h00 = (t, t2, t3) ->
     2 * t3 - 3 * t2 + 1

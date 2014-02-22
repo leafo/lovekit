@@ -17,13 +17,8 @@ class ScreenSnap
     print "++ writing ", #@snaps, "snaps"
     for image_data in *@snaps
       fname = @next_name format
-      -- love 7
-      if image.newEncodedImageData
-        image.newEncodedImageData image_data, format
-        filesystem.write fname, ss
-      else
-        print "encoding #{fname}"
-        image_data\encode fname
+      print "encoding #{fname}"
+      image_data\encode fname
 
   take_screenshot: =>
     start = love.timer.getTime!

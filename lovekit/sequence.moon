@@ -6,6 +6,8 @@ import keyboard from love
 import insert from table
 import select from _G
 
+import smoothstep from require "lovekit.support"
+
 -- Functions here yield to the sequence object. The sequence object will yield
 -- dt so animation can be performed
 

@@ -1,7 +1,8 @@
 
 import graphics, timer from love
 
-require "lovekit.sequence"
+import Sequence from require "lovekit.sequence"
+import COLOR from require "lovekit.color"
 
 class Effect
   new: (@duration) =>

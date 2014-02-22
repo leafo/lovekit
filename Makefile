@@ -10,4 +10,5 @@ test:
 	busted -p _spec.moon$
 
 
-
+lint:
+	moonc -l lovekit

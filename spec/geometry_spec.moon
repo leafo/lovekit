@@ -1,10 +1,12 @@
 
 import restore from require "spec.helpers"
 
+local Vec2d
+
 describe "Vec2d", ->
   setup ->
     export love = { graphics: { } }
-    require "lovekit.geometry"
+    import Vec2d from require "lovekit.geometry"
 
   teardown restore
 

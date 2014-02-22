@@ -5,23 +5,21 @@ r = (mod) ->
   for k,v in pairs tbl
     _G[k] = v
 
-require "lovekit.support"
-
-require "lovekit.geometry"
-require "lovekit.tilemap"
-require "lovekit.spriter"
-require "lovekit.viewport"
-require "lovekit.entity"
-require "lovekit.input"
-require "lovekit.sequence"
-require "lovekit.lists"
-require "lovekit.state"
-require "lovekit.color"
-require "lovekit.effects"
-require "lovekit.audio"
-require "lovekit.particles"
-require "lovekit.mixins"
-require "lovekit.paths"
-
-export COLOR = ColorStack!
+r "lovekit.support"
+r
+r "lovekit.geometry"
+r "lovekit.tilemap"
+r "lovekit.spriter"
+r "lovekit.viewport"
+r "lovekit.entity"
+r "lovekit.input"
+r "lovekit.sequence"
+r "lovekit.lists"
+r "lovekit.state"
+r "lovekit.color"
+r "lovekit.effects"
+r "lovekit.audio"
+r "lovekit.particles"
+r "lovekit.mixins"
+r "lovekit.paths"
 
