@@ -40,6 +40,15 @@ class FadeTransition extends Sequence
 
 -- handles a stack of objects that can respond to events
 class Dispatcher
+  @event_handlers: {
+    "draw"
+    "update"
+    "keypressed"
+    "mousepressed"
+    "mousereleased"
+    "joystickpressed"
+  }
+
   default_transition: Transition
 
   new: (initial) =>
@@ -88,15 +97,20 @@ class Dispatcher
       new_top\on_show self, true
 
   bind: (love) =>
-    for fn in *{"draw", "update", "keypressed", "mousepressed", "mousereleased"}
+    for fn in *@@event_handlers
       func = self[fn]
       love[fn] = (...) -> func self, ...
 
   keypressed: (key, code) =>
-    return if @send "on_key",  key, code
-    switch key
-      when "escape"
-        love.event.push "quit"
+    return if @send "on_key", key, code
+    return if @send "on_input", "key", key, code
+
+    if key == "escape"
+      love.event.push "quit"
+
+  joystickpressed: (...) =>
+    return if @send "on_joystick", ...
+    @send "on_input", "joystick", ...
 
   mousepressed: (...) => @send "mousepressed", ...
   mousereleased: (...) => @send "mousereleased", ...
