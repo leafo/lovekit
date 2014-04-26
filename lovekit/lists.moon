@@ -193,7 +193,7 @@ class EffectList
   new: (@obj) =>
     @current_effects = {}
 
-  clear: (@obj) =>
+  clear: =>
     for k in pairs @current_effects
       @current_effects[k] = nil
 
@@ -209,6 +209,7 @@ class EffectList
       table.insert @, effect
       @current_effects[effect.__class] = #@
 
+  -- TODO: combine on_finish with the callback?
   update: (dt) =>
     for i, e in ipairs @
       alive = e\update dt

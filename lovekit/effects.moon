@@ -5,13 +5,17 @@ import Sequence from require "lovekit.sequence"
 import COLOR from require "lovekit.color"
 
 class Effect
-  new: (@duration) =>
+  new: (@duration, @callback) =>
+    print "making effect with callback!"
     @time = 0
 
   -- return true if alive
   update: (dt) =>
     @time += dt
-    @time < @duration
+    with alive = @time < @duration
+      if not alive and @callback
+        @callback @
+        @callback = nil
 
   p: => math.min 1, @time / @duration
 
@@ -23,10 +27,10 @@ class Effect
   after: =>
 
 class ShakeEffect extends Effect
-  new: (duration, @speed=5, @amount=1) =>
+  new: (duration, @speed=5, @amount=1, ...) =>
     @start = timer.getTime!
     @rand = math.random! * math.pi
-    super duration
+    super duration, ...
 
   before: =>
     p = @p!
@@ -51,8 +55,14 @@ class ColorEffect extends Sequence
     if @color
       COLOR\pop!
 
+  update: (...) =>
+    with alive = super ...
+      if not alive and @callback
+        @callback @
+        @callback = nil
+
 class FlashEffect extends ColorEffect
-  new: (duration=0.2, color={255,100,100}) =>
+  new: (duration=0.2, color={255,100,100}, @callback) =>
     half = duration/2
     super ->
       start = {graphics.getColor!}

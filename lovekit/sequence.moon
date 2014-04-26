@@ -59,7 +59,7 @@ default_scope = {
       coroutine.yield "more", dt if dt
       key
 
-  -- wait for function to return true
+  -- call function over and over waiting for it to return true
   wait_until: (fn) ->
     local dt
     while not fn!
