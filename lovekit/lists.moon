@@ -8,9 +8,8 @@ box_sort = (a, b) ->
 
 
 Set = (items) ->
-  self = {}
-  self[key] = true for key in *items
-  self
+  with s = {}
+    s[key] = true for key in *items
 
 -- a linked list set
 class List
@@ -109,10 +108,11 @@ class DrawList
       with @dead_list[dead_len]
         @dead_list[dead_len] = nil
     else
-      #self + 1
+      #@ + 1
 
     item.alive = true
-    self[i] = item
+    @[i] = item
+    item
 
   add_all: (items) =>
     for item in *items
@@ -121,7 +121,7 @@ class DrawList
   update: (dt, ...) =>
     i = 1
     updated = 0
-    for item in *self
+    for item in *@
       if item.alive
         updated += 1
         alive = item\update dt, ...
@@ -135,7 +135,7 @@ class DrawList
     updated > 0, updated
 
   draw: (...) =>
-    for item in *self
+    for item in *@
       if item.alive
         item\draw ...
         if @show_boxes
@@ -144,7 +144,7 @@ class DrawList
 
   -- sort based on depth (y value)
   draw_sorted: (sort_fn=box_sort)=>
-    alive = [item for item in *self when item.alive]
+    alive = [item for item in *@ when item.alive]
     table.sort alive, sort_fn
 
     for item in *alive
@@ -158,7 +158,7 @@ class ReuseList
     @dead_list = {}
 
   update: (dt, ...) =>
-    for i, b in ipairs self
+    for i, b in ipairs @
       if b.alive
         b.alive = b\update dt, ...
         if not b.alive
@@ -166,13 +166,13 @@ class ReuseList
           insert @dead_list, i
 
   draw: =>
-    for b in *self
+    for b in *@
       b\draw! if b.alive
 
   add: (cls, ...) =>
     top = remove @dead_list
     out = if top
-      o = self[top]
+      o = @[top]
       setmetatable o, cls.__base if o.__class != cls
       cls.__init o, ...
       o
@@ -184,7 +184,7 @@ class ReuseList
 
   _append: (b) =>
     with b
-      self[#self + 1] = b
+      @[#@ + 1] = b
 
 
 -- Holds a collection of objects that have update/before/after methods
@@ -197,25 +197,25 @@ class EffectList
     for k in pairs @current_effects
       @current_effects[k] = nil
 
-    for i=1,#self
-      self[i] = nil
+    for i=1,#@
+      @[i] = nil
 
   add: (effect) =>
     existing = @current_effects[effect.__class]
     if existing
-      effect\replace self[existing]
-      self[existing] = effect
+      effect\replace @[existing]
+      @[existing] = effect
     else
-      table.insert self, effect
-      @current_effects[effect.__class] = #self
+      table.insert @, effect
+      @current_effects[effect.__class] = #@
 
   update: (dt) =>
-    for i, e in ipairs self
+    for i, e in ipairs @
       alive = e\update dt
       if not alive
         e.on_finish e if e.on_finish
         @current_effects[e.__class] = nil
-        table.remove self, i
+        table.remove @, i
 
   apply: (fn) =>
     @before!
@@ -223,11 +223,11 @@ class EffectList
     @after!
 
   before: =>
-    e\before @obj for e in *self
+    e\before @obj for e in *@
 
   after: =>
-    for i=#self,1,-1 -- reverse order
-      self[i]\after @obj
+    for i=#@,1,-1 -- reverse order
+      @[i]\after @obj
 
 {
   :Set
