@@ -18,7 +18,6 @@ smoothstep = (a, b, t) ->
 
 lerp = (a,b,t) -> a + (b - a)*t
 
-
 -- goes 0 to 1 from start to attack
 -- goes 1 from 0 to decay to stop
 ad_curve = (t, start, attack, decay, stop=1) ->
@@ -103,6 +102,10 @@ approach = (val, target, amount) ->
     _max target, val - amount
   else
     _min target, val + amount
+
+-- take into account distance between val and target
+smooth_approach = (val, target, amount) ->
+  approach val, target, amount * (1 + math.abs(val - target)^1.1)
 
 -- go to zero
 dampen = (val, amount, min=0) ->
@@ -281,6 +284,7 @@ find_local = (name, level=1) ->
   :merge
   :show_grid
   :approach
+  :smooth_approach
   :dampen
   :dampen_vector
   :lazy_value

@@ -9,6 +9,8 @@ import imgfy from require "lovekit.image"
 import EffectList from require "lovekit.lists"
 import ShakeEffect from require "lovekit.effects"
 
+import smooth_approach from require "lovekit.support"
+
 -- x,y,w,h are in game coordinate space
 class Viewport extends Box
   x: 0
@@ -98,8 +100,8 @@ class Viewport extends Box
     ty = cy - @h / 2
 
     if dt
-      @x = approach @x, tx, dt * @w * 1.5
-      @y = approach @y, ty, dt * @w * 1.5
+      @x = smooth_approach @x, tx, dt * @w / 100
+      @y = smooth_approach @y, ty, dt * @w / 100
     else -- go there instantly
       @x = tx
       @y = ty
