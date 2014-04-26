@@ -150,17 +150,17 @@ class EffectViewport extends Viewport
     @effects = EffectList!
     super ...
 
-  shake: (dur=0.4) =>
-    @effects\add ShakeEffect dur
+  shake: (dur=0.4, ...) =>
+    @effects\add ShakeEffect dur, ...
 
   update: (dt) => @effects\update dt
 
   apply: =>
     super!
-    e\before @obj for e in *@effects
+    e\before! for e in *@effects
 
   pop: =>
-    e\after @obj for e in *@effects
+    e\after! for e in *@effects
     super!
 
 class TiledBackground

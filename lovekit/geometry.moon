@@ -403,7 +403,6 @@ class VectorSelector extends Selector
 
     true
 
-
 {
   :floor, :ceil, :hash_pt
 
