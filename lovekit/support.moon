@@ -16,6 +16,12 @@ smoothstep = (a, b, t) ->
   t = t*t*t*(t*(t*6 - 15) + 10)
   a + (b - a)*t
 
+sqrt_step = (a, b, t) ->
+  a + (b - a)*math.sqrt(t)
+
+pow_step = (a, b, t) ->
+  a + (b - a)*(t^2)
+
 lerp = (a,b,t) -> a + (b - a)*t
 
 -- goes 0 to 1 from start to attack
@@ -279,6 +285,8 @@ find_local = (name, level=1) ->
   :rand
   :random_normal
   :smoothstep
+  :pow_step
+  :sqrt_step
   :lerp
   :ad_curve
   :escape_patt
