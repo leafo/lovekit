@@ -113,7 +113,7 @@ default_scope = {
       obj[key] = finish
 
     -- push left over time
-    leftover = t - 1.0
+    leftover = (t - 1.0) * time
     if leftover > 0
       coroutine.yield "more", leftover
 
