@@ -53,7 +53,7 @@ class Dispatcher
 
   new: (initial) =>
     @stack = { initial }
-    initial\on_show self if initial.on_show
+    initial\on_show self if initial and initial.on_show
 
   send: (event, ...) =>
     current = @top!
