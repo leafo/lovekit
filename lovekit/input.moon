@@ -1,7 +1,7 @@
 
 require "lovekit.geometry"
 
-import keyboard from love
+import keyboard, timer from love
 import insert from table
 import unpack from _G
 
@@ -77,6 +77,7 @@ class Controller
       cancel: "c"
     }, "auto"
 
+  tap_delay: 0.2
 
   new: (mapping, @joystick) =>
     if @joystick == "auto"
@@ -85,6 +86,8 @@ class Controller
         @@next_joystick += 1
 
     @add_mapping mapping
+    @tapper = {}
+
     @make_mover!
 
   make_mover: =>
@@ -159,6 +162,30 @@ class Controller
           insert @joy_mapping[name], joy_buttons - 1
 
     @joy_mapping = nil unless next @joy_mapping
+
+  -- must be called every frame
+  double_tapped: (key, ...) =>
+    if @is_down key
+      tap = @tapper[key]
+      if type(tap) == "number"
+        if timer.getTime! - tap < @tap_delay
+          @tapper[key] = false
+          if ...
+            return true, @double_tapped ...
+          else
+            return true
+
+      unless tap == false
+        @tapper[key] = true
+    elseif @tapper[key] == false
+      @tapper[key] = nil
+    elseif @tapper[key] == true
+      @tapper[key] = love.timer.getTime!
+
+    if ...
+      false, @double_tapped ...
+    else
+      false
 
   is_down: (name, ...) =>
     if keys = @key_mapping[name]
