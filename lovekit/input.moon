@@ -87,6 +87,7 @@ class Controller
 
     @add_mapping mapping
     @tapper = {}
+    @dtapper = {}
 
     @make_mover!
 
@@ -163,24 +164,32 @@ class Controller
 
     @joy_mapping = nil unless next @joy_mapping
 
+  -- down then up
+  tapped: (key, ...) =>
+    if @is_down key
+      @tapper[key] = true
+    elseif @tapper[key] == true
+      @tapper[key] = nil
+      return true
+
   -- must be called every frame
   double_tapped: (key, ...) =>
     if @is_down key
-      tap = @tapper[key]
+      tap = @dtapper[key]
       if type(tap) == "number"
         if timer.getTime! - tap < @tap_delay
-          @tapper[key] = false
+          @dtapper[key] = false
           if ...
             return true, @double_tapped ...
           else
             return true
 
       unless tap == false
-        @tapper[key] = true
-    elseif @tapper[key] == false
-      @tapper[key] = nil
-    elseif @tapper[key] == true
-      @tapper[key] = love.timer.getTime!
+        @dtapper[key] = true
+    elseif @dtapper[key] == false
+      @dtapper[key] = nil
+    elseif @dtapper[key] == true
+      @dtapper[key] = love.timer.getTime!
 
     if ...
       false, @double_tapped ...
