@@ -134,6 +134,7 @@ resume = (co, ...) ->
 
 class Sequence
   @default_scope: default_scope
+  elapsed: 0
 
   @after: (time, fn) =>
     Sequence ->
@@ -215,7 +216,10 @@ class Sequence
           break
     true
 
-  update: (dt) => @send_time dt
+  update: (dt) =>
+    @elapsed += dt
+    @send_time dt
+
   draw: => -- do nothing, so we can store in entity lists
 
 
