@@ -93,9 +93,16 @@ class Viewport extends Box
   project: (x,y) =>
     (x - @x) * @scale + @offset_x, (y - @y) * @scale + @offset_y
 
-  center_on_pt: (cx, cy, map_box) =>
-    @x = cx - @w / 2
-    @y = cy - @h / 2
+  center_on_pt: (cx, cy, map_box, dt) =>
+    tx = cx - @w / 2 -- target
+    ty = cy - @h / 2
+
+    if dt
+      @x = approach @x, tx, dt * @w * 1.5
+      @y = approach @y, ty, dt * @w * 1.5
+    else -- go there instantly
+      @x = tx
+      @y = ty
 
     if map_box
       x1, y1, x2, y2 = map_box\unpack2!
@@ -109,9 +116,13 @@ class Viewport extends Box
       @x = max_x if @x > max_x
       @y = max_y if @y > max_y
 
+  center_on: (thing, ...) =>
+    dx, dy = if thing.looking_at
+      thing\looking_at @
+    else
+      thing\center!
 
-  center_on: (thing, map_box) =>
-    @center_on_pt thing\center!
+    @center_on_pt dx,dy, ...
 
   on_bottom: (size, margin=0) =>
     @h - (size + margin)
