@@ -79,20 +79,26 @@ merge = (first, second, ...) ->
 
 -- takes viewport
 -- draws grid on scaled pixel boundaries
-show_grid = (v) ->
-  return if v.screen.scale == 1
-  love.graphics.setLineWidth 1/v.screen.scale
+-- call me after applying viewport please
+show_grid = (v, step=1) ->
+  return if v.scale == 1 and step == 1
+  love.graphics.setLineWidth 1/v.scale
   COLOR\pusha 128
 
+  import line from love.graphics
+
   w, h = v.w + 1, v.h + 1
-  sx = math.floor v.x
-  sy = math.floor v.y
+  sx = math.floor(v.x)
+  sy = math.floor(v.y)
 
-  for y = sy, sy + h
-    love.graphics.line sx, y, sx + w, y
+  sx = sx - sx % step
+  sy = sy - sy % step
 
-  for x = sx, sx + w
-    love.line x, sy, x, sy + h
+  for y = sy, sy + h, step
+    line sx, y, sx + w + step, y
+
+  for x = sx, sx + w, step
+    line x, sy, x, sy + h + step
 
   COLOR\pop!
 
