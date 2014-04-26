@@ -58,8 +58,8 @@ class Vec2d
   cap: (len) =>
     _len = @len!
     if _len > len
-      @[1] / _len * len
-      @[2] / _len * len
+      @[1] = @[1] / _len * len
+      @[2] = @[2] / _len * len
 
     @
 
