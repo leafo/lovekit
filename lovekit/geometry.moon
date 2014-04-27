@@ -260,12 +260,13 @@ class Box
     scaled\move_center @center! if center
     scaled
 
+  -- change size of w and h, preserving center
   shrink: (dx=1, dy=dx) =>
     hx = dx / 2
     hy = dy / 2
 
-    w = @w - hx
-    h = @h - hy
+    w = @w - dx
+    h = @h - dy
 
     error "box too small" if w < 0 or h < 0
     Box @x + hx, @y + hy, w, h
