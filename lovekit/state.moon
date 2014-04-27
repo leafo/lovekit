@@ -76,9 +76,9 @@ class Dispatcher
   insert: (state, pos=#@stack) =>
     insert @stack, #@stack, state
 
-  replace: (state) =>
+  replace: (state, ...) =>
     @insert state
-    @pop!
+    @pop 1, ...
 
   pop: (n=1, transition=@default_transition) =>
     @transition = if transition
