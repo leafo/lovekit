@@ -9,6 +9,21 @@ class Audio
     @get_source name for name in *names
     nil
 
+  -- return a sequence that fades out audio
+  fade_music: (t=1.0) =>
+    music = @music
+    volume = music\getVolume!
+    min = music\getVolumeLimits!
+
+    remaining = t
+    Sequence ->
+      during t, (dt) ->
+        remaining -= dt
+        vol = remaining/t * (volume - min) + min
+        music\setVolume vol
+
+      music\stop!
+
   get_source: (name, ext, source_type="static") =>
     return @sources[name] if @sources[name]
 
