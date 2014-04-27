@@ -47,6 +47,11 @@ class StateAnim
 
 -- animating a series of cells from a Spriter
 class Animator
+  copy_props = { "ox", "oy", "rate", "flip_x", "flip_y" }
+
+  ox: 0
+  oy: 0
+
   get_width: => @sprite.cell_w
   get_height: => @sprite.cell_h
 
@@ -54,6 +59,13 @@ class Animator
   -- @rate time between each frame in seconds
   -- @flip flip all frames horizontally if true
   new: (@sprite, @sequence, @rate=0, @flip_x=false, @flip_y=false) =>
+    for p in *copy_props
+      val = @sequence[p]
+      if val != nil
+        print "copying #{p}"
+        @sequence[p] = nil
+        @[p] = val
+
     @reset!
 
   reset: (frame=1) =>
@@ -74,12 +86,12 @@ class Animator
             @i = 1
 
   draw: (x, y) =>
-    @sprite\draw_cell @sequence[@i], x, y, @flip_x, @flip_y
+    @sprite\draw_cell @sequence[@i], x - @ox, y - @oy, @flip_x, @flip_y
 
   -- draw frame based on time from 0 to 1
   drawt: (t, x, y) =>
     k = math.max 1, math.ceil t * #@sequence
-    @sprite\draw_cell @sequence[k], x, y, @flip_x, @flip_y
+    @sprite\draw_cell @sequence[k], x - @ox, y - @oy, @flip_x, @flip_y
 
 -- used for blitting
 -- use @width of 0 to prevent the tiles from wrapping
