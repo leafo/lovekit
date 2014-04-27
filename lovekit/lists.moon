@@ -98,6 +98,7 @@ class EntityList
 -- uses .alive property of items in list to keep track of state
 class DrawList
   show_boxes: false
+  NULL: { alive: false }
 
   new: =>
     @dead_list = {}
@@ -117,6 +118,16 @@ class DrawList
   add_all: (items) =>
     for item in *items
       @add item
+
+  -- avoid, slow
+  remove: (thing) =>
+    for i, item in ipairs @
+      if thing == item
+        @[i] = @NULL
+        insert @dead_list, i if thing.alive
+        return true
+
+    false
 
   update: (dt, ...) =>
     i = 1

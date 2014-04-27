@@ -62,7 +62,6 @@ class Animator
     for p in *copy_props
       val = @sequence[p]
       if val != nil
-        print "copying #{p}"
         @sequence[p] = nil
         @[p] = val
 
