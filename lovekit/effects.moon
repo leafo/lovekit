@@ -6,7 +6,6 @@ import COLOR from require "lovekit.color"
 
 class Effect
   new: (@duration, @callback) =>
-    print "making effect with callback!"
     @time = 0
 
   -- return true if alive
