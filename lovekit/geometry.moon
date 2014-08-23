@@ -288,6 +288,10 @@ class UniformGrid
     @buckets = {}
     @values = {}
 
+  draw: =>
+    for box in pairs @values
+      Box.draw box
+
   clear: =>
     for _, bucket in pairs @buckets
       for k,v in pairs bucket
