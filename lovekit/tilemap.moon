@@ -345,6 +345,17 @@ class TileMap
     y = floor y / @cell_size
     tiles[y * @width + x + 1]
 
+  collides_pt: (x, y) =>
+    col = floor x / @cell_size
+    row = floor y / @cell_size
+    idx = col + @width * row + 1 -- 1 indexed
+
+    tile = @layers[@solid_layer][idx]
+    if @invert_collision
+      not tile
+    else
+      not not tile
+
   -- either takes all args, or first argument is a thing/box
   collides: (x1, y1, x2, y2) =>
     import width, cell_size, invert_collision from self
