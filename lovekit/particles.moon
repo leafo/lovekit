@@ -18,13 +18,17 @@ class Emitter extends Sequence
     super ->
       while count > 0
         count -= 1
-        @world.particles\add @make_particle @x, @y
+        @add_particle!
         wait dt
 
       callback! if callback
 
   draw: =>
+
   make_particle: => error "implement me"
+
+  add_particle: =>
+    @world.particles\add @make_particle @x, @y
 
 -- a 2d point
 class Particle
