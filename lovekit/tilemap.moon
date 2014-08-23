@@ -111,9 +111,9 @@ class TileMap
   batch_size: 1000
 
   -- read map from a tiled export
-  @from_tiled = (mod_name, callbacks={}) ->
+  @from_tiled = (mod_name, callbacks={}) =>
     data = require mod_name
-    map = TileMap data.width, data.height
+    map = @ data.width, data.height
     map.cell_size = data.tilewidth
     map.invert_collision = true if data.properties.invert_collision
 
@@ -170,7 +170,7 @@ class TileMap
   -- applies color_to_tile for each pixel of the image
   -- it can be either a function or a table. table keys
   -- are created by `hash_color`
-  @from_image = (fname, tile_sprite, color_to_tile) ->
+  @from_image = (fname, tile_sprite, color_to_tile) =>
     data = love.image.newImageData fname
     width, height = data\getWidth!, data\getHeight!
 
@@ -199,7 +199,7 @@ class TileMap
         tiles[len] = tile if tile
         len += 1
 
-    with TileMap width, height
+    with @ width, height
       .sprite = if type(tile_sprite) == "string"
         tile_sprite = Spriter tile_sprite, .cell_size, .cell_size
       else
