@@ -1,7 +1,7 @@
 
 import restore from require "spec.helpers"
 
-local Vec2d
+local Vec2d, Box
 
 describe "Vec2d", ->
   setup ->
@@ -38,5 +38,31 @@ describe "Vec2d", ->
     assert.equal "down", down\direction_name!
     assert.equal "left", left\direction_name!
     assert.equal "right", right\direction_name!
+
+describe "Box", ->
+  setup ->
+    export love = { graphics: { } }
+    import Box from require "lovekit.geometry"
+
+  teardown restore
+
+  it "should add box to null box", ->
+    b1 = Box 0,0,0,0
+    b1\add_box Box 10, 10, 15,15
+    assert.same {
+      x: 10, y: 10
+      w: 15, h: 15
+    }, b1
+
+  it "should add box to existing box", ->
+    b1 = Box 5,5,10,10
+    b1\add_box Box -10, 4, 15, 3
+
+    assert.same {
+      x: -10
+      y: 4
+      w: 25
+      h: 11
+    }, b1
 
 

@@ -271,6 +271,25 @@ class Box
     error "box too small" if w < 0 or h < 0
     Box @x + hx, @y + hy, w, h
 
+  -- make this box bigger such that the box now will contain both boxes
+  add_box: (other) =>
+    if @w == 0 or @h == 0
+      @x,@y,@w,@h = other\unpack!
+    else
+      x1,y1,x2,y2 = @unpack2!
+      ox1, oy1, ox2, oy2 = other\unpack2!
+      x1 = math.min x1, ox1
+      y1 = math.min y1, oy1
+      x2 = math.max x2, ox2
+      y2 = math.max x2, oy2
+
+      @x = x1
+      @y = y1
+      @w = x2 - x1
+      @h = y2 - y1
+
+    nil
+
   __tostring: =>
     ("box<(%d, %d), (%d, %d)>")\format @unpack!
 
