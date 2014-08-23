@@ -241,8 +241,30 @@ class EffectList
     for i=#@,1,-1 -- reverse order
       @[i]\after @obj
 
+class ImpulseSet
+  clear: =>
+    for k in pairs @
+      @[k] = false
+
+  clear_x: =>
+    for k in pairs @
+      @[k][1] = 0
+
+  clear_y: =>
+    for k in pairs @
+      @[k][2] = 0
+
+  sum: =>
+    ix, iy = 0, 0
+    for _,v in pairs @
+      continue unless v
+      ix += v[1]
+      iy += v[2]
+
+    ix, iy
 {
   :Set
+  :ImpulseSet
   :List
   :EntityList
   :DrawList
