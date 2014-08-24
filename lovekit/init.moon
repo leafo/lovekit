@@ -20,6 +20,7 @@ for mod in *{
   "particles"
   "mixins"
   "paths"
+  "shaders"
 }
   tbl = require "lovekit.#{mod}"
   for k,v in pairs tbl
