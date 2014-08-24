@@ -1,10 +1,15 @@
 
 punct = "[%^$()%.%[%]*+%-?]"
-{min: _min, max: _max, random: _random} = math
+{min: _min, max: _max} = math
 
 import COLOR from require "lovekit.color"
 
 local *
+
+_random = if love
+  love.math.random
+else
+  math.random
 
 rand = (min, max) ->
   _random! * (max - min) + min
