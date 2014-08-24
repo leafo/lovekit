@@ -29,6 +29,11 @@ class StateAnim
   draw: (x,y) =>
     @current\draw x, y
 
+  -- duration of a state animation in seconds
+  state_duration: (name) =>
+    state = assert @states[name], "unknown state"
+    state.rate * #state.sequence
+
   -- dupes Animators using frame indexes in idx when fn returns a new state name
   splice_states: (idx, fn) =>
     current_states =[{k,v} for k,v in pairs @states]
