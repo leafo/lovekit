@@ -31,7 +31,8 @@ class StateAnim
 
   -- duration of a state animation in seconds
   state_duration: (name) =>
-    state = assert @states[name], "unknown state"
+    state = @states[name]
+    error "unknown state #{name}" unless state
     state.rate * #state.sequence
 
   -- dupes Animators using frame indexes in idx when fn returns a new state name

@@ -6,6 +6,7 @@ import COLOR from require "lovekit.color"
 import Vec2d from require "lovekit.geometry"
 import ad_curve from require "lovekit.support"
 
+-- emits @count particles over the course of @duration seconds
 class Emitter extends Sequence
   y: 0 -- so it can be sorted *_*
   alive: true
@@ -29,6 +30,15 @@ class Emitter extends Sequence
 
   add_particle: =>
     @world.particles\add @make_particle @x, @y
+
+-- emits particles forever at @rate, can turn it off by setting .alive to false
+class ForeverEmitter extends Emitter
+  rate: 0.05
+  new: (@world, @x, @y, @rate, @make_particle) =>
+    Sequence.__init @, ->
+      while true
+        @add_particle!
+        wait @rate
 
 -- a 2d point
 class Particle
@@ -155,4 +165,5 @@ class TextEmitter extends Emitter
   :ImageParticle
   :TextParticle
   :TextEmitter
+  :ForeverEmitter
 }
