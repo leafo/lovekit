@@ -24,6 +24,13 @@ class Emitter extends Sequence
 
       callback! if callback
 
+  attach: (fn) =>
+    @attached_fn = fn
+
+  update: (dt) =>
+    @attached_fn dt if @attached_fn
+    super dt
+
   draw: =>
 
   make_particle: => error "implement me"
