@@ -54,7 +54,7 @@ class StateAnim
 -- animating a series of cells from a Spriter
 class Animator
   -- values that can be pulled from sequence and passed to animator
-  copy_props = { "ox", "oy", "rate", "flip_x", "flip_y" }
+  copy_props = { "ox", "oy", "rate", "flip_x", "flip_y", "once" }
 
   ox: 0
   oy: 0
