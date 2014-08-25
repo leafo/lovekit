@@ -6,7 +6,7 @@ import COLOR from require "lovekit.color"
 
 local *
 
-_random = if love
+_random = if love and love.math
   love.math.random
 else
   math.random
@@ -22,6 +22,7 @@ smoothstep = (a, b, t) ->
   a + (b - a)*t
 
 sqrt_step = (a, b, t) ->
+
   a + (b - a)*math.sqrt(t)
 
 pow_step = (a, b, t) ->
