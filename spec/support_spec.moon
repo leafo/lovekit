@@ -57,3 +57,14 @@ describe "support", ->
     t = Thing!
     assert.same t.hello, "world"
 
+  it "should reverse array #rev", ->
+    import reverse from require "lovekit.support"
+
+    assert.same {}, reverse {}
+    assert.same {1}, reverse {1}
+    assert.same {2,1}, reverse {1,2}
+    assert.same {3,2,1}, reverse {1,2,3}
+    assert.same {4,3,2,1}, reverse {1,2,3,4}
+    assert.same {5,4,3,2,1}, reverse {1,2,3,4,5}
+
+

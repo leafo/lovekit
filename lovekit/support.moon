@@ -14,6 +14,9 @@ else
 rand = (min, max) ->
   _random! * (max - min) + min
 
+chance = (p) ->
+  love.math.random! <= p
+
 random_normal = ->
   (_random! + _random! + _random! + _random! + _random! + _random! + _random! + _random! + _random! + _random! + _random! + _random!) / 12
 
@@ -193,7 +196,7 @@ pick_dist = (t) ->
     with {sum + v, k}
       sum += v
 
-  r = math.random! * sum
+  r = _random! * sum
   for {prob, v} in *dist
     if r <= prob
       return v
@@ -210,6 +213,12 @@ shuffle = (array) ->
   for i=#array, 2, -1
     j = _random i
     array[i], array[j] = array[j], array[i]
+  array
+
+reverse = (array) ->
+  len = #array
+  for i=1,math.floor len/2
+    array[i], array[len - i + 1] = array[len - i + 1], array[i]
   array
 
 instance_of = (object, cls) ->
@@ -319,5 +328,7 @@ find_local = (name, level=1) ->
   :all_values
   :count_garbage_collections
   :find_local
+  :chance
+  :reverse
 }
 

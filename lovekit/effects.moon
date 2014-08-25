@@ -28,7 +28,7 @@ class Effect
 class ShakeEffect extends Effect
   new: (duration, @speed=5, @amount=1, ...) =>
     @start = timer.getTime!
-    @rand = math.random! * math.pi
+    @rand = love.math.random! * math.pi
     super duration, ...
 
   before: =>
