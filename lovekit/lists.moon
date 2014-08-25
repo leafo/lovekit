@@ -104,12 +104,11 @@ class DrawList
     @dead_list = {}
 
   add: (item) =>
-    dead_len = #@dead_list
-    i = if dead_len > 0
-      with @dead_list[dead_len]
-        @dead_list[dead_len] = nil
+    i = next @dead_list
+    if i
+      @dead_list[i] = nil
     else
-      #@ + 1
+      i = #@ + 1
 
     item.alive = true
     @[i] = item
@@ -124,7 +123,7 @@ class DrawList
     for i, item in ipairs @
       if thing == item
         @[i] = @NULL
-        insert @dead_list, i if thing.alive
+        @dead_list[i] = true if thing.alive
         return true
 
     false
@@ -132,14 +131,18 @@ class DrawList
   update: (dt, ...) =>
     i = 1
     updated = 0
-    for item in *@
+    for item_i, item in ipairs @
       if item.alive
         updated += 1
         alive = item\update dt, ...
+
+        -- if item was removed during update
+        continue if @dead_list[item_i]
+
         if not alive
           item.alive = false
           item\onremove! if item.onremove
-          insert @dead_list, i
+          @dead_list[i] = true
 
       i += 1
 
