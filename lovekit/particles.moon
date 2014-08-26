@@ -101,7 +101,7 @@ class ImageParticle extends Particle
   h: 0
 
   sprite: nil
-  quad: 0
+  quad: nil
 
   new: (...) =>
     super ...
@@ -121,11 +121,13 @@ class ImageParticle extends Particle
     g.rotate @spin
     g.scale @scale, @scale
 
-    @sprite\draw @quad, -@w/2, -@h/2
+    if @quad
+      @sprite\draw @quad, -@w/2, -@h/2
+    else
+      @sprite\draw -@w/2, -@h/2
 
     g.pop!
     COLOR\pop!
-
 
 class TextParticle extends Particle
   dspin: 0
