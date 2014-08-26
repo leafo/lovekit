@@ -10,7 +10,7 @@ class Audio
     nil
 
   -- return a sequence that fades out audio
-  fade_music: (t=1.0) =>
+  fade_music: (t=1.0, callback_fn) =>
     music = @music
     volume = music\getVolume!
     min = music\getVolumeLimits!
@@ -23,6 +23,7 @@ class Audio
         music\setVolume vol
 
       music\stop!
+      callback_fn and callback_fn!
 
   get_source: (name, ext, source_type="static") =>
     return @sources[name] if @sources[name]
