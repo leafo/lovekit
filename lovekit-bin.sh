@@ -16,7 +16,7 @@ GAME_ZIP="${GAME_NAME}.love"
 LOVEKIT_SRC=/srv/git/lovekit.git
 
 LOVE_BIN_WIN="/home/leafo/Downloads/love-0.9.1-win32.zip"
-# LOVE_BIN_OSX="/home/leafo/Downloads/love-0.8.0-macosx-ub.zip"
+LOVE_BIN_OSX="/home/leafo/Downloads/love-0.9.1-macosx-x64.zip"
 
 MOON_SRC_DIR=/home/leafo/code/lua/moonscript
 
@@ -89,6 +89,11 @@ mv "$REL/$GAME_ZIP" .
 # create win32 exe
 if [ -n "$LOVE_BIN_WIN" ]; then
 	log "Creating Windows build"
+	if [ ! -f "$LOVE_BIN_WIN" ]; then
+		err "Missing windows binaries, tried: $LOVE_BIN_WIN"
+		exit 1
+	fi
+
 	mkdir -p $TMP/bin
 	(
 		cd $TMP/bin
@@ -111,6 +116,13 @@ fi
 
 if [ -n "$LOVE_BIN_OSX" ]; then
 	log "Creating OSX build"
+
+	if [ ! -f "$LOVE_BIN_WIN" ]; then
+		err "Missing windows binaries, tried: $LOVE_BIN_WIN"
+		exit 1
+	fi
+
+
 	mkdir -p $TMP/osx
 
 	(
