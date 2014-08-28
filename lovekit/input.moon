@@ -78,6 +78,12 @@ class Controller
     }, "auto"
 
   tap_delay: 0.2
+  axis_button: {
+    left: true
+    right: true
+    up: true
+    down: true
+  }
 
   new: (mapping, @joystick) =>
     if @joystick == "auto"
@@ -200,15 +206,39 @@ class Controller
       pressed = keyboard.isDown unpack keys
       return true if pressed
 
-    if btns = @joy_mapping and @joy_mapping[name]
-      if next btns
-        pressed = @joystick\isDown unpack btns
-        return true if pressed
+    if @joystick_is_down name
+      return true
 
     if ...
       @is_down ...
     else
       false
+
+  joystick_is_down: (name) =>
+    return false unless @joystick
+
+    -- left, right, etc map to axis instead
+    if @axis_button[name]
+      x = @joystick\getGamepadAxis "leftx"
+      y = @joystick\getGamepadAxis "lefty"
+      vec = joystick_deadzone_normalize Vec2d(x,y)
+
+      return switch name
+        when "left"
+          vec[1] < 0
+        when "right"
+          vec[1] > 0
+        when "up"
+          vec[2] < 0
+        when "down"
+          vec[2] > 0
+
+
+    return false unless @joy_mapping
+    btns = @joy_mapping[name]
+    return false unless btns and next btns
+
+    @joystick\isDown unpack btns
 
   movement_vector: =>
     error "don't know how to make movement vector"
