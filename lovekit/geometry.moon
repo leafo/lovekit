@@ -126,6 +126,27 @@ class Vec2d
     offset = (r - 0.5) * spread
     @rotate _rad offset
 
+  -- converts to closest axis aligned unit vector
+  primary_direction: =>
+    {x, y} = @
+    if x == 0 and y == 0
+      return Vec2d 0, 0
+
+    xx = math.abs x
+    yy = math.abs y
+
+    if xx > yy
+      if x < 0
+        Vec2d -1, 0
+      else
+        Vec2d 1, 0
+    else
+      if y < 0
+        Vec2d 0, -1
+      else
+        Vec2d 0, 1
+
+
   __mul: (left, right) ->
     if type(left) == "number"
       Vec2d left * right[1], left * right[2]
