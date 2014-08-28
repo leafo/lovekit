@@ -155,12 +155,11 @@ class Controller
           insert @key_mapping[name], extra_keys
 
       if joy_buttons = inputs.joystick
-        -- subtract 1 from buttons for love 9 fix
         if type(joy_buttons) == "table"
           for btn in *joy_buttons
-            insert @joy_mapping[name], btn - 1
+            insert @joy_mapping[name], btn
         else
-          insert @joy_mapping[name], joy_buttons - 1
+          insert @joy_mapping[name], joy_buttons
 
     @joy_mapping = nil unless next @joy_mapping
 
@@ -202,8 +201,9 @@ class Controller
       return true if pressed
 
     if btns = @joy_mapping and @joy_mapping[name]
-      pressed = @joystick\isDown unpack btns
-      return true if pressed
+      if next btns
+        pressed = @joystick\isDown unpack btns
+        return true if pressed
 
     if ...
       @is_down ...
