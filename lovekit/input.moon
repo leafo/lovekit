@@ -41,15 +41,32 @@ make_mover = (up, down, left, right) ->
 
 movement_vector = make_mover "up", "down", "left", "right"
 
-joystick_deadzone_normalize = (vec, amount=.2) ->
+joystick_deadzone_normalize = (vec, min_amount=.2, max_amount=0.95) ->
   x, y = unpack vec
   len = vec\len!
-  new_len = if len < amount
-    0
-  else
-    math.min 1, (len - amount) / (1 - amount)
 
-  Vec2d x/len * new_len, y/len * new_len
+  new_len = if len < min_amount
+    0
+  elseif len > max_amount
+    1
+  else
+    math.min 1, (len - min_amount) / (max_amount - min_amount)
+
+  out = Vec2d x/len * new_len, y/len * new_len
+
+  -- snap to a near angle
+  -- TODO: support 45 degree angles as well
+  if new_len != 0
+    primary = out\primary_direction!
+    dot = primary * out
+    -- close enough, lock to axis aligned direction
+    if dot > 0.95
+      if new_len == 1
+        out = primary
+      else
+        out = primary * new_len
+
+  out
 
 
 make_joystick_mover = (joystick=1, xaxis="leftx", yaxis="lefty") ->
