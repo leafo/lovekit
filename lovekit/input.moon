@@ -231,6 +231,35 @@ class Controller
     else
       false
 
+  -- detects a more intentional directional press
+  -- having the keybaord key down will return true
+  -- having the joystick primary direction match will return true
+  direction_is_down: (name) =>
+    return nil unless @axis_button[name]
+
+    if keys = @key_mapping[name]
+      return true if keyboard.isDown unpack keys
+
+    if @joystick
+      x = @joystick\getGamepadAxis "leftx"
+      y = @joystick\getGamepadAxis "lefty"
+      vec = joystick_deadzone_normalize Vec2d(x,y)
+      vec = vec\primary_direction!
+
+      yes = switch name
+        when "left"
+          vec[1] < 0
+        when "right"
+          vec[1] > 0
+        when "up"
+          vec[2] < 0
+        when "down"
+          vec[2] > 0
+
+      return true if yes
+
+  -- detects if joystick button is down
+  -- also detects if joystick is pointed in direction slightest amount
   joystick_is_down: (name) =>
     return false unless @joystick
 
