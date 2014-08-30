@@ -7,6 +7,11 @@ import unpack from _G
 
 import Vec2d from require "lovekit.geometry"
 
+-- mapping for pink thing
+with guid = "030000006f0e00001f01000000010000"
+  love.joystick.setGamepadMapping guid, "leftx", "axis", 1
+  love.joystick.setGamepadMapping guid, "lefty", "axis", 2
+
 table_table = ->
   setmetatable {}, __index: (key) =>
     with new = {}

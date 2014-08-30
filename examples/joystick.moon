@@ -3,6 +3,9 @@ require "lovekit.all"
 
 {graphics: g} = love
 
+-- 030000006f0e00001f01000000010000 -- pink thing
+-- 030000005e0400008e02000014010000 -- xbox 360
+
 apply_deadzone = (vec, amount=.2) ->
   -- should be in normalized range
   x,y = unpack vec
@@ -51,7 +54,6 @@ apply_deadzone = (vec, amount=.2) ->
 
     g.pop!
 
-
-  love.joystickpressed = (...) ->
-    print "pressed", ...
+  love.joystickpressed = (j, ...) ->
+    print "[#{j\getID()}] [#{j\isGamepad!}] pressed", ...
 
