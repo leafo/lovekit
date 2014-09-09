@@ -79,9 +79,31 @@ make_joystick_mover = (joystick=1, xaxis="leftx", yaxis="lefty") ->
     joystick = assert love.joystick.getJoysticks![joystick], "Missing joystick"
 
   (speed) ->
-    x = joystick\getGamepadAxis xaxis
-    y = joystick\getGamepadAxis yaxis
-    vec = joystick_deadzone_normalize Vec2d(x,y)
+    hat_dir = joystick\getHat 1
+    vec = if hat_dir != "c"
+      switch hat_dir
+        when "u"
+          Vec2d 0, -1
+        when "d"
+          Vec2d 0, 1
+        when "l"
+          Vec2d -1, 0
+        when "r"
+          Vec2d 1, 0
+        when "ld"
+          Vec2d(-1, 1)\normalized!
+        when "lu"
+          Vec2d(-1, -1)\normalized!
+        when "rd"
+          Vec2d(1, 1)\normalized!
+        when "ru"
+          Vec2d(1, -1)\normalized!
+    else
+      x = joystick\getGamepadAxis xaxis
+      y = joystick\getGamepadAxis yaxis
+      Vec2d(x,y)
+
+    vec = joystick_deadzone_normalize vec
     vec = vec * speed if speed
     vec
 
@@ -273,6 +295,19 @@ class Controller
       x = @joystick\getGamepadAxis "leftx"
       y = @joystick\getGamepadAxis "lefty"
       vec = joystick_deadzone_normalize Vec2d(x,y)
+
+
+      hat_dir = @joystick\getHat 1
+      if hat_dir != "c"
+        return switch name
+          when "left"
+            hat_dir\match "l"
+          when "right"
+            hat_dir\match "r"
+          when "up"
+            hat_dir\match "u"
+          when "down"
+            hat_dir\match "d"
 
       return switch name
         when "left"
