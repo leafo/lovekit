@@ -145,7 +145,12 @@ class Viewport extends Box
   bottom: (offset=0) =>
     @h - offset
 
+  __tostring: =>
+    ("viewport<(%d, %d), (%d, %d)>")\format @unpack!
+
 class EffectViewport extends Viewport
+  __tostring: Viewport.__tostring
+
   new: (...) =>
     @effects = EffectList!
     super ...
