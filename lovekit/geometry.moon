@@ -311,8 +311,17 @@ class Box
 
     nil
 
+  -- create texture coordinate from two boxes
+  __div: (left, right) ->
+    assert left and left.__class == Box and right and right.__class == Box
+
+    Box (left.x - right.x) / right.w,
+      (left.y - right.y) / right.h,
+      left.w / right.w,
+      left.h / right.h
+
   __tostring: =>
-    ("box<(%d, %d), (%d, %d)>")\format @unpack!
+    ("box<(%.2f, %.2f), (%.2f, %.2f)>")\format @unpack!
 
 hash_pt = (x,y) -> "#{x}:#{y}"
 
