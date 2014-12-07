@@ -25,13 +25,21 @@ smoothstep = (a, b, t) ->
   a + (b - a)*t
 
 sqrt_step = (a, b, t) ->
-
   a + (b - a)*math.sqrt(t)
 
 pow_step = (a, b, t) ->
   a + (b - a)*(t^2)
 
 lerp = (a,b,t) -> a + (b - a)*t
+
+cubic_bez = (p0, p1, p2, p3, t) ->
+  nt - (1 - t)
+  nt2 = nt * nt
+  nt3 = nt2 *  nt
+  t2 = t * t
+  t3 = t2 * t
+
+  nt3 * p0 + 3 * nt2 * t * p1 + 3 * nt * t2 * p2 + t3 * p3
 
 -- goes 0 to 1 from start to attack
 -- goes 1 from 0 to decay to stop
@@ -330,5 +338,6 @@ find_local = (name, level=1) ->
   :find_local
   :chance
   :reverse
+  :cubic_bez
 }
 
