@@ -90,4 +90,21 @@ class FlashEffect extends ColorEffect
       tween @color, half, start
 
 
-{ :Effect, :ShakeEffect, :ColorEffect, :FlashEffect, :PopinEffect }
+class FadeInEffect extends Effect
+  before: =>
+    COLOR\pusha @p! * 255
+
+  after: =>
+    COLOR\pop!
+
+class FadeOutEffect extends Effect
+  before: =>
+    COLOR\pusha (1 - @p!) * 255
+
+  after: =>
+    COLOR\pop!
+
+
+
+
+{ :Effect, :ShakeEffect, :ColorEffect, :FlashEffect, :PopinEffect, :FadeInEffect, :FadeOutEffect }
