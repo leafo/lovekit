@@ -25,15 +25,7 @@ class Effect
   before: (object) =>
   after: (object) =>
 
-class PopinEffect extends Sequence
-  scale: 0
-  new: (duration, callback) =>
-    super ->
-      @scale = 0
-      tween @, duration * 0.8, scale: 1.2
-      tween @, duration * 0.2, scale: 1
-      callback and callback @
-
+class ScaleEffect extends Sequence
   before: (object) =>
     tx, ty = object\center!
 
@@ -44,6 +36,31 @@ class PopinEffect extends Sequence
 
   after: (object) =>
     graphics.pop!
+
+class PopinEffect extends ScaleEffect
+  scale: 0
+  new: (duration, callback) =>
+    super ->
+      tween @, duration * 0.8, scale: 1.2
+      tween @, duration * 0.2, scale: 1
+      callback and callback @
+
+class BlowOutEffect extends Sequence
+  scale: 1
+  alpha: 255
+
+  new: (duration, callback) =>
+    super ->
+      tween @, duration, scale: 2.0, alpha: 0
+      callback and callback @
+
+  before: (object) =>
+    COLOR\pusha @alpha
+    ScaleEffect.before @, object
+
+  after: (object) =>
+    ScaleEffect.after @, object
+    COLOR\pop!
 
 class ShakeEffect extends Effect
   new: (duration, @speed=5, @amount=1, ...) =>
@@ -104,7 +121,4 @@ class FadeOutEffect extends Effect
   after: =>
     COLOR\pop!
 
-
-
-
-{ :Effect, :ShakeEffect, :ColorEffect, :FlashEffect, :PopinEffect, :FadeInEffect, :FadeOutEffect }
+{ :Effect, :ShakeEffect, :ColorEffect, :FlashEffect, :PopinEffect, :FadeInEffect, :FadeOutEffect, :BlowOutEffect }
