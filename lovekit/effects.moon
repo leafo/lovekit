@@ -5,7 +5,7 @@ import Sequence from require "lovekit.sequence"
 import COLOR from require "lovekit.color"
 
 class Effect
-  new: (@duration, @callback) =>
+  new: (@duration=1, @callback) =>
     @time = 0
 
   -- return true if alive
@@ -22,8 +22,28 @@ class Effect
   replace: (other) =>
 
   -- implement these in subclasses
-  before: =>
-  after: =>
+  before: (object) =>
+  after: (object) =>
+
+class PopinEffect extends Sequence
+  scale: 0
+  new: (duration, callback) =>
+    super ->
+      @scale = 0
+      tween @, duration * 0.8, scale: 1.2
+      tween @, duration * 0.2, scale: 1
+      callback and callback @
+
+  before: (object) =>
+    tx, ty = object\center!
+
+    graphics.push!
+    graphics.translate tx, ty
+    graphics.scale @scale, @scale
+    graphics.translate -tx, -ty
+
+  after: (object) =>
+    graphics.pop!
 
 class ShakeEffect extends Effect
   new: (duration, @speed=5, @amount=1, ...) =>
@@ -70,4 +90,4 @@ class FlashEffect extends ColorEffect
       tween @color, half, start
 
 
-{ :Effect, :ShakeEffect, :ColorEffect, :FlashEffect }
+{ :Effect, :ShakeEffect, :ColorEffect, :FlashEffect, :PopinEffect }

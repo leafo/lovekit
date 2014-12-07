@@ -80,9 +80,9 @@ class HasEffects
     switch name
       when "draw"
         (...) =>
-          @effects\before!
+          @effects\before @
           existing @, ...
-          @effects\after!
+          @effects\after @
 
   new: =>
     @effects or= EffectList!

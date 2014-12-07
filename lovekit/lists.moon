@@ -237,12 +237,12 @@ class EffectList
     fn!
     @after!
 
-  before: =>
-    e\before @obj for e in *@
+  before: (...) =>
+    e\before @obj or ... for e in *@
 
-  after: =>
+  after: (...) =>
     for i=#@,1,-1 -- reverse order
-      @[i]\after @obj
+      @[i]\after @obj or ...
 
 class ImpulseSet
   clear: =>
