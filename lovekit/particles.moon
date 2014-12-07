@@ -108,14 +108,13 @@ class ImageParticle extends Particle
     @spin = 0
     @scale = 1
 
-
   update: (dt, ...) =>
     @spin += dt * @dspin
     @scale += dt * @dscale
     super dt, ...
 
   draw: =>
-    COLOR\pusha ad_curve(@p!, 0, 0.1, 0.5) * 255
+    COLOR\pusha ad_curve(@p!, 0, 0.1, 0.5) * (@a * 255)
     g.push!
     g.translate @x, @y
     g.rotate @spin
