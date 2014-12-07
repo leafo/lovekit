@@ -2,7 +2,7 @@
 import insert, remove from table
 
 import get_local from require "lovekit.support"
-import DrawList from require "lovekit.lists"
+import DrawList, EffectList from require "lovekit.lists"
 import Sequence from require "lovekit.sequence"
 
 -- adds methods, wraps constructor
@@ -75,10 +75,27 @@ class KeyRepeat
    love.keyboard.setKeyRepeat @_key_repeat
    @_key_repeat = nil
 
+class HasEffects
+  @merge_methods: (name, existing, new) =>
+    switch name
+      when "draw"
+        (...) =>
+          @effects\before!
+          existing @, ...
+          @effects\after!
+
+  new: =>
+    @effects or= EffectList!
+
+  update: (dt) =>
+    @effects\update dt
+
+  draw: => error "implement draw in receiver"
 
 {
   :mixin
-  :Sequenced
+  :HasEffects
   :HasParticles
   :KeyRepeat
+  :Sequenced
 }
