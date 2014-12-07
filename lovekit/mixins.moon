@@ -16,10 +16,13 @@ mixin = do
       continue if member_name\match "^__"
       if existing = base[member_name]
         if type(existing) == "function" and type(member_val) == "function"
-          -- before mode
-          base[member_name] = (...) ->
-            member_val ...
-            existing ...
+          if mix.merge_methods
+            base[member_name] = mix\merge_methods member_name, existing, member_val
+          else
+            -- before mode
+            base[member_name] = (...) ->
+              member_val ...
+              existing ...
         else
           base[member_name] = member_val
       else

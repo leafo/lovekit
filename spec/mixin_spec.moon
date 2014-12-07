@@ -51,3 +51,28 @@ describe "mixins", ->
       "Before add_one (Mixin), 12"
     }
 
+
+  it "should handle mixin method conflict", ->
+    items = {}
+
+    class MyMixin
+      @merge_methods: (name, existing, new) =>
+        (...) =>
+          table.insert items, "Before"
+          existing @, ...
+          table.insert items, "After"
+
+      thinger: (...) =>
+        error "implement in receiver"
+
+    class MyThing
+      mixin MyMixin
+
+      thinger: ->
+        table.insert items, "Cows"
+
+    thing = MyThing!
+    thing\thinger!
+
+    assert.same {"Before", "Cows", "After"}, items
+
