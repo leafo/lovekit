@@ -139,6 +139,7 @@ class Controller
     @add_mapping mapping
     @tapper = {}
     @dtapper = {}
+    @downer = {}
 
     @make_mover!
 
@@ -213,6 +214,16 @@ class Controller
           insert @joy_mapping[name], joy_buttons
 
     @joy_mapping = nil unless next @joy_mapping
+
+  -- first down
+  downed: (key) =>
+    if @is_down key
+      was_down = @downer[key]
+      @downer[key] = true
+      unless was_down
+        true
+    else
+      @downer[key] = nil
 
   -- down then up
   tapped: (key, ...) =>
