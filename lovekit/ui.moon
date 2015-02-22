@@ -318,5 +318,26 @@ class Bin extends Box
   draw: =>
     @item\draw!
 
+
+-- a group just holds items for drawing/updating in one go.
+-- is bounding box of all items
+class Group extends Box
+  new: (@items={}) =>
+
+  update: (dt) =>
+    @x = 0
+    @y = 0
+    @w = 0
+    @h = 0
+
+    for item in *@items
+      item\update dt
+      @add_box item
+
+  draw: (...) =>
+    for item in *@items
+      item\draw ...
+
+
 { :Frame, :Label, :AnimatedLabel, :BlinkingLabel, :RevealLabel, :VList,
-  :HList, :Anchor, :CenterAnchor, :Bin }
+  :HList, :Anchor, :CenterAnchor, :Bin, :Group }
