@@ -2,6 +2,9 @@
 import graphics from love
 
 class Image
+  @from_tex: (tex) =>
+    setmetatable {:tex}, @__base
+
   new: (@fname) =>
     @reload!
   
