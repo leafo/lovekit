@@ -150,8 +150,11 @@ class TileMap
           continue if tid < 0
           tile = tid: tid, layer: l
 
+          tile = callbacks.tile tile, layer, i
+
           if callbacks.solid_tile and is_solid
             tile = callbacks.solid_tile tile, layer, i
+
 
           tiles[i] = tile
 
