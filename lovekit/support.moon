@@ -58,6 +58,18 @@ ad_curve = (t, start, attack, decay, stop=1) ->
 
   1
 
+-- time: time to grow to enlarged size
+-- amount: the enlarged size
+-- decay: multiplied by time to calculate pop out time
+pop_in = (t, time=0.1, amount=1.1, decay=1) ->
+  pop_out_time = time * decay
+  if t < time
+    lerp 0, amount, t / time
+  elseif t < time + pop_out_time
+    lerp amount, 1, (t - time) / pop_out_time
+  else
+    1
+
 escape_patt = (str) ->
   (str\gsub punct, (p) -> "%"..p)
 
@@ -339,5 +351,6 @@ find_local = (name, level=1) ->
   :chance
   :reverse
   :cubic_bez
+  :pop_in
 }
 
