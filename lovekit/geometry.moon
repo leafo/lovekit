@@ -363,6 +363,19 @@ class UniformGrid
           if query_box != box
             \add box, values[box] if box\touches_box query_box
 
+  get_touching_pt: (x, y) =>
+    bucket = @bucket_for_pt x, y
+    return unless bucket
+
+    values = @values
+    list = with SetList!
+      for box in *bucket
+        if box\touches_pt x, y
+          \add box, values[box]
+
+    list if next list
+
+
   bucket_for_pt: (x,y, insert=false) =>
     x = _floor x / @cell_size
     y = _floor y / @cell_size
