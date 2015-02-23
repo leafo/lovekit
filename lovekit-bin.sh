@@ -15,8 +15,8 @@ GAME_ZIP="${GAME_NAME}.love"
 # LOVEKIT_SRC=https://leafo@github.com/leafo/lovekit.git
 LOVEKIT_SRC=/srv/git/lovekit.git
 
-LOVE_BIN_WIN="/home/leafo/Downloads/love-0.9.1-win32.zip"
-LOVE_BIN_OSX="/home/leafo/Downloads/love-0.9.1-macosx-x64.zip"
+LOVE_BIN_WIN="/home/leafo/Downloads/love-0.9.2-win32.zip"
+LOVE_BIN_OSX="/home/leafo/Downloads/love-0.9.2-macosx-x64.zip"
 
 MOON_SRC_DIR=/home/leafo/code/lua/moonscript
 
