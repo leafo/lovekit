@@ -113,11 +113,17 @@ class Label extends Box
     @alive
 
   draw: =>
+    if @color
+      COLOR\push unpack @color
+
     text = @is_func and @_text or @text
     if @max_width
       g.printf text, @x, @y, @max_width, @align
     else
       g.print text, @x, @y
+
+    if @color
+      COLOR\pop!
 
     -- COLOR\push 255,100,100, 200
     -- g.rectangle "fill", @x,@y, 2,2
