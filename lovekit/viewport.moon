@@ -22,9 +22,12 @@ class Viewport extends Box
 
   crop: false
 
+  pixel_scale: false
+
   -- screen is table with w, h, and scale
   new: (opts={}) =>
     screen_w, screen_h = graphics.getWidth!, graphics.getHeight!
+    @pixel_scale = opts.pixel_scale
 
     if opts.scale
       @scale = opts.scale
@@ -68,6 +71,19 @@ class Viewport extends Box
     Box x - w/2, y - h/2, w*2,h*2
 
   apply: (scale=true)=>
+    if @pixel_scale
+      unless @canvas
+        @canvas = graphics.newCanvas @w, @h
+        @canvas\setFilter "nearest", "nearest"
+
+      @last_canvas = graphics.getCanvas!
+      graphics.setCanvas @canvas
+
+      @canvas\clear 0,0,0,0
+      graphics.push!
+      graphics.translate -@x, -@y
+      return
+
     if @crop
       s = @scale
       graphics.setScissor @offset_x, @offset_y, @w * s, @h * s
@@ -82,6 +98,21 @@ class Viewport extends Box
     graphics.translate -@x, -@y
 
   pop: =>
+    if @pixel_scale
+      graphics.pop!
+
+      if @last_canvas
+        graphics.setCanvas @last_canvas
+      else
+        graphics.setCanvas!
+
+      graphics.push!
+      graphics.setBlendMode "premultiplied"
+      graphics.draw @canvas, 0, 0, 0, @scale, @scale
+      graphics.setBlendMode "alpha"
+      graphics.pop!
+      return
+
     graphics.pop!
 
     if @crop
