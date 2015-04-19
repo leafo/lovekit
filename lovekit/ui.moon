@@ -345,6 +345,27 @@ class Group extends Box
     for item in *@items
       item\draw ...
 
+-- wraps a single item with padding/border
+class Border extends Box
+  padding: 0
+  border: true
+
+  new: (@item, props) =>
+    extract_props @, props
+
+  update: (dt) =>
+    @w = @item.w + @padding * 2
+    @h = @item.h + @padding * 2
+    @item\update dt
+
+  draw: =>
+    if @border
+      g.rectangle "line", @unpack!
+
+    @item.x = @x + @padding
+    @item.y = @y + @padding
+    @item\draw!
+
 
 { :Frame, :Label, :AnimatedLabel, :BlinkingLabel, :RevealLabel, :VList,
-  :HList, :Anchor, :CenterAnchor, :Bin, :Group }
+  :HList, :Anchor, :CenterAnchor, :Bin, :Group, :Border }
