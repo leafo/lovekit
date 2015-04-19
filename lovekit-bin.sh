@@ -18,7 +18,7 @@ LOVEKIT_SRC=/srv/git/lovekit.git
 LOVE_BIN_WIN="/home/leafo/Downloads/love-0.9.2-win32.zip"
 LOVE_BIN_OSX="/home/leafo/Downloads/love-0.9.2-macosx-x64.zip"
 
-MOON_SRC_DIR=/home/leafo/code/lua/moonscript
+MOON_SRC_DIR=/home/leafo/code/moon/moonscript
 
 function log {
 	echo "$(tput setaf 4)>>$(tput sgr0) " $@
