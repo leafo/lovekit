@@ -131,6 +131,7 @@ class ImageParticle extends Particle
 class TextParticle extends Particle
   dspin: 0
   dscale: 0
+  color: {255,255,255}
 
   new: (@str, ...) =>
     super ...
@@ -148,7 +149,7 @@ class TextParticle extends Particle
     super dt, ...
 
   draw: =>
-    COLOR\pusha ad_curve(@p!, 0, 0.1, 0.5) * 255
+    COLOR\push @color[1], @color[2], @color[3], ad_curve(@p!, 0, 0.1, 0.5) * 255
     g.push!
     g.translate @x, @y
     g.rotate @spin
