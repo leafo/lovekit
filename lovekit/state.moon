@@ -52,8 +52,12 @@ class Dispatcher
   default_transition: Transition
 
   new: (initial) =>
-    @stack = { initial }
-    initial\on_show self if initial and initial.on_show
+    if "function" == type initial
+      @stack = {}
+      @init_later = initial
+    else
+      @stack = { initial }
+      initial\on_show self if initial and initial.on_show
 
   send: (event, ...) =>
     current = @top!
@@ -125,8 +129,11 @@ class Dispatcher
 
     @viewport\pop! if @viewport
 
-
   update: (dt) =>
+    if @init_later
+      @push @init_later!
+      @init_later = nil
+
     @viewport\update dt if @viewport and @viewport.update
 
     if t = @transition
