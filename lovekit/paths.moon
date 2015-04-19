@@ -91,6 +91,15 @@ class CatmullRomPath
   walker: (speed) =>
     PathWalker @, speed
 
+  each_pt: (rate=1) =>
+    return unless #@ >= 4
+    coroutine.wrap ->
+      for i=2,#@ - 2
+        p1,p2, m1,m2 = @interpolation_parts(i)
+        d = math.abs (p2 - p1)\len! / 10
+        for t=0, 1, 1/d * rate
+          coroutine.yield unpack hermite_interpolate(p1, p2, m1, m2, t)
+
   draw: =>
     pt = graphics.getPointSize!
 
