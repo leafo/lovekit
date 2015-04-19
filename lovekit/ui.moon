@@ -349,18 +349,29 @@ class Group extends Box
 class Border extends Box
   padding: 0
   border: true
+  background: false
 
   new: (@item, props) =>
     extract_props @, props
+    super @item.x, @item.y, @item.w, @item.h
 
   update: (dt) =>
     @w = @item.w + @padding * 2
     @h = @item.h + @padding * 2
+
+    if @min_width
+      @w = math.max @min_width, @w
+
     @item\update dt
 
   draw: =>
     if @border
       g.rectangle "line", @unpack!
+
+    if @background
+      COLOR\push unpack @background
+      g.rectangle "fill", @unpack!
+      COLOR\pop!
 
     @item.x = @x + @padding
     @item.y = @y + @padding
