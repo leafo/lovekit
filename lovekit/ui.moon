@@ -7,6 +7,16 @@ import COLOR from require "lovekit.color"
 import Sequence from require "lovekit.sequence"
 import EffectList from require "lovekit.lists"
 
+extract_props = (items) =>
+  return unless items
+  for k,v in pairs items
+    if type(k) == "string"
+      items[k] = nil
+      @[k] = v
+
+-- update: update the bounding box of the ui component, call update of children before updating current
+-- draw: if the component manages positions then it should update children
+
 border = {
   tl: 0
   l: 1
@@ -19,6 +29,7 @@ border = {
   back: 8
 }
 
+-- TODO: this has nothing to do with any of the stuff in here
 class Frame extends Box
   shadow: true
 
@@ -203,11 +214,7 @@ class BaseList extends Box
       @x = 0
       @y = 0
 
-    -- extract props
-    for k,v in pairs @items
-      if type(k) == "string"
-        @items[k] = nil
-        @[k] = v
+    extract_props @, @items
 
   update_size: -> error "override me"
 
