@@ -116,12 +116,19 @@ class Dispatcher
   mousereleased: (...) => @send "mousereleased", ...
 
   draw: =>
+    @viewport\apply! if @viewport
+
     if t = @transition
       t\draw!
     else
       @send "draw"
 
+    @viewport\pop! if @viewport
+
+
   update: (dt) =>
+    @viewport\update dt if @viewport and @viewport.update
+
     if t = @transition
       unless t\update dt
         @transition = nil
