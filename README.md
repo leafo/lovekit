@@ -1,5 +1,7 @@
 # Lovekit
 
+[![Build Status](https://travis-ci.org/leafo/lovekit.svg)](https://travis-ci.org/leafo/lovekit)
+
 Lovekit is a collection of tools written in [MoonScript](http://moonscript.org)
 that I use to build games. I've made (or started) the following games:
 
