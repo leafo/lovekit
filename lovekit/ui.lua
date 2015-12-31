@@ -133,9 +133,9 @@ do
       self.w = font:getWidth(text)
       if self.max_width then
         self.w = math.min(self.max_width, self.w)
-        local num_lines
-        self.w, num_lines = font:getWrap(text, self.max_width)
-        self.h = num_lines * font:getHeight()
+        local lines
+        self.w, lines = font:getWrap(text, self.max_width)
+        self.h = #lines * font:getHeight()
       else
         self.h = font:getHeight()
       end

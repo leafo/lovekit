@@ -98,8 +98,8 @@ class Label extends Box
 
     if @max_width
       @w = math.min @max_width, @w
-      @w, num_lines = font\getWrap text, @max_width
-      @h = num_lines * font\getHeight!
+      @w, lines = font\getWrap text, @max_width
+      @h = #lines * font\getHeight!
     else
       @h = font\getHeight!
 
