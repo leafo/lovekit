@@ -1,14 +1,16 @@
 
+.PHONY: all watch test lint
 
-all::
-	moonc main.moon lovekit examples
-
-watch:: all
-	moonc -w main.moon lovekit examples
-
-test:
+test: build
 	busted -p _spec.moon$
 
-
-lint:
+lint: build
 	moonc -l lovekit
+
+watch: build
+	moonc -w main.moon lovekit examples
+
+build:
+	moonc main.moon lovekit examples
+
+
