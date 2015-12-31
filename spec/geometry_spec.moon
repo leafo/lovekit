@@ -5,7 +5,7 @@ local Vec2d, Box
 
 describe "Vec2d", ->
   setup ->
-    export love = { graphics: { } }
+    _G.love = { graphics: { } }
     import Vec2d from require "lovekit.geometry"
 
   teardown restore
@@ -41,7 +41,7 @@ describe "Vec2d", ->
 
 describe "Box", ->
   setup ->
-    export love = { graphics: { } }
+    _G.love = { graphics: { } }
     import Box from require "lovekit.geometry"
 
   teardown restore

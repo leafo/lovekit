@@ -5,7 +5,7 @@ local lazy_value, lazy
 
 describe "support", ->
   setup ->
-    export love = setmetatable {}, __index: => {}
+    _G.love = setmetatable {}, __index: => {}
     import lazy_value, lazy from require "lovekit.support"
 
   teardown restore

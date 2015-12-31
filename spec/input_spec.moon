@@ -7,7 +7,7 @@ local Controller
 
 describe "lovekit.input", ->
   setup ->
-    export love = {
+    _G.love = {
       keyboard: {
         isDown: (first, ...) ->
           return false unless first

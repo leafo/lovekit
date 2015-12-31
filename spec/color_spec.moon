@@ -7,7 +7,7 @@ local ColorStack, hash_string, hash_to_color
 
 describe "color", ->
   setup ->
-    export love = {
+    _G.love = {
       graphics: {
         setColor: (r=255,g=255,b=255,a=255) ->
           current_color = {r,g,b,a}

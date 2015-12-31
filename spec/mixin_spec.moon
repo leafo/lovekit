@@ -6,7 +6,7 @@ local mixin
 
 describe "mixins", ->
   setup ->
-    export love = setmetatable {}, __index: =>
+    _G.love = setmetatable {}, __index: =>
     import mixin from require "lovekit.mixins"
 
   teardown restore
