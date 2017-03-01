@@ -40,7 +40,7 @@ do
         end
         self.last_canvas = graphics.getCanvas()
         graphics.setCanvas(self.canvas)
-        self.canvas:clear(0, 0, 0, 0)
+        graphics.clear()
         graphics.push()
         graphics.translate(-self.x, -self.y)
         return 
@@ -68,7 +68,7 @@ do
           graphics.setCanvas()
         end
         graphics.push()
-        graphics.setBlendMode("premultiplied")
+        graphics.setBlendMode("alpha", "premultiplied")
         graphics.draw(self.canvas, 0, 0, 0, self.scale, self.scale)
         graphics.setBlendMode("alpha")
         graphics.pop()

@@ -78,8 +78,7 @@ class Viewport extends Box
 
       @last_canvas = graphics.getCanvas!
       graphics.setCanvas @canvas
-
-      @canvas\clear 0,0,0,0
+      graphics.clear()
       graphics.push!
       graphics.translate -@x, -@y
       return
@@ -107,7 +106,7 @@ class Viewport extends Box
         graphics.setCanvas!
 
       graphics.push!
-      graphics.setBlendMode "premultiplied"
+      graphics.setBlendMode "alpha", "premultiplied"
       graphics.draw @canvas, 0, 0, 0, @scale, @scale
       graphics.setBlendMode "alpha"
       graphics.pop!
