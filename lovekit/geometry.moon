@@ -70,6 +70,11 @@ class Vec2d
   left: => return self[1] < 0
   right: => return self[1] > 0
 
+  move: (dx, dy ) =>
+    @[1] += dx
+    @[2] += dy
+    @
+
   update: (x, y) =>
     self[1], self[2] = x, y
     @

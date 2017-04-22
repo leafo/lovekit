@@ -74,6 +74,11 @@ do
     right = function(self)
       return self[1] > 0
     end,
+    move = function(self, dx, dy)
+      self[1] = self[1] + dx
+      self[2] = self[2] + dy
+      return self
+    end,
     update = function(self, x, y)
       self[1], self[2] = x, y
       return self
