@@ -63,6 +63,9 @@ class List
 
 -- nothing efficient about this, same API as draw list but preserves insert order
 class EntityList
+  @load: (tbl) =>
+    setmetatable tbl, @__base
+
   new: =>
 
   add: (item) =>

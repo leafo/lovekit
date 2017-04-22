@@ -151,6 +151,10 @@ do
     end
   })
   _base_0.__class = _class_0
+  local self = _class_0
+  self.load = function(self, tbl)
+    return setmetatable(tbl, self.__base)
+  end
   EntityList = _class_0
 end
 local DrawList
