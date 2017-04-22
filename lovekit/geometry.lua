@@ -419,6 +419,13 @@ do
       end
       return nil
     end,
+    clamp_vector = function(self, vec)
+      local x, y = unpack(vec)
+      if x >= self.x and x <= self.x + self.w and y >= self.y and y <= self.y + self.h then
+        return vec
+      end
+      return Vec2d(math.min(math.max(self.x, x), self.x + self.w), math.min(math.max(self.y, y), self.y + self.h))
+    end,
     __div = function(left, right)
       assert(left and left.__class == Box and right and right.__class == Box)
       return Box((left.x - right.x) / right.w, (left.y - right.y) / right.h, left.w / right.w, left.h / right.h)

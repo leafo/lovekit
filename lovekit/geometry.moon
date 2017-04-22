@@ -311,6 +311,16 @@ class Box
 
     nil
 
+  -- ensure vector is inside the box, returns the new vetor
+  clamp_vector: (vec) =>
+    x, y = unpack vec
+
+    if x >= @x and x <= @x + @w and y >= @y and y <= @y + @h
+      return vec
+
+    Vec2d math.min(math.max(@x, x), @x + @w),
+      math.min(math.max(@y, y), @y + @h)
+
   -- create texture coordinate from two boxes
   __div: (left, right) ->
     assert left and left.__class == Box and right and right.__class == Box
