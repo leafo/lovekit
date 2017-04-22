@@ -16,6 +16,17 @@ do
     draw = function(self, ...)
       return graphics.draw(self.tex, ...)
     end,
+    draw_center = function(self, x, y, ...)
+      if x == nil then
+        x = 0
+      end
+      if y == nil then
+        y = 0
+      end
+      local w = self.tex:getWidth()
+      local h = self.tex:getHeight()
+      return graphics.draw(self.tex, x - w / 2, y - h / 2, ...)
+    end,
     reload = function(self)
       self.tex = graphics.newImage(self.fname)
     end

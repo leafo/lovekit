@@ -16,6 +16,11 @@ class Image
   draw: (...) =>
     graphics.draw @tex, ...
 
+  draw_center: (x=0, y=0, ...)=>
+    w = @tex\getWidth!
+    h = @tex\getHeight!
+    graphics.draw @tex, x - w/2, y - h/2, ...
+
   reload: =>
     @tex = graphics.newImage @fname
 
