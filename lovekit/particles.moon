@@ -96,6 +96,8 @@ class PixelParticle extends Particle
 class ImageParticle extends Particle
   dspin: 0
   dscale: 0
+  ad_left: 0.1
+  ad_right: 0.5
 
   w: 0
   h: 0
@@ -114,7 +116,7 @@ class ImageParticle extends Particle
     super dt, ...
 
   draw: =>
-    COLOR\pusha ad_curve(@p!, 0, 0.1, 0.5) * (@a * 255)
+    COLOR\pusha ad_curve(@p!, 0, @ad_left, @ad_right) * (@a * 255)
     g.push!
     g.translate @x, @y
     g.rotate @spin

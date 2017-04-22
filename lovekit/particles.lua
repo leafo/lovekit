@@ -246,6 +246,8 @@ do
   local _base_0 = {
     dspin = 0,
     dscale = 0,
+    ad_left = 0.1,
+    ad_right = 0.5,
     w = 0,
     h = 0,
     sprite = nil,
@@ -256,7 +258,7 @@ do
       return _class_0.__parent.__base.update(self, dt, ...)
     end,
     draw = function(self)
-      COLOR:pusha(ad_curve(self:p(), 0, 0.1, 0.5) * (self.a * 255))
+      COLOR:pusha(ad_curve(self:p(), 0, self.ad_left, self.ad_right) * (self.a * 255))
       g.push()
       g.translate(self.x, self.y)
       g.rotate(self.spin)
