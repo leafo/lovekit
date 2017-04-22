@@ -104,4 +104,18 @@ describe "lovekit.input", ->
       DOWN_KEYS.return = true
       assert.truthy c\is_down "double", "single"
 
+  describe "joystick_deadzone_normalize", ->
+    local Vec2d, joystick_deadzone_normalize
+
+    before_each ->
+      import Vec2d from require "lovekit.geometry"
+      import joystick_deadzone_normalize from require "lovekit.input"
+
+    it "normalized a zero vector", ->
+      vec = Vec2d(0,0)
+      assert.same Vec2d(0,0), joystick_deadzone_normalize vec
+
+
+
+
 

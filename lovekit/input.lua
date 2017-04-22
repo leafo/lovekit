@@ -85,6 +85,9 @@ joystick_deadzone_normalize = function(vec, min_amount, max_amount)
   end
   local x, y = unpack(vec)
   local len = vec:len()
+  if len == 0 then
+    return vec
+  end
   local new_len
   if len < min_amount then
     new_len = 0
@@ -457,5 +460,6 @@ return {
   make_mover = make_mover,
   movement_vector = movement_vector,
   make_joystick_mover = make_joystick_mover,
+  joystick_deadzone_normalize = joystick_deadzone_normalize,
   Controller = Controller
 }

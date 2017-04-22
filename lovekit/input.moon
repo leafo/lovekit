@@ -50,6 +50,7 @@ movement_vector = make_mover "up", "down", "left", "right"
 joystick_deadzone_normalize = (vec, min_amount=.2, max_amount=0.95) ->
   x, y = unpack vec
   len = vec\len!
+  return vec if len == 0
 
   new_len = if len < min_amount
     0
@@ -348,5 +349,6 @@ class Controller
   :make_mover
   :movement_vector
   :make_joystick_mover
+  :joystick_deadzone_normalize
   :Controller
 }
