@@ -157,12 +157,12 @@ class DrawList
           item\outline! if item.w
 
   -- sort based on depth (y value)
-  draw_sorted: (sort_fn=box_sort)=>
+  draw_sorted: (sort_fn=box_sort, ...)=>
     alive = [item for item in *@ when item.alive]
     table.sort alive, sort_fn
 
     for item in *alive
-      item\draw!
+      item\draw ...
       item.box\outline! if @show_boxes and item.box
 
 -- a simple array that reuses the tables created for objects when they are dead

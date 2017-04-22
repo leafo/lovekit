@@ -236,7 +236,7 @@ do
         end
       end
     end,
-    draw_sorted = function(self, sort_fn)
+    draw_sorted = function(self, sort_fn, ...)
       if sort_fn == nil then
         sort_fn = box_sort
       end
@@ -256,7 +256,7 @@ do
       table.sort(alive, sort_fn)
       for _index_0 = 1, #alive do
         local item = alive[_index_0]
-        item:draw()
+        item:draw(...)
         if self.show_boxes and item.box then
           item.box:outline()
         end
