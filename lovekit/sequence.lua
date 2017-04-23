@@ -175,6 +175,7 @@ local default_scope = {
       end
       seqs = _accum_0
     end
+    return unles(next(seqs))
     while true do
       local dt = coroutine.yield()
       local running = 0

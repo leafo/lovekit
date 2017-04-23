@@ -121,6 +121,8 @@ default_scope = {
         error "Got unknown object to parallel, expected function or sequence, got: #{type fn}"
 
 
+    return unles next seqs
+
     -- TODO: remaining time can get lost at end frame
     while true
       dt = coroutine.yield!
