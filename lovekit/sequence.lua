@@ -150,9 +150,28 @@ local default_scope = {
         ...
       }
       for _index_0 = 1, #_list_0 do
-        local fn = _list_0[_index_0]
-        _accum_0[_len_0] = Sequence(fn)
-        _len_0 = _len_0 + 1
+        local _continue_0 = false
+        repeat
+          local fn = _list_0[_index_0]
+          if not (fn) then
+            _continue_0 = true
+            break
+          end
+          local _value_0
+          if type(fn) == "function" then
+            _value_0 = Sequence(fn)
+          elseif fn.__class == Sequence then
+            _value_0 = fn
+          else
+            _value_0 = error("Got unknown object to parallel, expected function or sequence, got: " .. tostring(type(fn)))
+          end
+          _accum_0[_len_0] = _value_0
+          _len_0 = _len_0 + 1
+          _continue_0 = true
+        until true
+        if not _continue_0 then
+          break
+        end
       end
       seqs = _accum_0
     end

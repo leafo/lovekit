@@ -111,7 +111,15 @@ default_scope = {
 
   -- runs all functions as sequences parallel, returns when the last one completes
   parallel: (...) ->
-    seqs = [Sequence fn for fn in *{...}]
+    seqs = for fn in *{...}
+      continue unless fn
+      if type(fn) == "function"
+        Sequence fn
+      elseif fn.__class == Sequence
+        fn
+      else
+        error "Got unknown object to parallel, expected function or sequence, got: #{type fn}"
+
 
     -- TODO: remaining time can get lost at end frame
     while true
