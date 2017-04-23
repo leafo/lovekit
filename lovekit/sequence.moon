@@ -213,11 +213,15 @@ class Sequence
     fn
 
   new: (fn, scope, ...) =>
+    if scope
+      for k,v in pairs scope
+        if type(v) == "function"
+          @@setfenv v, tbl
+
+      setmetatable scope, __index: @@default_scope
+
     @fn = @@setfenv fn, scope
     @create ...
-
-  _setfenv: (fn, scope=@@default_scope) =>
-    error "migrate error: moved to @setfenv"
 
   create: (...) =>
     @args = {...}

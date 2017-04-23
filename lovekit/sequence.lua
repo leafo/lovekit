@@ -205,12 +205,6 @@ do
   local _class_0
   local _base_0 = {
     elapsed = 0,
-    _setfenv = function(self, fn, scope)
-      if scope == nil then
-        scope = self.__class.default_scope
-      end
-      return error("migrate error: moved to @setfenv")
-    end,
     create = function(self, ...)
       self.args = {
         ...
@@ -256,6 +250,16 @@ do
   _base_0.__index = _base_0
   _class_0 = setmetatable({
     __init = function(self, fn, scope, ...)
+      if scope then
+        for k, v in pairs(scope) do
+          if type(v) == "function" then
+            self.__class:setfenv(v, tbl)
+          end
+        end
+        setmetatable(scope, {
+          __index = self.__class.default_scope
+        })
+      end
       self.fn = self.__class:setfenv(fn, scope)
       return self:create(...)
     end,
