@@ -213,6 +213,9 @@ do
     mousereleased = function(self, ...)
       return self:send("mousereleased", ...)
     end,
+    mousemoved = function(self, ...)
+      return self:send("mousemoved", ...)
+    end,
     draw = function(self)
       if self.viewport then
         self.viewport:apply()
@@ -282,7 +285,8 @@ do
     "keypressed",
     "mousepressed",
     "mousereleased",
-    "joystickpressed"
+    "joystickpressed",
+    "mousemoved"
   }
   Dispatcher = _class_0
 end

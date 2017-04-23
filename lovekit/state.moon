@@ -47,6 +47,7 @@ class Dispatcher
     "mousepressed"
     "mousereleased"
     "joystickpressed"
+    "mousemoved"
   }
 
   default_transition: Transition
@@ -118,6 +119,7 @@ class Dispatcher
 
   mousepressed: (...) => @send "mousepressed", ...
   mousereleased: (...) => @send "mousereleased", ...
+  mousemoved: (...) => @send "mousemoved", ...
 
   draw: =>
     @viewport\apply! if @viewport
