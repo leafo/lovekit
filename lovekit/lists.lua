@@ -392,15 +392,36 @@ do
       return self:after()
     end,
     before = function(self, ...)
-      local _list_0 = self
-      for _index_0 = 1, #_list_0 do
-        local e = _list_0[_index_0]
-        e:before(self.obj or ...)
+      for _index_0 = 1, #self do
+        local _continue_0 = false
+        repeat
+          local e = self[_index_0]
+          if not (e) then
+            _continue_0 = true
+            break
+          end
+          e:before(self.obj or ...)
+          _continue_0 = true
+        until true
+        if not _continue_0 then
+          break
+        end
       end
     end,
     after = function(self, ...)
       for i = #self, 1, -1 do
-        self[i]:after(self.obj or ...)
+        local _continue_0 = false
+        repeat
+          if not (self[i]) then
+            _continue_0 = true
+            break
+          end
+          self[i]:after(self.obj or ...)
+          _continue_0 = true
+        until true
+        if not _continue_0 then
+          break
+        end
       end
     end
   }

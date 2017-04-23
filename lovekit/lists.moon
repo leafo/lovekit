@@ -241,10 +241,13 @@ class EffectList
     @after!
 
   before: (...) =>
-    e\before @obj or ... for e in *@
+    for e in *@
+      continue unless e
+      e\before @obj or ...
 
   after: (...) =>
     for i=#@,1,-1 -- reverse order
+      continue unless @[i]
       @[i]\after @obj or ...
 
 class ImpulseSet
