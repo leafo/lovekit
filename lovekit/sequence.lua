@@ -157,7 +157,7 @@ local default_scope = {
       end
     end
   end,
-  tween = function(obj, time, props, step)
+  tween = function(obj, time, props, step, onupdate)
     if step == nil then
       step = smoothstep
     end
@@ -170,10 +170,16 @@ local default_scope = {
       for key, finish in pairs(props) do
         obj[key] = step(initial[key], finish, t)
       end
+      if onupdate then
+        onupdate(obj)
+      end
       t = t + (coroutine.yield() / time)
     end
     for key, finish in pairs(props) do
       obj[key] = finish
+      if onupdate then
+        onupdate(obj)
+      end
     end
     local leftover = (t - 1.0) * time
     if leftover > 0 then
@@ -203,20 +209,7 @@ do
       if scope == nil then
         scope = self.__class.default_scope
       end
-      if scope then
-        local old_env = getfenv(fn)
-        setfenv(fn, setmetatable({ }, {
-          __index = function(self, name)
-            local val = scope[name]
-            if val then
-              return val
-            else
-              return old_env[name]
-            end
-          end
-        }))
-      end
-      return fn
+      return error("migrate error: moved to @setfenv")
     end,
     create = function(self, ...)
       self.args = {
@@ -263,7 +256,7 @@ do
   _base_0.__index = _base_0
   _class_0 = setmetatable({
     __init = function(self, fn, scope, ...)
-      self.fn = self:_setfenv(fn, scope)
+      self.fn = self.__class:setfenv(fn, scope)
       return self:create(...)
     end,
     __base = _base_0,
@@ -286,6 +279,11 @@ do
     end)
   end
   self.extend = function(self, tbl)
+    for k, v in pairs(tbl) do
+      if type(v) == "function" then
+        self:setfenv(v, tbl)
+      end
+    end
     self.default_scope = setmetatable(tbl, {
       __index = self.default_scope
     })
@@ -321,6 +319,25 @@ do
         return val
       end
     })
+  end
+  self.setfenv = function(self, fn, scope)
+    if scope == nil then
+      scope = self.default_scope
+    end
+    if scope then
+      local old_env = getfenv(fn)
+      setfenv(fn, setmetatable({ }, {
+        __index = function(self, name)
+          local val = scope[name]
+          if val then
+            return val
+          else
+            return old_env[name]
+          end
+        end
+      }))
+    end
+    return fn
   end
   Sequence = _class_0
 end

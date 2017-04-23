@@ -119,7 +119,7 @@ default_scope = {
       if running == 0
         break
 
-  tween: (obj, time, props, step=smoothstep) ->
+  tween: (obj, time, props, step=smoothstep, onupdate) ->
     t = 0
     initial = {}
     for key in pairs props
@@ -128,11 +128,15 @@ default_scope = {
     while t < 1.0
       for key, finish in pairs props
         obj[key] = step initial[key], finish, t
+
+      onupdate obj if onupdate
+
       t += coroutine.yield! / time
 
     -- finish
     for key, finish in pairs props
       obj[key] = finish
+      onupdate obj if onupdate
 
     -- push left over time
     leftover = (t - 1.0) * time
@@ -164,7 +168,12 @@ class Sequence
       fn!
 
   @extend: (tbl) =>
+    for k,v in pairs tbl
+      if type(v) == "function"
+        @setfenv v, tbl
+
     @default_scope = setmetatable tbl, __index: @default_scope
+
 
   @join: (...) ->
     seqs =  {...}
@@ -189,11 +198,7 @@ class Sequence
 
       val
 
-  new: (fn, scope, ...) =>
-    @fn = @_setfenv fn, scope
-    @create ...
-
-  _setfenv: (fn, scope=@@default_scope) =>
+  @setfenv: (fn, scope=@default_scope) =>
     if scope
       old_env = getfenv fn
       setfenv fn, setmetatable {}, {
@@ -206,6 +211,13 @@ class Sequence
       }
 
     fn
+
+  new: (fn, scope, ...) =>
+    @fn = @@setfenv fn, scope
+    @create ...
+
+  _setfenv: (fn, scope=@@default_scope) =>
+    error "migrate error: moved to @setfenv"
 
   create: (...) =>
     @args = {...}
