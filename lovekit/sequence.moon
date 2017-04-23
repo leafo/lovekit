@@ -98,6 +98,27 @@ default_scope = {
 
     coroutine.yield "more", -time if time < 0
 
+  -- runs all functions as sequences parallel, returns when the last one completes
+  parallel: (...) ->
+    seqs = [Sequence fn for fn in *{...}]
+
+    -- TODO: remaining time can get lost at end frame
+    while true
+      dt = coroutine.yield!
+
+      running = 0
+
+      for idx, seq in pairs seqs
+        continue unless seq
+        alive = seq\update dt
+        if alive
+          running += 1
+        else
+          seqs[idx] = false
+
+      if running == 0
+        break
+
   tween: (obj, time, props, step=smoothstep) ->
     t = 0
     initial = {}

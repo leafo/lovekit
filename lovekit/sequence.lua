@@ -115,6 +115,48 @@ local default_scope = {
       return coroutine.yield("more", -time)
     end
   end,
+  parallel = function(...)
+    local seqs
+    do
+      local _accum_0 = { }
+      local _len_0 = 1
+      local _list_0 = {
+        ...
+      }
+      for _index_0 = 1, #_list_0 do
+        local fn = _list_0[_index_0]
+        _accum_0[_len_0] = Sequence(fn)
+        _len_0 = _len_0 + 1
+      end
+      seqs = _accum_0
+    end
+    while true do
+      local dt = coroutine.yield()
+      local running = 0
+      for idx, seq in pairs(seqs) do
+        local _continue_0 = false
+        repeat
+          if not (seq) then
+            _continue_0 = true
+            break
+          end
+          local alive = seq:update(dt)
+          if alive then
+            running = running + 1
+          else
+            seqs[idx] = false
+          end
+          _continue_0 = true
+        until true
+        if not _continue_0 then
+          break
+        end
+      end
+      if running == 0 then
+        break
+      end
+    end
+  end,
   tween = function(obj, time, props, step)
     if step == nil then
       step = smoothstep
