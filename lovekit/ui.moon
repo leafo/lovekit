@@ -371,13 +371,13 @@ class Border extends Box
     @item\update dt
 
   draw: =>
-    if @border
-      g.rectangle "line", @unpack!
-
     if @background
       COLOR\push unpack @background
       g.rectangle "fill", @unpack!
       COLOR\pop!
+
+    if @border
+      g.rectangle "line", @unpack!
 
     @item.x = @x + @padding
     @item.y = @y + @padding

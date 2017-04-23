@@ -835,13 +835,13 @@ do
       return self.item:update(dt)
     end,
     draw = function(self)
-      if self.border then
-        g.rectangle("line", self:unpack())
-      end
       if self.background then
         COLOR:push(unpack(self.background))
         g.rectangle("fill", self:unpack())
         COLOR:pop()
+      end
+      if self.border then
+        g.rectangle("line", self:unpack())
       end
       self.item.x = self.x + self.padding
       self.item.y = self.y + self.padding
