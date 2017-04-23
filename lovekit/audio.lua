@@ -15,6 +15,9 @@ do
       if t == nil then
         t = 1.0
       end
+      if not (musi) then
+        return 
+      end
       local music = self.music
       local volume = music:getVolume()
       local min = music:getVolumeLimits()

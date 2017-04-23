@@ -11,6 +11,7 @@ class Audio
 
   -- return a sequence that fades out audio
   fade_music: (t=1.0, callback_fn) =>
+    return unless @music, "no music"
     music = @music
     volume = music\getVolume!
     min = music\getVolumeLimits!
