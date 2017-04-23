@@ -175,7 +175,9 @@ local default_scope = {
       end
       seqs = _accum_0
     end
-    return unles(next(seqs))
+    if not (next(seqs)) then
+      return 
+    end
     while true do
       local dt = coroutine.yield()
       local running = 0
@@ -299,7 +301,7 @@ do
       if scope then
         for k, v in pairs(scope) do
           if type(v) == "function" then
-            self.__class:setfenv(v, tbl)
+            self.__class:setfenv(v, scope)
           end
         end
         setmetatable(scope, {

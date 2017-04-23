@@ -121,7 +121,7 @@ default_scope = {
         error "Got unknown object to parallel, expected function or sequence, got: #{type fn}"
 
 
-    return unles next seqs
+    return unless next seqs
 
     -- TODO: remaining time can get lost at end frame
     while true
@@ -237,7 +237,7 @@ class Sequence
     if scope
       for k,v in pairs scope
         if type(v) == "function"
-          @@setfenv v, tbl
+          @@setfenv v, scope
 
       setmetatable scope, __index: @@default_scope
 
