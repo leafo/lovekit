@@ -213,6 +213,7 @@ pick_one = (...) ->
 pick_dist = (t) ->
   sum = 0
   dist = for k, v in pairs t
+    continue if v == 0 or not v
     with {sum + v, k}
       sum += v
 

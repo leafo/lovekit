@@ -261,15 +261,28 @@ pick_dist = function(t)
     local _accum_0 = { }
     local _len_0 = 1
     for k, v in pairs(t) do
-      do
-        local _with_0 = {
-          sum + v,
-          k
-        }
-        sum = sum + v
-        _accum_0[_len_0] = _with_0
+      local _continue_0 = false
+      repeat
+        if v == 0 or not v then
+          _continue_0 = true
+          break
+        end
+        local _value_0
+        do
+          local _with_0 = {
+            sum + v,
+            k
+          }
+          sum = sum + v
+          _value_0 = _with_0
+        end
+        _accum_0[_len_0] = _value_0
+        _len_0 = _len_0 + 1
+        _continue_0 = true
+      until true
+      if not _continue_0 then
+        break
       end
-      _len_0 = _len_0 + 1
     end
     dist = _accum_0
   end
