@@ -69,8 +69,10 @@ local default_scope = {
   end,
   wait_until = function(fn)
     local dt
-    while not fn() do
+    local elapsed = 0
+    while not fn(elapsed) do
       dt = coroutine.yield()
+      elapsed = elapsed + dt
     end
     if dt then
       return coroutine.yield("more", dt)
@@ -113,6 +115,30 @@ local default_scope = {
     end
     if time < 0 then
       return coroutine.yield("more", -time)
+    end
+  end,
+  wait_for_one = function(...)
+    local seqs
+    do
+      local _accum_0 = { }
+      local _len_0 = 1
+      local _list_0 = {
+        ...
+      }
+      for _index_0 = 1, #_list_0 do
+        local fn = _list_0[_index_0]
+        _accum_0[_len_0] = Sequence(fn)
+        _len_0 = _len_0 + 1
+      end
+      seqs = _accum_0
+    end
+    while true do
+      local dt = coroutine.yield()
+      for idx, seq in ipairs(seqs) do
+        if not (seq:update(dt)) then
+          return idx
+        end
+      end
     end
   end,
   parallel = function(...)

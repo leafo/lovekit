@@ -62,8 +62,10 @@ default_scope = {
   -- call function over and over waiting for it to return true
   wait_until: (fn) ->
     local dt
-    while not fn!
+    elapsed = 0
+    while not fn elapsed
       dt = coroutine.yield!
+      elapsed += dt
     coroutine.yield "more", dt if dt
 
   -- flattens an async function
@@ -97,6 +99,15 @@ default_scope = {
         break
 
     coroutine.yield "more", -time if time < 0
+
+  -- returns when one of the sequences finishes
+  wait_for_one: (...) ->
+    seqs = [Sequence fn for fn in *{...}]
+    while true
+      dt = coroutine.yield!
+      for idx, seq in ipairs seqs
+        unless seq\update dt
+          return idx
 
   -- runs all functions as sequences parallel, returns when the last one completes
   parallel: (...) ->
