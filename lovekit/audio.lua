@@ -15,8 +15,8 @@ do
       if t == nil then
         t = 1.0
       end
-      if not (musi) then
-        return 
+      if not (self.music) then
+        return nil, "no music"
       end
       local music = self.music
       local volume = music:getVolume()
