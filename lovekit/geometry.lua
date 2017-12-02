@@ -75,8 +75,10 @@ do
       return self[1] > 0
     end,
     move = function(self, dx, dy)
-      self[1] = self[1] + dx
-      self[2] = self[2] + dy
+      local _update_0 = 1
+      self[_update_0] = self[_update_0] + dx
+      local _update_1 = 2
+      self[_update_1] = self[_update_1] + dy
       return self
     end,
     update = function(self, x, y)
@@ -84,8 +86,10 @@ do
       return self
     end,
     adjust = function(self, dx, dy)
-      self[1] = self[1] + dx
-      self[2] = self[2] + dy
+      local _update_0 = 1
+      self[_update_0] = self[_update_0] + dx
+      local _update_1 = 2
+      self[_update_1] = self[_update_1] + dy
       return self
     end,
     normalized = function(self)

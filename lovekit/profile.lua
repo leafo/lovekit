@@ -19,7 +19,8 @@ do
       self.counts[label] = 0
       local old_fn = obj[func_name]
       obj[func_name] = function(...)
-        self.counts[label] = self.counts[label] + 1
+        local _update_0 = label
+        self.counts[_update_0] = self.counts[_update_0] + 1
         return old_fn(...)
       end
     end,
