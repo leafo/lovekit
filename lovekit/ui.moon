@@ -362,13 +362,15 @@ class Border extends Box
     super @item.x, @item.y, @item.w, @item.h
 
   update: (dt) =>
-    @item\update dt
+    alive = @item\update dt
 
     @w = @item.w + @padding * 2
     @h = @item.h + @padding * 2
 
     if @min_width
       @w = math.max @min_width, @w
+
+    alive
 
   draw: =>
     if @background
