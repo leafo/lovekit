@@ -827,13 +827,15 @@ do
     border = true,
     background = false,
     update = function(self, dt)
-      local alive = self.item:update(dt)
-      self.w = self.item.w + self.padding * 2
-      self.h = self.item.h + self.padding * 2
-      if self.min_width then
-        self.w = math.max(self.min_width, self.w)
+      do
+        local _with_0 = self.item:update(dt)
+        self.w = self.item.w + self.padding * 2
+        self.h = self.item.h + self.padding * 2
+        if self.min_width then
+          self.w = math.max(self.min_width, self.w)
+        end
+        return _with_0
       end
-      return alive
     end,
     draw = function(self)
       if self.background then

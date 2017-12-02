@@ -46,7 +46,6 @@ class PathWalker
       p = @t / @duration
       break if p <= 1
       unless @reset @i + 1, @t - @duration
-        print "Finished"
         @reset!
 
     @x, @y = unpack @points\interpolate @i + 1, p

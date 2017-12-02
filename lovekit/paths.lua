@@ -58,7 +58,6 @@ do
           break
         end
         if not (self:reset(self.i + 1, self.t - self.duration)) then
-          print("Finished")
           self:reset()
         end
       end
