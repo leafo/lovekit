@@ -376,7 +376,16 @@ class Border extends Box
       COLOR\pop!
 
     if @border
+      border_color = if type(@border) == "table"
+        @border
+
+
+      if border_color
+        COLOR\push unpack border_color
+
       g.rectangle "line", @unpack!
+      if border_color
+        COLOR\pop!
 
     @item.x = @x + @padding
     @item.y = @y + @padding

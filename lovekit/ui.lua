@@ -844,7 +844,17 @@ do
         COLOR:pop()
       end
       if self.border then
+        local border_color
+        if type(self.border) == "table" then
+          border_color = self.border
+        end
+        if border_color then
+          COLOR:push(unpack(border_color))
+        end
         g.rectangle("line", self:unpack())
+        if border_color then
+          COLOR:pop()
+        end
       end
       self.item.x = self.x + self.padding
       self.item.y = self.y + self.padding
