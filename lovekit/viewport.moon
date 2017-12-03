@@ -20,6 +20,9 @@ class Viewport extends Box
   offset_x: 0
   offset_y: 0
 
+  canvas_offset_x: 0
+  canvas_offset_y: 0
+
   crop: false
 
   pixel_scale: false
@@ -107,7 +110,7 @@ class Viewport extends Box
 
       graphics.push!
       graphics.setBlendMode "alpha", "premultiplied"
-      graphics.draw @canvas, 0, 0, 0, @scale, @scale
+      graphics.draw @canvas, @canvas_offset_x, @canvas_offset_y, 0, @scale, @scale
       graphics.setBlendMode "alpha"
       graphics.pop!
       return

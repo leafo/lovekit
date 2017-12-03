@@ -22,6 +22,8 @@ do
     scale = 1,
     offset_x = 0,
     offset_y = 0,
+    canvas_offset_x = 0,
+    canvas_offset_y = 0,
     crop = false,
     pixel_scale = false,
     update = function(self, dt) end,
@@ -69,7 +71,7 @@ do
         end
         graphics.push()
         graphics.setBlendMode("alpha", "premultiplied")
-        graphics.draw(self.canvas, 0, 0, 0, self.scale, self.scale)
+        graphics.draw(self.canvas, self.canvas_offset_x, self.canvas_offset_y, 0, self.scale, self.scale)
         graphics.setBlendMode("alpha")
         graphics.pop()
         return 
