@@ -390,15 +390,22 @@ do
             return hat_dir:match("d")
           end
         end
-        local _exp_0 = name
-        if "left" == _exp_0 then
-          return vec[1] < 0
-        elseif "right" == _exp_0 then
-          return vec[1] > 0
-        elseif "up" == _exp_0 then
-          return vec[2] < 0
-        elseif "down" == _exp_0 then
-          return vec[2] > 0
+        if vec:len() > 0.5 then
+          local dir = vec:normalized()
+          local ex, ey
+          local _exp_0 = name
+          if "left" == _exp_0 then
+            ex, ey = -1, 0
+          elseif "right" == _exp_0 then
+            ex, ey = 1, 0
+          elseif "up" == _exp_0 then
+            ex, ey = 0, -1
+          elseif "down" == _exp_0 then
+            ex, ey = 0, 1
+          end
+          return math.abs(1 - (ex * dir[1] + ey * dir[2])) < 0.1
+        else
+          return false
         end
       end
       if not (self.joy_mapping) then

@@ -299,7 +299,7 @@ class Controller
       return true if yes
 
   -- detects if joystick button is down
-  -- also detects if joystick is pointed in direction slightest amount
+  -- also detects if joystick is pointed in direction past some threshold
   joystick_is_down: (name) =>
     return false unless @joystick
 
@@ -308,7 +308,6 @@ class Controller
       x = @joystick\getGamepadAxis "leftx"
       y = @joystick\getGamepadAxis "lefty"
       vec = joystick_deadzone_normalize Vec2d(x,y)
-
 
       hat_dir = @joystick\getHat 1
       if hat_dir != "c"
@@ -322,15 +321,23 @@ class Controller
           when "down"
             hat_dir\match "d"
 
-      return switch name
-        when "left"
-          vec[1] < 0
-        when "right"
-          vec[1] > 0
-        when "up"
-          vec[2] < 0
-        when "down"
-          vec[2] > 0
+      return if vec\len! > 0.5
+        dir = vec\normalized!
+
+        ex, ey = switch name
+          when "left"
+            -1, 0
+          when "right"
+            1, 0
+          when "up"
+            0, -1
+          when "down"
+            0, 1
+
+        -- less than 0.1 cos
+        math.abs(1 - (ex*dir[1] + ey*dir[2])) < 0.1
+      else
+        false
 
 
     return false unless @joy_mapping
