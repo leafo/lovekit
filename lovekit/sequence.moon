@@ -61,12 +61,19 @@ default_scope = {
 
   -- call function over and over waiting for it to return true
   wait_until: (fn) ->
-    local dt
+    local dt, ret
     elapsed = 0
-    while not fn elapsed
-      dt = coroutine.yield!
-      elapsed += dt
+
+    while true
+      ret = fn elapsed
+      if ret
+        break
+      else
+        dt = coroutine.yield!
+        elapsed += dt
+
     coroutine.yield "more", dt if dt
+    ret
 
   -- flattens an async function
   -- callback must be last arg

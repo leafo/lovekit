@@ -68,15 +68,21 @@ local default_scope = {
     end
   end,
   wait_until = function(fn)
-    local dt
+    local dt, ret
     local elapsed = 0
-    while not fn(elapsed) do
-      dt = coroutine.yield()
-      elapsed = elapsed + dt
+    while true do
+      ret = fn(elapsed)
+      if ret then
+        break
+      else
+        dt = coroutine.yield()
+        elapsed = elapsed + dt
+      end
     end
     if dt then
-      return coroutine.yield("more", dt)
+      coroutine.yield("more", dt)
     end
+    return ret
   end,
   await = function(fn, ...)
     local out
