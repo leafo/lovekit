@@ -126,6 +126,19 @@ class Vec2d
     c, s = cos(rads), sin(rads)
     Vec2d x*c - y*s, y*c + x*s
 
+  merge_angle: (other, p=0.5) =>
+    a = @radians!
+    b = other\radians!
+
+    if b - a > math.pi
+      a += 2 * math.pi
+
+    if b - a < -math.pi
+      a -= 2 * math.pi
+
+    rad = a + (b - a) * p
+    Vec2d.from_radians rad
+
   -- rotate randomly -spread/2 to spread/2 degrees
   random_heading: (spread=10, r=random!) =>
     offset = (r - 0.5) * spread

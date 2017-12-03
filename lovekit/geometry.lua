@@ -145,6 +145,21 @@ do
       local c, s = cos(rads), sin(rads)
       return Vec2d(x * c - y * s, y * c + x * s)
     end,
+    merge_angle = function(self, other, p)
+      if p == nil then
+        p = 0.5
+      end
+      local a = self:radians()
+      local b = other:radians()
+      if b - a > math.pi then
+        a = a + (2 * math.pi)
+      end
+      if b - a < -math.pi then
+        a = a - (2 * math.pi)
+      end
+      local rad = a + (b - a) * p
+      return Vec2d.from_radians(rad)
+    end,
     random_heading = function(self, spread, r)
       if spread == nil then
         spread = 10
