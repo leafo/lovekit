@@ -218,6 +218,8 @@ do
         self.movement_vector = function(self, ...)
           return joystick_mover(...)
         end
+      else
+        return error("failed to make movement vector method")
       end
     end,
     add_mapping = function(self, mapping)

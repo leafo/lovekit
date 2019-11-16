@@ -42,7 +42,7 @@ do
       ext = ext or self.ext
       local fname = self.dir .. "/" .. name .. "." .. ext
       print("loading source(" .. tostring(source_type) .. "):", fname)
-      local source = audio.newSource(fname, source_type)
+      local source = assert(audio.newSource(fname, source_type))
       do
         local _with_0 = source
         self.sources[name] = source
@@ -68,7 +68,7 @@ do
     play = function(self, name)
       local s = self:get_source(name)
       if s then
-        s:rewind()
+        s:stop()
         return s:play()
       end
     end

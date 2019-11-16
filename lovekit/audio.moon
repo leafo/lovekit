@@ -32,7 +32,7 @@ class Audio
     ext = ext or @ext
     fname = @dir .. "/" .. name .. "." ..ext
     print "loading source(".. tostring(source_type) .. "):", fname
-    source = audio.newSource fname, source_type
+    source = assert audio.newSource fname, source_type
     with source
       @sources[name] = source
 
@@ -47,7 +47,7 @@ class Audio
   play: (name) =>
     s = @get_source name
     if s
-      s\rewind!
+      s\stop!
       s\play!
 
 
