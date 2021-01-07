@@ -1,5 +1,7 @@
 # Lovekit
 
+![test](https://github.com/leafo/lovekit/workflows/test/badge.svg)
+
 Lovekit is a collection of tools written in [MoonScript](http://moonscript.org)
 that I use to build games. I've made (or started) the following games:
 
