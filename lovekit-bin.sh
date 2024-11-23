@@ -5,6 +5,19 @@
 set -e
 set -o pipefail
 
+
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    echo "Usage: $0 [game_name]"
+    echo
+    echo "Options:"
+    echo "  --help, -h         Show this help message and exit"
+    echo
+    echo "Arguments:"
+    echo "  game_name          Name of the game to package (default: 'game')"
+    exit 0
+fi
+
+
 GAME_NAME=game
 if [ -n "$1" ]; then
 	GAME_NAME=$1
@@ -52,7 +65,10 @@ log "Preparing $GAME_NAME"
 log "Working in $TMP"
 echo
 
-[ ! -d "$LOVEKIT" ] && git clone $LOVEKIT_SRC $LOVEKIT
+if [ ! -d "$LOVEKIT" ]; then
+  log "Cloning lovekit"
+  git clone $LOVEKIT_SRC $LOVEKIT
+fi
 
 copyall "$(git ls-files | grep -v '\.xcf$')" $REL
 (cd $LOVEKIT && copyall "$(git ls-files | grep ^lovekit)" $REL)
@@ -67,11 +83,11 @@ if [ -n "$MOON_SRC_DIR" ]; then
 fi
 
 echo
-log "Building"
+log "Compiling all moon -> lua"
 (
 	cd $REL
 	moonc .
-	rm $(find . | grep \.moon$)
+	find . -name "*.moon" -exec rm {} +
 )
 
 
@@ -85,63 +101,61 @@ log "Packing $GAME_ZIP"
 
 mv "$REL/$GAME_ZIP" .
 
-
 # create win32 exe
 if [ -n "$LOVE_BIN_WIN" ]; then
-	log "Creating Windows build"
+	log "Creating Windows build..."
 	if [ ! -f "$LOVE_BIN_WIN" ]; then
-		err "Missing windows binaries, tried: $LOVE_BIN_WIN"
-		exit 1
+		err "Windows binaries not found, skipping Windows build"
+		err "Tried: $LOVE_BIN_WIN"
+	else
+		mkdir -p $TMP/bin
+		(
+			cd $TMP/bin
+			unzip $LOVE_BIN_WIN &> /dev/null
+			mv "$(ls | head -n 1)" "$GAME_NAME"
+			cd "$GAME_NAME"
+			rm *.txt
+			mv love.exe "$GAME_NAME.exe"
+		)
+
+		cat $GAME_ZIP >> "$TMP/bin/$GAME_NAME/$GAME_NAME.exe"
+		(
+			cd $TMP/bin
+			zip -r "$GAME_NAME-win32.zip" $(ls) &> /dev/null
+			log "Packed $(ls *.zip)"
+		)
+
+		mv $TMP/bin/*.zip .
 	fi
-
-	mkdir -p $TMP/bin
-	(
-		cd $TMP/bin
-		unzip $LOVE_BIN_WIN &> /dev/null
-		mv "$(ls | head -n 1)" "$GAME_NAME"
-		cd "$GAME_NAME"
-		rm *.txt
-		mv love.exe "$GAME_NAME.exe"
-	)
-
-	cat $GAME_ZIP >> "$TMP/bin/$GAME_NAME/$GAME_NAME.exe"
-	(
-		cd $TMP/bin
-		zip -r "$GAME_NAME-win32.zip" $(ls) &> /dev/null
-		log "Packed $(ls *.zip)"
-	)
-
-	mv $TMP/bin/*.zip .
 fi
 
 if [ -n "$LOVE_BIN_OSX" ]; then
-	log "Creating OSX build"
+	log "Creating OSX build..."
 
-	if [ ! -f "$LOVE_BIN_WIN" ]; then
-		err "Missing windows binaries, tried: $LOVE_BIN_WIN"
-		exit 1
+	if [ ! -f "$LOVE_BIN_OSX" ]; then
+		err "OSX binaries not found, skipping OSX build"
+		err "Tried: $LOVE_BIN_OSX"
+	else
+		mkdir -p $TMP/osx
+
+		(
+			cd $TMP/osx
+			unzip $LOVE_BIN_OSX &> /dev/null
+		)
+
+		cp "$GAME_ZIP" "$TMP/osx/love.app/Contents/Resources/"
+
+		(
+			cd $TMP/osx
+			cat love.app/Contents/Info.plist | sed 's/>LÖVE</>'$GAME_NAME'</' | sed 's/>org.love2d.love</>net.leafo.'$GAME_NAME'</' | sed '74,101d' | tee love.app/Contents/Info.plist &> /dev/null
+			mv love.app "${GAME_NAME}.app"
+
+			zip -r "$GAME_NAME-osx" $(ls) &> /dev/null
+			log "Packed $(ls *.zip)"
+		)
+
+		mv $TMP/osx/*.zip .
 	fi
-
-
-	mkdir -p $TMP/osx
-
-	(
-		cd $TMP/osx
-		unzip $LOVE_BIN_OSX &> /dev/null
-	)
-
-	cp "$GAME_ZIP" "$TMP/osx/love.app/Contents/Resources/"
-
-	(
-		cd $TMP/osx
-		cat love.app/Contents/Info.plist | sed 's/>LÖVE</>'$GAME_NAME'</' | sed 's/>org.love2d.love</>net.leafo.'$GAME_NAME'</' | sed '74,101d' | tee love.app/Contents/Info.plist &> /dev/null
-		mv love.app "${GAME_NAME}.app"
-
-		zip -r "$GAME_NAME-osx" $(ls) &> /dev/null
-		log "Packed $(ls *.zip)"
-	)
-
-	mv $TMP/osx/*.zip .
 fi
 
 rm -rf $TMP
