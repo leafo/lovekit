@@ -88,12 +88,12 @@ class SlopeTopTile extends Box
   -- draw: =>
   --   y = _min @left, @right
 
-  --   setColor 255,100,255
+  --   setColor 1, 0.3, 1
 
   --   unless y == 0
   --     rectangle "fill", @x, @y + @h - y, @w, y
 
-  --   setColor 100,255,100
+  --   setColor 0.3, 1, 0.3
   --   triangle "fill",
   --     @x, @y + @h - @left,
   --     @x + @w, @y + @h - @right,
