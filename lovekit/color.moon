@@ -92,7 +92,11 @@ hash_to_color = (str, s=60, l=60) ->
   num = hash_string(str) % 360
   hsl_to_rgb num, s, l
 
+
 -- stacks colors by multiplying them
+-- NOTE: in love 11, color components are now 0-1 instead of 0-255
+-- the color stack still works in 0-255 space for r,g,b,a
+SCALE = 255
 class ColorStack
   red: {255,0,0}
   green: {0,255,0}
@@ -100,6 +104,7 @@ class ColorStack
 
   new: =>
     @length = 1
+    -- the stack is stored in an array with a stride of 4 numbers from the range 0-255, representing r,g,b,a
     @stack = { 255,255,255,255 }
 
   push: (r,g,b,a) =>
@@ -116,6 +121,7 @@ class ColorStack
     top = l * 4 + 1
     l += 1
 
+    -- multiply the color by the previous color
     r = r * s[top - 4] / 255
     g = g * s[top - 3] / 255
     b = b * s[top - 2] / 255
@@ -127,7 +133,7 @@ class ColorStack
     s[top + 3] = a
 
     @length = l
-    graphics.setColor r,g,b,a
+    graphics.setColor r/SCALE, g/SCALE, b/SCALE, a/SCALE
 
   -- override the color on top, multiplying with one before
   set: (...) =>
@@ -151,7 +157,7 @@ class ColorStack
     s[top + 3] = a
 
     @length = l
-    graphics.setColor r,g,b,a
+    graphics.setColor r/SCALE, g/SCALE, b/SCALE, a/SCALE
 
   pop: (n=1) =>
     {stack: s, length: l} = @
@@ -165,8 +171,9 @@ class ColorStack
 
     @length = l
     return @pop n - 1 if n > 1
-    graphics.setColor s[top - 4], s[top - 3], s[top - 2], s[top - 1]
+    graphics.setColor s[top - 4]/SCALE, s[top - 3]/SCALE, s[top - 2]/SCALE, s[top - 1]/SCALE
 
+  -- NOTE: this returns in 0-255 space
   current: =>
     s = @stack
     start = (@length - 1) * 4 + 1

@@ -100,6 +100,7 @@ hash_to_color = function(str, s, l)
   local num = hash_string(str) % 360
   return hsl_to_rgb(num, s, l)
 end
+local SCALE = 255
 local ColorStack
 do
   local _class_0
@@ -140,7 +141,7 @@ do
       s[top + 2] = b
       s[top + 3] = a
       self.length = l
-      return graphics.setColor(r, g, b, a)
+      return graphics.setColor(r / SCALE, g / SCALE, b / SCALE, a / SCALE)
     end,
     set = function(self, ...)
       self.length = self.length - 1
@@ -160,7 +161,7 @@ do
       s[top + 2] = b
       s[top + 3] = a
       self.length = l
-      return graphics.setColor(r, g, b, a)
+      return graphics.setColor(r / SCALE, g / SCALE, b / SCALE, a / SCALE)
     end,
     pop = function(self, n)
       if n == nil then
@@ -178,7 +179,7 @@ do
       if n > 1 then
         return self:pop(n - 1)
       end
-      return graphics.setColor(s[top - 4], s[top - 3], s[top - 2], s[top - 1])
+      return graphics.setColor(s[top - 4] / SCALE, s[top - 3] / SCALE, s[top - 2] / SCALE, s[top - 1] / SCALE)
     end,
     current = function(self)
       local s = self.stack
