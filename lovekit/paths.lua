@@ -101,7 +101,7 @@ do
       local p1, p2, m1, m2 = self:interpolation_parts(i)
       local d = math.abs((p2 - p1):len() / 10)
       for t = 0, 1, 1 / d do
-        graphics.point(unpack(hermite_interpolate(p1, p2, m1, m2, t)))
+        graphics.points(unpack(hermite_interpolate(p1, p2, m1, m2, t)))
       end
     end,
     interpolation_parts = function(self, i)
@@ -151,7 +151,7 @@ do
         local _des_0 = self[_index_0]
         local x, y
         x, y = _des_0[1], _des_0[2]
-        graphics.point(x, y)
+        graphics.points(x, y)
       end
       return graphics.setPointSize(pt)
     end

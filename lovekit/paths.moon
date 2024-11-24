@@ -67,7 +67,7 @@ class CatmullRomPath
     d = math.abs (p2 - p1)\len! / 10
 
     for t=0, 1, 1/d
-      graphics.point unpack hermite_interpolate(p1, p2, m1, m2, t)
+      graphics.points unpack hermite_interpolate(p1, p2, m1, m2, t)
 
   -- calculate the parts needed for hermite interpolation using catmull-rom
   interpolation_parts: (i) =>
@@ -111,7 +111,7 @@ class CatmullRomPath
       COLOR\pop!
 
     for {x,y} in *@
-      graphics.point x, y
+      graphics.points x, y
 
     graphics.setPointSize pt
 

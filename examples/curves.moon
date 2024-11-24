@@ -35,7 +35,7 @@ class Graph extends Box
     for t = @min_t, @max_t, step
       y = fn(t)
       x = t / @max_t
-      graphics.point x * @w, y * @h
+      graphics.points x * @w, y * @h
 
     graphics.pop!
 
