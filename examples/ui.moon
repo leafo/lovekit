@@ -70,18 +70,18 @@ import Anchor, Label, VList, HList from require "lovekit.ui"
     draw_list\update dt
 
   love.mousepressed = (x,y, btn) ->
-    if btn == "l"
+    if btn == 1
       perms_i = perms_i % #perms + 1
       print "Anchor:", unpack perms[perms_i]
       anchor.xalign, anchor.yalign = unpack perms[perms_i]
 
-    if btn == "r"
+    if btn == 2
       aligns_i = aligns_i % #aligns + 1
       print "List:", unpack aligns[aligns_i]
       list.xalign, list.yalign = unpack aligns[aligns_i]
       nil
 
-    if btn == "m"
+    if btn == 3
       print "Flipping..."
       if list.__class == VList
         setmetatable list, HList.__base

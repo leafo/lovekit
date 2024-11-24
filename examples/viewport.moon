@@ -9,7 +9,7 @@ require "lovekit.all"
     Box.draw v, {255,0, 0}
     v\pop!
 
-  love.mousepressed = (x,y, btn) ->
+  love.mousepressed = (x,y) ->
     vx, vy = v\unproject x, y
 
     print "raw", x, y

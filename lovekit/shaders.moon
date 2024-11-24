@@ -26,7 +26,7 @@ class FullScreenShader
     else
       g.setCanvas!
 
-    g.setBlendMode "premultiplied"
+    g.setBlendMode "alpha", "premultiplied"
     g.setShader @shader unless @disabled
     @send!
     g.draw @canvas, 0,0
