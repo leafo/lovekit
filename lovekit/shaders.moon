@@ -17,7 +17,7 @@ class FullScreenShader
     old_canvas = g.getCanvas!
 
     g.setCanvas @canvas
-    @canvas\clear 0,0,0,0
+    g.clear 0,0,0,0
 
     fn!
 

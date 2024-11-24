@@ -11,14 +11,14 @@ do
     render = function(self, fn)
       local old_canvas = g.getCanvas()
       g.setCanvas(self.canvas)
-      self.canvas:clear(0, 0, 0, 0)
+      g.clear(0, 0, 0, 0)
       fn()
       if old_canvas then
         g.setCanvas(old_canvas)
       else
         g.setCanvas()
       end
-      g.setBlendMode("premultiplied")
+      g.setBlendMode("alpha", "premultiplied")
       if not (self.disabled) then
         g.setShader(self.shader)
       end
