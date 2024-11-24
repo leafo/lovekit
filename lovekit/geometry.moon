@@ -461,10 +461,10 @@ class BoxSelector extends Selector
   update: (dt) =>
     @update_mouse!
 
-    if not @current and love.mouse.isDown "l"
+    if not @current and love.mouse.isDown 1
       @current = Box @mx, @my, 1, 1
 
-    if @current and not love.mouse.isDown "l"
+    if @current and not love.mouse.isDown 1
       print @current\fix!
       @current = nil
 
@@ -487,10 +487,10 @@ class VectorSelector extends Selector
   update: (dt) =>
     @update_mouse!
 
-    if not @origin and love.mouse.isDown "l"
+    if not @origin and love.mouse.isDown 1
       @origin = Vec2d(@mx, @my)
 
-    if @origin and not love.mouse.isDown "l"
+    if @origin and not love.mouse.isDown 1
       v = Vec2d(@mx - @origin[1], @my - @origin[2])
       print "Vec:", v, "Dir:", v\normalized!
       @dest = nil

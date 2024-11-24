@@ -713,10 +713,10 @@ do
     end,
     update = function(self, dt)
       self:update_mouse()
-      if not self.current and love.mouse.isDown("l") then
+      if not self.current and love.mouse.isDown(1) then
         self.current = Box(self.mx, self.my, 1, 1)
       end
-      if self.current and not love.mouse.isDown("l") then
+      if self.current and not love.mouse.isDown(1) then
         print(self.current:fix())
         self.current = nil
       end
@@ -775,10 +775,10 @@ do
     end,
     update = function(self, dt)
       self:update_mouse()
-      if not self.origin and love.mouse.isDown("l") then
+      if not self.origin and love.mouse.isDown(1) then
         self.origin = Vec2d(self.mx, self.my)
       end
-      if self.origin and not love.mouse.isDown("l") then
+      if self.origin and not love.mouse.isDown(1) then
         local v = Vec2d(self.mx - self.origin[1], self.my - self.origin[2])
         print("Vec:", v, "Dir:", v:normalized())
         self.dest = nil
