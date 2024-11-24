@@ -8,7 +8,7 @@ import graphics, keyboard from love
   controller = Controller\default!
 
   sprite = Spriter "scrap/tileset.png", 16, 16
-  map = TileMap.from_image "scrap/map.png", sprite, {
+  map = TileMap\from_image "scrap/map.png", sprite, {
     ["0,0,0"]: { tid: 0 }
     ["255,255,255"]: { tid: 1 }
     ["0,0,255"]: animated_tile { 2, 3, layer: 0 }
@@ -94,7 +94,7 @@ import graphics, keyboard from love
     particles\draw_sorted!
     graphics.pop!
 
-    graphics.print love.timer.getFPS!, 10, 10
+    graphics.print "FPS: #{love.timer.getFPS!}", 10, 10
 
 
 

@@ -60,6 +60,9 @@ class Thing extends Box
     if thing
       thing\draw!
 
+    graphics.print "FPS: #{love.timer.getFPS!}", 10, 10
+    graphics.print "Click to add points", 10, 30
+
   love.update = (dt) ->
     if thing
       thing\update dt
@@ -76,5 +79,6 @@ class Thing extends Box
     if key == "backspace"
       path\pop!
       thing = nil
+
 
 

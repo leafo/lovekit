@@ -60,7 +60,9 @@ import Anchor, Label, VList, HList from require "lovekit.ui"
   draw_list\add anchor
 
   love.draw = ->
-    g.print "Mouse buttons", 10, 10
+    g.print "Left click: change anchor", 10, 10
+    g.print "Right click: change list align", 10, 30
+    g.print "Middle click: Switch list type", 10, 50
 
     v\apply!
     draw_list\draw!

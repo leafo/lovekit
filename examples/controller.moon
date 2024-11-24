@@ -13,7 +13,7 @@ require "lovekit.all"
   }, "auto"
 
   love.draw = ->
-    g.print "Hello", 10, 10
+    g.print "Use arrow keys or controller move stick", 10, 10
 
     move = c\movement_vector 200
 
