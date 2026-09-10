@@ -206,8 +206,6 @@ class Controller
     elseif joystick_mover
       @movement_vector = (...) =>
         joystick_mover ...
-    else
-      error "failed to make movement vector method"
 
   add_mapping: (mapping) =>
     @key_mapping or= table_table!
