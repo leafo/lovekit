@@ -211,8 +211,8 @@ class TiledBackground
 
     @tile_w, @tile_h = @img\width!, @img\height!
     @quad = graphics.newQuad 0,0,
-      viewport.screen.w + @tile_w,
-      viewport.screen.h + @tile_h,
+      graphics.getWidth! + @tile_w,
+      graphics.getHeight! + @tile_h,
       @tile_w, @tile_h
 
   draw: (ox, oy)=>

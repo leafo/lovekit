@@ -321,7 +321,7 @@ do
         self.img = _with_0
       end
       self.tile_w, self.tile_h = self.img:width(), self.img:height()
-      self.quad = graphics.newQuad(0, 0, viewport.screen.w + self.tile_w, viewport.screen.h + self.tile_h, self.tile_w, self.tile_h)
+      self.quad = graphics.newQuad(0, 0, graphics.getWidth() + self.tile_w, graphics.getHeight() + self.tile_h, self.tile_w, self.tile_h)
     end,
     __base = _base_0,
     __name = "TiledBackground"

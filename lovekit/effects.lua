@@ -343,9 +343,20 @@ do
       self.callback = callback
       local half = duration / 2
       return _class_0.__parent.__init(self, function()
-        local start = {
-          graphics.getColor()
-        }
+        local start
+        do
+          local _accum_0 = { }
+          local _len_0 = 1
+          local _list_0 = {
+            graphics.getColor()
+          }
+          for _index_0 = 1, #_list_0 do
+            local c = _list_0[_index_0]
+            _accum_0[_len_0] = c * 255
+            _len_0 = _len_0 + 1
+          end
+          start = _accum_0
+        end
         self.color = {
           unpack(start)
         }

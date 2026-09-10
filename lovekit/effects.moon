@@ -101,7 +101,7 @@ class FlashEffect extends ColorEffect
   new: (duration=0.2, color={255,100,100}, @callback) =>
     half = duration/2
     super ->
-      start = {graphics.getColor!}
+      start = [c * 255 for c in *{graphics.getColor!}]
       @color = {unpack start}
       tween @color, half, color
       tween @color, half, start
