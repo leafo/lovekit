@@ -1,9 +1,5 @@
 
-module "lovekit.profile", package.seeall
-
 import graphics from love
-
-export ^
 
 class Counter
   new: =>
@@ -44,3 +40,4 @@ class Counter
     graphics.print msg, x, y
     @reset! if reset
 
+{ :Counter }

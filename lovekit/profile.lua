@@ -1,6 +1,6 @@
-module("lovekit.profile", package.seeall)
 local graphics
 graphics = love.graphics
+local Counter
 do
   local _class_0
   local _base_0 = {
@@ -108,5 +108,7 @@ do
   })
   _base_0.__class = _class_0
   Counter = _class_0
-  return _class_0
 end
+return {
+  Counter = Counter
+}
