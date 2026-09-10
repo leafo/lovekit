@@ -18,12 +18,11 @@ class ScreenSnap
     for image_data in *@snaps
       fname = @next_name format
       print "encoding #{fname}"
-      image_data\encode fname
+      image_data\encode format, fname
 
   take_screenshot: =>
-    start = love.timer.getTime!
-    @snaps[#@snaps + 1] = graphics.newScreenshot!
-    print "++ snap", love.timer.getTime! - start
+    graphics.captureScreenshot (image_data) ->
+      @snaps[#@snaps + 1] = image_data
 
   tick:  =>
     @take_screenshot! if @frames % @rate == 0

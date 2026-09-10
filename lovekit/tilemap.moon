@@ -185,6 +185,8 @@ class TileMap
     for y=0,height - 1
       for x=0,width - 1
         _r, _g, _b, _a = data\getPixel x, y
+        -- love 11 returns 0-1 components, hash keys are written in 0-255
+        _r, _g, _b, _a = floor(_r * 255 + 0.5), floor(_g * 255 + 0.5), floor(_b * 255 + 0.5), floor(_a * 255 + 0.5)
 
         tile = if call_map
           color_to_tile x,y,_r,_g,_b,_a

@@ -181,9 +181,9 @@ bind = (g=_G) ->
   -- insert reloader to run with timer.step :)
   import timer from love
   old_step = timer.step
-  timer.step = ->
+  timer.step = (...) ->
     update!
-    old_step!
+    old_step ...
 
   -- add reloader to main
   old_run = love.run

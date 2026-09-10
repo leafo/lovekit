@@ -277,9 +277,9 @@ bind = function(g)
   local timer
   timer = love.timer
   local old_step = timer.step
-  timer.step = function()
+  timer.step = function(...)
     update()
-    return old_step()
+    return old_step(...)
   end
   local old_run = love.run
   love.run = function(...)

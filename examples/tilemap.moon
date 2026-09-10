@@ -29,7 +29,7 @@ import graphics, keyboard from love
   speed_i = 0
   love.keypressed = (name, code) ->
     switch name
-      when " "
+      when "space"
         speed_i = (speed_i + 1) % 4
         print "speed index", speed_i
         speed = 50 + speed_i * 50

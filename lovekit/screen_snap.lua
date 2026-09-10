@@ -24,13 +24,13 @@ do
         local image_data = _list_0[_index_0]
         local fname = self:next_name(format)
         print("encoding " .. tostring(fname))
-        image_data:encode(fname)
+        image_data:encode(format, fname)
       end
     end,
     take_screenshot = function(self)
-      local start = love.timer.getTime()
-      self.snaps[#self.snaps + 1] = graphics.newScreenshot()
-      return print("++ snap", love.timer.getTime() - start)
+      return graphics.captureScreenshot(function(image_data)
+        self.snaps[#self.snaps + 1] = image_data
+      end)
     end,
     tick = function(self)
       if self.frames % self.rate == 0 then
