@@ -7,7 +7,7 @@ config_char = (n) -> package.config\sub n,n
 -- /, ;, ?
 dirsep, pathsep, wildcard = unpack [config_char n for n in *{1,3,5}]
 
-handle = inotify.init true
+handle = inotify.init { blocking: false }
 actions = {}
 watching = {} -- directories being watched
 
@@ -199,4 +199,3 @@ bind!
   :update, :watch, :watch_class
   :bind
 }
-
