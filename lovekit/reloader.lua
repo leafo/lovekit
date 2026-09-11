@@ -29,11 +29,11 @@ local Path = {
     do
       local _with_0 = file
       if file then
-        local _
+        local _scrap_0
         do
           local _base_0 = file
           local _fn_0 = _base_0.close
-          _ = function(...)
+          _scrap_0 = function(...)
             return _fn_0(_base_0, ...)
           end
         end
