@@ -38,12 +38,15 @@ class Viewport extends Box
       @h = screen_h / @scale
 
       -- the canvas needs a whole pixel size, center it so any leftover
-      -- screen pixels split evenly between the edges
+      -- screen pixels split evenly between the edges. offset_x/y follow so
+      -- project/unproject agree with where the canvas is drawn
       if @pixel_scale
         @w = math.floor @w
         @h = math.floor @h
         @canvas_offset_x = math.floor (screen_w - @w * @scale) / 2
         @canvas_offset_y = math.floor (screen_h - @h * @scale) / 2
+        @offset_x = @canvas_offset_x
+        @offset_y = @canvas_offset_y
 
       return
 

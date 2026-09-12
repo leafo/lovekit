@@ -182,6 +182,8 @@ do
           self.h = math.floor(self.h)
           self.canvas_offset_x = math.floor((screen_w - self.w * self.scale) / 2)
           self.canvas_offset_y = math.floor((screen_h - self.h * self.scale) / 2)
+          self.offset_x = self.canvas_offset_x
+          self.offset_y = self.canvas_offset_y
         end
         return 
       end
