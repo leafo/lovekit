@@ -110,6 +110,29 @@ joystick_deadzone_normalize = function(vec, min_amount, max_amount)
   end
   return out
 end
+local dpad_vector
+dpad_vector = function(joystick)
+  if not (joystick:isGamepad()) then
+    return 
+  end
+  local x, y = 0, 0
+  if joystick:isGamepadDown("dpleft") then
+    x = x - 1
+  end
+  if joystick:isGamepadDown("dpright") then
+    x = x + 1
+  end
+  if joystick:isGamepadDown("dpup") then
+    y = y - 1
+  end
+  if joystick:isGamepadDown("dpdown") then
+    y = y + 1
+  end
+  if x == 0 and y == 0 then
+    return 
+  end
+  return Vec2d(x, y):normalized()
+end
 local make_joystick_mover
 make_joystick_mover = function(joystick, xaxis, yaxis)
   if joystick == nil then
@@ -127,29 +150,34 @@ make_joystick_mover = function(joystick, xaxis, yaxis)
   return function(speed)
     local hat_dir = joystick:getHat(1)
     local vec
-    if hat_dir ~= "c" then
-      local _exp_0 = hat_dir
-      if "u" == _exp_0 then
-        vec = Vec2d(0, -1)
-      elseif "d" == _exp_0 then
-        vec = Vec2d(0, 1)
-      elseif "l" == _exp_0 then
-        vec = Vec2d(-1, 0)
-      elseif "r" == _exp_0 then
-        vec = Vec2d(1, 0)
-      elseif "ld" == _exp_0 then
-        vec = Vec2d(-1, 1):normalized()
-      elseif "lu" == _exp_0 then
-        vec = Vec2d(-1, -1):normalized()
-      elseif "rd" == _exp_0 then
-        vec = Vec2d(1, 1):normalized()
-      elseif "ru" == _exp_0 then
-        vec = Vec2d(1, -1):normalized()
+    do
+      local dpad = dpad_vector(joystick)
+      if dpad then
+        vec = dpad
+      elseif hat_dir ~= "c" then
+        local _exp_0 = hat_dir
+        if "u" == _exp_0 then
+          vec = Vec2d(0, -1)
+        elseif "d" == _exp_0 then
+          vec = Vec2d(0, 1)
+        elseif "l" == _exp_0 then
+          vec = Vec2d(-1, 0)
+        elseif "r" == _exp_0 then
+          vec = Vec2d(1, 0)
+        elseif "ld" == _exp_0 then
+          vec = Vec2d(-1, 1):normalized()
+        elseif "lu" == _exp_0 then
+          vec = Vec2d(-1, -1):normalized()
+        elseif "rd" == _exp_0 then
+          vec = Vec2d(1, 1):normalized()
+        elseif "ru" == _exp_0 then
+          vec = Vec2d(1, -1):normalized()
+        end
+      else
+        local x = joystick:getGamepadAxis(xaxis)
+        local y = joystick:getGamepadAxis(yaxis)
+        vec = Vec2d(x, y)
       end
-    else
-      local x = joystick:getGamepadAxis(xaxis)
-      local y = joystick:getGamepadAxis(yaxis)
-      vec = Vec2d(x, y)
     end
     vec = joystick_deadzone_normalize(vec)
     if speed then
@@ -169,6 +197,10 @@ do
       up = true,
       down = true
     },
+    set_joystick = function(self, joystick)
+      self.joystick = joystick
+      return self:make_mover()
+    end,
     make_mover = function(self)
       local left = rawget(self.key_mapping, "left")
       local right = rawget(self.key_mapping, "right")
@@ -351,10 +383,13 @@ do
         end
       end
       if self.joystick then
-        local x = self.joystick:getGamepadAxis("leftx")
-        local y = self.joystick:getGamepadAxis("lefty")
-        local vec = joystick_deadzone_normalize(Vec2d(x, y))
-        vec = vec:primary_direction()
+        local vec = dpad_vector(self.joystick)
+        if not (vec) then
+          local x = self.joystick:getGamepadAxis("leftx")
+          local y = self.joystick:getGamepadAxis("lefty")
+          vec = joystick_deadzone_normalize(Vec2d(x, y))
+          vec = vec:primary_direction()
+        end
         local yes
         local _exp_0 = name
         if "left" == _exp_0 then
@@ -379,6 +414,21 @@ do
         local x = self.joystick:getGamepadAxis("leftx")
         local y = self.joystick:getGamepadAxis("lefty")
         local vec = joystick_deadzone_normalize(Vec2d(x, y))
+        do
+          local dpad = dpad_vector(self.joystick)
+          if dpad then
+            local _exp_0 = name
+            if "left" == _exp_0 then
+              return dpad[1] < 0
+            elseif "right" == _exp_0 then
+              return dpad[1] > 0
+            elseif "up" == _exp_0 then
+              return dpad[2] < 0
+            elseif "down" == _exp_0 then
+              return dpad[2] > 0
+            end
+          end
+        end
         local hat_dir = self.joystick:getHat(1)
         if hat_dir ~= "c" then
           local _exp_0 = name
@@ -417,7 +467,19 @@ do
       if not (btns and next(btns)) then
         return false
       end
-      return self.joystick:isDown(unpack(btns))
+      for _index_0 = 1, #btns do
+        local btn = btns[_index_0]
+        local down
+        if type(btn) == "string" then
+          down = self.joystick:isGamepadDown(btn)
+        else
+          down = self.joystick:isDown(btn)
+        end
+        if down then
+          return true
+        end
+      end
+      return false
     end,
     movement_vector = function(self)
       return error("don't know how to make movement vector")
@@ -470,5 +532,6 @@ return {
   movement_vector = movement_vector,
   make_joystick_mover = make_joystick_mover,
   joystick_deadzone_normalize = joystick_deadzone_normalize,
+  dpad_vector = dpad_vector,
   Controller = Controller
 }

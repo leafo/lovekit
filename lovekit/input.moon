@@ -76,13 +76,27 @@ joystick_deadzone_normalize = (vec, min_amount=.2, max_amount=0.95) ->
   out
 
 
+-- a joystick with a gamepad mapping exposes the dpad as buttons rather than a
+-- hat. returns the pressed direction, nil when nothing is held
+dpad_vector = (joystick) ->
+  return unless joystick\isGamepad!
+  x, y = 0, 0
+  x -= 1 if joystick\isGamepadDown "dpleft"
+  x += 1 if joystick\isGamepadDown "dpright"
+  y -= 1 if joystick\isGamepadDown "dpup"
+  y += 1 if joystick\isGamepadDown "dpdown"
+  return if x == 0 and y == 0
+  Vec2d(x, y)\normalized!
+
 make_joystick_mover = (joystick=1, xaxis="leftx", yaxis="lefty") ->
   if type(joystick) == "number"
     joystick = assert love.joystick.getJoysticks![joystick], "Missing joystick"
 
   (speed) ->
     hat_dir = joystick\getHat 1
-    vec = if hat_dir != "c"
+    vec = if dpad = dpad_vector joystick
+      dpad
+    elseif hat_dir != "c"
       switch hat_dir
         when "u"
           Vec2d 0, -1
@@ -142,6 +156,11 @@ class Controller
     @dtapper = {}
     @downer = {}
 
+    @make_mover!
+
+  -- swap the joystick, eg. from love.joystickadded, and rebuild the mover
+  set_joystick: (joystick) =>
+    @joystick = joystick
     @make_mover!
 
   make_mover: =>
@@ -209,6 +228,8 @@ class Controller
         else
           insert @key_mapping[name], extra_keys
 
+      -- joystick buttons are raw button indexes, or gamepad button names
+      -- like "a" or "start" when the joystick has a gamepad mapping
       if joy_buttons = inputs.joystick
         if type(joy_buttons) == "table"
           for btn in *joy_buttons
@@ -283,10 +304,12 @@ class Controller
       return true if keyboard.isDown unpack keys
 
     if @joystick
-      x = @joystick\getGamepadAxis "leftx"
-      y = @joystick\getGamepadAxis "lefty"
-      vec = joystick_deadzone_normalize Vec2d(x,y)
-      vec = vec\primary_direction!
+      vec = dpad_vector @joystick
+      unless vec
+        x = @joystick\getGamepadAxis "leftx"
+        y = @joystick\getGamepadAxis "lefty"
+        vec = joystick_deadzone_normalize Vec2d(x,y)
+        vec = vec\primary_direction!
 
       yes = switch name
         when "left"
@@ -310,6 +333,17 @@ class Controller
       x = @joystick\getGamepadAxis "leftx"
       y = @joystick\getGamepadAxis "lefty"
       vec = joystick_deadzone_normalize Vec2d(x,y)
+
+      if dpad = dpad_vector @joystick
+        return switch name
+          when "left"
+            dpad[1] < 0
+          when "right"
+            dpad[1] > 0
+          when "up"
+            dpad[2] < 0
+          when "down"
+            dpad[2] > 0
 
       hat_dir = @joystick\getHat 1
       if hat_dir != "c"
@@ -346,7 +380,14 @@ class Controller
     btns = @joy_mapping[name]
     return false unless btns and next btns
 
-    @joystick\isDown unpack btns
+    for btn in *btns
+      down = if type(btn) == "string"
+        @joystick\isGamepadDown btn
+      else
+        @joystick\isDown btn
+      return true if down
+
+    false
 
   movement_vector: =>
     error "don't know how to make movement vector"
@@ -359,5 +400,6 @@ class Controller
   :movement_vector
   :make_joystick_mover
   :joystick_deadzone_normalize
+  :dpad_vector
   :Controller
 }
