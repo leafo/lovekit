@@ -27,10 +27,16 @@ class Viewport extends Box
 
   pixel_scale: false
 
+  -- round the camera translation to whole screen pixels so quads drawn at
+  -- integer world coordinates never straddle a pixel, this stops tile seams
+  -- and texture bleeding on tilemaps. camera still moves in screen pixels
+  snap: false
+
   -- screen is table with w, h, and scale
   new: (opts={}) =>
     screen_w, screen_h = graphics.getWidth!, graphics.getHeight!
     @pixel_scale = opts.pixel_scale
+    @snap = opts.snap
 
     if opts.scale
       @scale = opts.scale
@@ -109,7 +115,15 @@ class Viewport extends Box
     if s = @scale
       graphics.scale s, s
 
-    graphics.translate -@x, -@y
+    if @snap
+      graphics.translate -@snap_coord(@x), -@snap_coord(@y)
+    else
+      graphics.translate -@x, -@y
+
+  -- world coordinate rounded to the nearest screen pixel
+  snap_coord: (v) =>
+    s = @scale or 1
+    math.floor(v * s + 0.5) / s
 
   pop: =>
     if @pixel_scale
@@ -207,10 +221,10 @@ class EffectViewport extends Viewport
 
   apply: =>
     super!
-    e\before! for e in *@effects
+    e\before @ for e in *@effects
 
   pop: =>
-    e\after! for e in *@effects
+    e\after @ for e in *@effects
     super!
 
 class TiledBackground

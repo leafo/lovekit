@@ -26,6 +26,7 @@ do
     canvas_offset_y = 0,
     crop = false,
     pixel_scale = false,
+    snap = false,
     update = function(self, dt) end,
     bigger = function(self)
       local x, y, w, h = self:unpack()
@@ -59,7 +60,15 @@ do
           graphics.scale(s, s)
         end
       end
-      return graphics.translate(-self.x, -self.y)
+      if self.snap then
+        return graphics.translate(-self:snap_coord(self.x), -self:snap_coord(self.y))
+      else
+        return graphics.translate(-self.x, -self.y)
+      end
+    end,
+    snap_coord = function(self, v)
+      local s = self.scale or 1
+      return math.floor(v * s + 0.5) / s
     end,
     pop = function(self)
       if self.pixel_scale then
@@ -173,6 +182,7 @@ do
       end
       local screen_w, screen_h = graphics.getWidth(), graphics.getHeight()
       self.pixel_scale = opts.pixel_scale
+      self.snap = opts.snap
       if opts.scale then
         self.scale = opts.scale
         self.w = screen_w / self.scale
@@ -256,14 +266,14 @@ do
       local _list_0 = self.effects
       for _index_0 = 1, #_list_0 do
         local e = _list_0[_index_0]
-        e:before()
+        e:before(self)
       end
     end,
     pop = function(self)
       local _list_0 = self.effects
       for _index_0 = 1, #_list_0 do
         local e = _list_0[_index_0]
-        e:after()
+        e:after(self)
       end
       return _class_0.__parent.__base.pop(self)
     end

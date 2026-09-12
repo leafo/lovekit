@@ -68,14 +68,20 @@ class ShakeEffect extends Effect
     @rand = love.math.random! * math.pi
     super duration, ...
 
-  before: =>
+  before: (viewport) =>
     p = @p!
     t = (timer.getTime! - @start) * @speed
 
     graphics.push!
     decay = (1 - p) * 2
-    graphics.translate @amount * decay * math.sin(t*10 + @rand),
-      @amount * decay * math.cos(t*11 + @rand)
+    dx = @amount * decay * math.sin(t*10 + @rand)
+    dy = @amount * decay * math.cos(t*11 + @rand)
+
+    -- keep a snapping viewport on whole screen pixels
+    if viewport and viewport.snap
+      dx, dy = viewport\snap_coord(dx), viewport\snap_coord(dy)
+
+    graphics.translate dx, dy
 
   after: =>
     graphics.pop!

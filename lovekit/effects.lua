@@ -208,12 +208,17 @@ do
   local _class_0
   local _parent_0 = Effect
   local _base_0 = {
-    before = function(self)
+    before = function(self, viewport)
       local p = self:p()
       local t = (timer.getTime() - self.start) * self.speed
       graphics.push()
       local decay = (1 - p) * 2
-      return graphics.translate(self.amount * decay * math.sin(t * 10 + self.rand), self.amount * decay * math.cos(t * 11 + self.rand))
+      local dx = self.amount * decay * math.sin(t * 10 + self.rand)
+      local dy = self.amount * decay * math.cos(t * 11 + self.rand)
+      if viewport and viewport.snap then
+        dx, dy = viewport:snap_coord(dx), viewport:snap_coord(dy)
+      end
+      return graphics.translate(dx, dy)
     end,
     after = function(self)
       return graphics.pop()
