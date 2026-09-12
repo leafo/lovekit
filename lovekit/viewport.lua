@@ -177,6 +177,12 @@ do
         self.scale = opts.scale
         self.w = screen_w / self.scale
         self.h = screen_h / self.scale
+        if self.pixel_scale then
+          self.w = math.floor(self.w)
+          self.h = math.floor(self.h)
+          self.canvas_offset_x = math.floor((screen_w - self.w * self.scale) / 2)
+          self.canvas_offset_y = math.floor((screen_h - self.h * self.scale) / 2)
+        end
         return 
       end
       if opts.w and opts.h then

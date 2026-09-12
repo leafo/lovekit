@@ -36,6 +36,15 @@ class Viewport extends Box
       @scale = opts.scale
       @w = screen_w / @scale
       @h = screen_h / @scale
+
+      -- the canvas needs a whole pixel size, center it so any leftover
+      -- screen pixels split evenly between the edges
+      if @pixel_scale
+        @w = math.floor @w
+        @h = math.floor @h
+        @canvas_offset_x = math.floor (screen_w - @w * @scale) / 2
+        @canvas_offset_y = math.floor (screen_h - @h * @scale) / 2
+
       return
 
     -- got size, figure out scale and offset
