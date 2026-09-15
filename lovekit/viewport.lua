@@ -12,6 +12,21 @@ local ShakeEffect
 ShakeEffect = require("lovekit.effects").ShakeEffect
 local smooth_approach
 smooth_approach = require("lovekit.support").smooth_approach
+local pixel_scale_for
+pixel_scale_for = function(design_w, design_h, opts)
+  if opts == nil then
+    opts = { }
+  end
+  local screen_w, screen_h = graphics.getWidth(), graphics.getHeight()
+  local exact = math.min(screen_w / design_w, screen_h / design_h)
+  local scale
+  if opts.crop then
+    scale = math.floor(exact + 0.5)
+  else
+    scale = math.floor(exact)
+  end
+  return math.max(1, scale)
+end
 local Viewport
 do
   local _class_0
@@ -357,5 +372,6 @@ end
 return {
   Viewport = Viewport,
   EffectViewport = EffectViewport,
-  TiledBackground = TiledBackground
+  TiledBackground = TiledBackground,
+  pixel_scale_for = pixel_scale_for
 }
