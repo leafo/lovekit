@@ -12,13 +12,16 @@ import ShakeEffect from require "lovekit.effects"
 import smooth_approach from require "lovekit.support"
 
 -- whole number of screen pixels per design pixel that best fits the screen, so
--- content is only ever multiplied, never resampled. crop rounds to the nearest
--- and lets a slightly oversized result be cropped, otherwise it rounds down
+-- content is only ever multiplied, never resampled. cover rounds up, keeping a
+-- big display from rendering the game small with a lot of extra world around
+-- it. crop rounds to the nearest, otherwise it rounds down
 pixel_scale_for = (design_w, design_h, opts={}) ->
   screen_w, screen_h = graphics.getWidth!, graphics.getHeight!
   exact = math.min screen_w / design_w, screen_h / design_h
 
-  scale = if opts.crop
+  scale = if opts.cover
+    math.ceil exact
+  elseif opts.crop
     math.floor exact + 0.5
   else
     math.floor exact

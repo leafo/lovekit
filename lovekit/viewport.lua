@@ -20,7 +20,9 @@ pixel_scale_for = function(design_w, design_h, opts)
   local screen_w, screen_h = graphics.getWidth(), graphics.getHeight()
   local exact = math.min(screen_w / design_w, screen_h / design_h)
   local scale
-  if opts.crop then
+  if opts.cover then
+    scale = math.ceil(exact)
+  elseif opts.crop then
     scale = math.floor(exact + 0.5)
   else
     scale = math.floor(exact)
