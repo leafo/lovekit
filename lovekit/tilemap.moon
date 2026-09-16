@@ -184,23 +184,27 @@ class TileMap
     len = 1
     for y=0,height - 1
       for x=0,width - 1
+        -- love 11 returns 0-1 components, passed as is to the callback
         _r, _g, _b, _a = data\getPixel x, y
-        -- love 11 returns 0-1 components, hash keys are written in 0-255
-        _r, _g, _b, _a = floor(_r * 255 + 0.5), floor(_g * 255 + 0.5), floor(_b * 255 + 0.5), floor(_a * 255 + 0.5)
 
         tile = if call_map
           color_to_tile x,y,_r,_g,_b,_a
         else
-          color_to_tile[hash_color _r,_g,_b,_a]
+          -- hash keys are written in 0-255
+          _r, _g, _b, _a = floor(_r * 255 + 0.5), floor(_g * 255 + 0.5), floor(_b * 255 + 0.5), floor(_a * 255 + 0.5)
+          key = hash_color _r,_g,_b,_a
+          t = color_to_tile[key]
+
+          if not t and _a > 0
+            error "Got unexpected map tile color in #{fname}: #{key}"
+
+          t
 
         if type(tile) == "function"
           tile = tile x * tile_sprite.cell_w, y * tile_sprite.cell_w, len
 
         if type(tile) == "number"
           tile = tid: tile
-
-        -- if not tile and _a > 0
-        --   error "Got unexpected map tile color: " .. hash_color r,g,b,a
 
         tiles[len] = tile if tile
         len += 1

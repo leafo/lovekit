@@ -617,12 +617,17 @@ do
     for y = 0, height - 1 do
       for x = 0, width - 1 do
         local _r, _g, _b, _a = data:getPixel(x, y)
-        _r, _g, _b, _a = floor(_r * 255 + 0.5), floor(_g * 255 + 0.5), floor(_b * 255 + 0.5), floor(_a * 255 + 0.5)
         local tile
         if call_map then
           tile = color_to_tile(x, y, _r, _g, _b, _a)
         else
-          tile = color_to_tile[hash_color(_r, _g, _b, _a)]
+          _r, _g, _b, _a = floor(_r * 255 + 0.5), floor(_g * 255 + 0.5), floor(_b * 255 + 0.5), floor(_a * 255 + 0.5)
+          local key = hash_color(_r, _g, _b, _a)
+          local t = color_to_tile[key]
+          if not t and _a > 0 then
+            error("Got unexpected map tile color in " .. tostring(fname) .. ": " .. tostring(key))
+          end
+          tile = t
         end
         if type(tile) == "function" then
           tile = tile(x * tile_sprite.cell_w, y * tile_sprite.cell_w, len)
