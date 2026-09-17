@@ -55,7 +55,16 @@ do
       end
       if self.pixel_scale then
         if not (self.canvas) then
-          self.canvas = graphics.newCanvas(self.w, self.h)
+          local formats = graphics.getCanvasFormats()
+          local format
+          if not formats.rgba8 and formats.rgba16f then
+            format = "rgba16f"
+          else
+            format = "normal"
+          end
+          self.canvas = graphics.newCanvas(self.w, self.h, {
+            format = format
+          })
           self.canvas:setFilter("nearest", "nearest")
         end
         self.last_canvas = graphics.getCanvas()

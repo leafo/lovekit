@@ -111,7 +111,10 @@ class Viewport extends Box
   apply: (scale=true)=>
     if @pixel_scale
       unless @canvas
-        @canvas = graphics.newCanvas @w, @h
+        -- love.js has no 8 bit canvas, the default there is 4 bits a channel
+        formats = graphics.getCanvasFormats!
+        format = if not formats.rgba8 and formats.rgba16f then "rgba16f" else "normal"
+        @canvas = graphics.newCanvas @w, @h, :format
         @canvas\setFilter "nearest", "nearest"
 
       @last_canvas = graphics.getCanvas!
