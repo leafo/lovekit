@@ -16,6 +16,13 @@ if love and love.joystick then
     love.joystick.setGamepadMapping(guid, "leftx", "axis", 1)
     love.joystick.setGamepadMapping(guid, "lefty", "axis", 2)
   end
+  love.joystick.loadGamepadMappings(table.concat({
+    "38426974446f20556c74696d61746520,8BitDo Ultimate 2C Wireless",
+    "a:b0,b:b1,x:b3,y:b4,leftshoulder:b6,rightshoulder:b7",
+    "back:b10,start:b11,leftstick:b13,rightstick:b14",
+    "leftx:a0,lefty:a1,rightx:a2,righty:a3,lefttrigger:a4,righttrigger:a5",
+    "dpup:-a7,dpdown:+a7,dpleft:-a6,dpright:+a6"
+  }, ","))
 end
 local table_table
 table_table = function()
