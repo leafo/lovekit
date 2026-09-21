@@ -97,12 +97,20 @@ dpad_vector = (joystick) ->
   return if x == 0 and y == 0
   Vec2d(x, y)\normalized!
 
+-- getHat returns "" rather than "c" on a pad with no hats, like a browser
+-- gamepad whose dpad is reported as axes
+hat_direction = (joystick) ->
+  if joystick\getHatCount! > 0
+    joystick\getHat 1
+  else
+    "c"
+
 make_joystick_mover = (joystick=1, xaxis="leftx", yaxis="lefty") ->
   if type(joystick) == "number"
     joystick = assert love.joystick.getJoysticks![joystick], "Missing joystick"
 
   (speed) ->
-    hat_dir = joystick\getHat 1
+    hat_dir = hat_direction joystick
     vec = if dpad = dpad_vector joystick
       dpad
     elseif hat_dir != "c"
@@ -352,7 +360,7 @@ class Controller
           when "down"
             dpad[2] > 0
 
-      hat_dir = @joystick\getHat 1
+      hat_dir = hat_direction @joystick
       if hat_dir != "c"
         return switch name
           when "left"

@@ -140,6 +140,14 @@ dpad_vector = function(joystick)
   end
   return Vec2d(x, y):normalized()
 end
+local hat_direction
+hat_direction = function(joystick)
+  if joystick:getHatCount() > 0 then
+    return joystick:getHat(1)
+  else
+    return "c"
+  end
+end
 local make_joystick_mover
 make_joystick_mover = function(joystick, xaxis, yaxis)
   if joystick == nil then
@@ -155,7 +163,7 @@ make_joystick_mover = function(joystick, xaxis, yaxis)
     joystick = assert(love.joystick.getJoysticks()[joystick], "Missing joystick")
   end
   return function(speed)
-    local hat_dir = joystick:getHat(1)
+    local hat_dir = hat_direction(joystick)
     local vec
     do
       local dpad = dpad_vector(joystick)
@@ -434,7 +442,7 @@ do
             end
           end
         end
-        local hat_dir = self.joystick:getHat(1)
+        local hat_dir = hat_direction(self.joystick)
         if hat_dir ~= "c" then
           local _exp_0 = name
           if "left" == _exp_0 then
