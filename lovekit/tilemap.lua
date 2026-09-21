@@ -275,10 +275,10 @@ do
       return coroutine.wrap(function()
         for i = 1, self.count do
           local t = tiles[i]
-          i = i - 1
-          local x = i % self.width
-          local y = floor(i / self.width)
-          coroutine.yield(x, y, t, i + 1)
+          local j = i - 1
+          local x = j % self.width
+          local y = floor(j / self.width)
+          coroutine.yield(x, y, t, i)
         end
       end)
     end,

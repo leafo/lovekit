@@ -308,10 +308,11 @@ class TileMap
     coroutine.wrap ->
       for i=1,@count
         t = tiles[i]
-        i -= 1
-        x = i % @width
-        y = floor(i / @width)
-        coroutine.yield x, y, t, i + 1
+        -- loop variables are read only in Lua 5.5
+        j = i - 1
+        x = j % @width
+        y = floor(j / @width)
+        coroutine.yield x, y, t, i
 
   update: (dt) =>
     @time += dt
