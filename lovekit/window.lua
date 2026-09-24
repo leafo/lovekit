@@ -29,7 +29,8 @@ open_window = function(opts)
     window.setMode(tonumber(w), tonumber(h))
   else
     local dw, dh = window.getDesktopDimensions()
-    if dw < design_w or dh < design_h then
+    local mobile = love._os == "Android" or love._os == "iOS"
+    if mobile or dw < design_w or dh < design_h then
       window.setMode(0, 0, {
         fullscreen = true,
         fullscreentype = "desktop"

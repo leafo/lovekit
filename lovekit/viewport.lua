@@ -211,8 +211,8 @@ do
       self.snap = opts.snap
       if opts.scale then
         self.scale = opts.scale
-        self.w = screen_w / self.scale
-        self.h = screen_h / self.scale
+        self.w = opts.w or screen_w / self.scale
+        self.h = opts.h or screen_h / self.scale
         if self.pixel_scale then
           self.w = math.floor(self.w)
           self.h = math.floor(self.h)

@@ -57,8 +57,10 @@ class Viewport extends Box
 
     if opts.scale
       @scale = opts.scale
-      @w = screen_w / @scale
-      @h = screen_h / @scale
+      -- with pixel_scale, a w and h keep the design size and center it on a
+      -- screen of a different shape, otherwise the view covers the screen
+      @w = opts.w or screen_w / @scale
+      @h = opts.h or screen_h / @scale
 
       -- the canvas needs a whole pixel size, center it so any leftover
       -- screen pixels split evenly between the edges. offset_x/y follow so

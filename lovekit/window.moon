@@ -2,7 +2,8 @@
 {:window, :mouse} = love
 
 -- opens the window at design_w by design_h screen pixels, or fullscreen on
--- displays too small for that (handhelds like the RG35XX are 640x480). a size
+-- phones and displays too small for that (handhelds like the RG35XX are
+-- 640x480). a size
 -- in the env var named by opts.env, or a `--window 640x480` argument, wins
 open_window = (opts={}) ->
   {:design_w, :design_h, :title, :env, :args} = opts
@@ -21,7 +22,10 @@ open_window = (opts={}) ->
     window.setMode tonumber(w), tonumber(h)
   else
     dw, dh = window.getDesktopDimensions!
-    if dw < design_w or dh < design_h
+    -- phones take the whole screen, a windowed mode there leaves the status
+    -- and navigation bars showing
+    mobile = love._os == "Android" or love._os == "iOS"
+    if mobile or dw < design_w or dh < design_h
       window.setMode 0, 0, fullscreen: true, fullscreentype: "desktop"
       mouse.setVisible false
     else
