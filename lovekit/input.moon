@@ -143,16 +143,18 @@ make_joystick_mover = (joystick=1, xaxis="leftx", yaxis="lefty") ->
 class Controller
   @next_joystick: 1
 
-  @default: =>
-    @ {
-      left: "left"
-      right: "right"
-      up: "up"
-      down: "down"
+  @default_mapping: {
+    left: "left"
+    right: "right"
+    up: "up"
+    down: "down"
 
-      confirm: "x"
-      cancel: "c"
-    }, "auto"
+    confirm: "x"
+    cancel: "c"
+  }
+
+  @default: =>
+    @ @default_mapping, "auto"
 
   tap_delay: 0.2
   axis_button: {

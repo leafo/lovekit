@@ -528,15 +528,16 @@ do
   _base_0.__class = _class_0
   local self = _class_0
   self.next_joystick = 1
+  self.default_mapping = {
+    left = "left",
+    right = "right",
+    up = "up",
+    down = "down",
+    confirm = "x",
+    cancel = "c"
+  }
   self.default = function(self)
-    return self({
-      left = "left",
-      right = "right",
-      up = "up",
-      down = "down",
-      confirm = "x",
-      cancel = "c"
-    }, "auto")
+    return self(self.default_mapping, "auto")
   end
   Controller = _class_0
 end
