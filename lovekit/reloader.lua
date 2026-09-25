@@ -18,7 +18,9 @@ local dirsep, pathsep, wildcard = unpack((function()
   end
   return _accum_0
 end)())
-local handle = inotify.init(true)
+local handle = inotify.init({
+  blocking = false
+})
 local actions = { }
 local watching = { }
 local insert
