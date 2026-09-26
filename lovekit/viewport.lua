@@ -43,7 +43,25 @@ do
     canvas_offset_y = 0,
     crop = false,
     pixel_scale = false,
+    stretch = false,
+    clear_color = false,
     snap = false,
+    fit_screen = function(self, refit)
+      if refit == nil then
+        refit = false
+      end
+      local screen_w, screen_h = graphics.getWidth(), graphics.getHeight()
+      self.screen_w, self.screen_h = screen_w, screen_h
+      if self.stretch then
+        self.scale = math.min(screen_w / self.w, screen_h / self.h)
+      elseif refit then
+        self.scale = pixel_scale_for(self.w, self.h)
+      end
+      self.canvas_offset_x = math.floor((screen_w - self.w * self.scale) / 2)
+      self.canvas_offset_y = math.floor((screen_h - self.h * self.scale) / 2)
+      self.offset_x = self.canvas_offset_x
+      self.offset_y = self.canvas_offset_y
+    end,
     update = function(self, dt) end,
     bigger = function(self)
       local x, y, w, h = self:unpack()
@@ -54,6 +72,9 @@ do
         scale = true
       end
       if self.pixel_scale then
+        if graphics.getWidth() ~= self.screen_w or graphics.getHeight() ~= self.screen_h then
+          self:fit_screen(true)
+        end
         if not (self.canvas) then
           local formats = graphics.getCanvasFormats()
           local format
@@ -69,7 +90,11 @@ do
         end
         self.last_canvas = graphics.getCanvas()
         graphics.setCanvas(self.canvas)
-        graphics.clear()
+        if self.clear_color then
+          graphics.clear(unpack(self.clear_color))
+        else
+          graphics.clear()
+        end
         graphics.push()
         graphics.translate(-self.x, -self.y)
         return 
@@ -209,6 +234,8 @@ do
       local screen_w, screen_h = graphics.getWidth(), graphics.getHeight()
       self.pixel_scale = opts.pixel_scale
       self.snap = opts.snap
+      self.stretch = opts.stretch
+      self.clear_color = opts.clear_color
       if opts.scale then
         self.scale = opts.scale
         self.w = opts.w or screen_w / self.scale
@@ -216,10 +243,7 @@ do
         if self.pixel_scale then
           self.w = math.floor(self.w)
           self.h = math.floor(self.h)
-          self.canvas_offset_x = math.floor((screen_w - self.w * self.scale) / 2)
-          self.canvas_offset_y = math.floor((screen_h - self.h * self.scale) / 2)
-          self.offset_x = self.canvas_offset_x
-          self.offset_y = self.canvas_offset_y
+          self:fit_screen()
         end
         return 
       end

@@ -44,6 +44,15 @@ class Viewport extends Box
 
   pixel_scale: false
 
+  -- with pixel_scale, scale the canvas by however much fits the screen
+  -- instead of a whole number, for small screens where the bars would waste
+  -- too much of it
+  stretch: false
+
+  -- with pixel_scale, {r, g, b, a} from 0 to 1 the canvas is cleared to each
+  -- frame, otherwise it's left transparent
+  clear_color: false
+
   -- round the camera translation to whole screen pixels so quads drawn at
   -- integer world coordinates never straddle a pixel, this stops tile seams
   -- and texture bleeding on tilemaps. camera still moves in screen pixels
@@ -54,6 +63,8 @@ class Viewport extends Box
     screen_w, screen_h = graphics.getWidth!, graphics.getHeight!
     @pixel_scale = opts.pixel_scale
     @snap = opts.snap
+    @stretch = opts.stretch
+    @clear_color = opts.clear_color
 
     if opts.scale
       @scale = opts.scale
@@ -62,16 +73,11 @@ class Viewport extends Box
       @w = opts.w or screen_w / @scale
       @h = opts.h or screen_h / @scale
 
-      -- the canvas needs a whole pixel size, center it so any leftover
-      -- screen pixels split evenly between the edges. offset_x/y follow so
-      -- project/unproject agree with where the canvas is drawn
+      -- the canvas needs a whole pixel size
       if @pixel_scale
         @w = math.floor @w
         @h = math.floor @h
-        @canvas_offset_x = math.floor (screen_w - @w * @scale) / 2
-        @canvas_offset_y = math.floor (screen_h - @h * @scale) / 2
-        @offset_x = @canvas_offset_x
-        @offset_y = @canvas_offset_y
+        @fit_screen!
 
       return
 
@@ -104,6 +110,24 @@ class Viewport extends Box
 
     error "don't know how to create viewport"
 
+  -- centers the pixel_scale canvas so any leftover screen pixels split evenly
+  -- between the edges. offset_x/y follow so project/unproject agree with where
+  -- the canvas is drawn. refit picks a new scale for the current screen, as
+  -- when a phone settles on its fullscreen size after the game has started
+  fit_screen: (refit=false) =>
+    screen_w, screen_h = graphics.getWidth!, graphics.getHeight!
+    @screen_w, @screen_h = screen_w, screen_h
+
+    if @stretch
+      @scale = math.min screen_w / @w, screen_h / @h
+    elseif refit
+      @scale = pixel_scale_for @w, @h
+
+    @canvas_offset_x = math.floor (screen_w - @w * @scale) / 2
+    @canvas_offset_y = math.floor (screen_h - @h * @scale) / 2
+    @offset_x = @canvas_offset_x
+    @offset_y = @canvas_offset_y
+
   update: (dt) => -- animations: screen shake, screen zoom
 
   bigger: =>
@@ -112,6 +136,9 @@ class Viewport extends Box
 
   apply: (scale=true)=>
     if @pixel_scale
+      if graphics.getWidth! != @screen_w or graphics.getHeight! != @screen_h
+        @fit_screen true
+
       unless @canvas
         -- love.js has no 8 bit canvas, the default there is 4 bits a channel
         formats = graphics.getCanvasFormats!
@@ -121,7 +148,10 @@ class Viewport extends Box
 
       @last_canvas = graphics.getCanvas!
       graphics.setCanvas @canvas
-      graphics.clear()
+      if @clear_color
+        graphics.clear unpack @clear_color
+      else
+        graphics.clear()
       graphics.push!
       graphics.translate -@x, -@y
       return
